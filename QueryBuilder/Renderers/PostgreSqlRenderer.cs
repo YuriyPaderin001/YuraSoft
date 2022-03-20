@@ -4,6 +4,8 @@ using System.Text;
 using YuraSoft.QueryBuilder.Abstractions;
 using YuraSoft.QueryBuilder.Exceptions;
 
+#nullable enable
+
 namespace YuraSoft.QueryBuilder.Renderers
 {
 	public class PostgreSqlRenderer : IRenderer
@@ -382,5 +384,95 @@ namespace YuraSoft.QueryBuilder.Renderers
 		}
 
 		public string RenderIdentificator(string identificator) => $"\"{identificator}\"";
+
+		public string RenderValue(Int8Value value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(Int16Value value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(Int32Value value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(Int64Value value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(FloatValue value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(DoubleValue value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(DecimalValue value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString();
+		}
+
+		public string RenderValue(DateTimeValue value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return value.Value.ToString(value.Format);
+		}
+
+		public string RenderValue(StringValue value)
+		{
+			if (value == null)
+			{
+				throw new ArgumentShouldNotBeNullException(nameof(value));
+			}
+
+			return $"'{value.Value}'";
+		}
 	}
 }

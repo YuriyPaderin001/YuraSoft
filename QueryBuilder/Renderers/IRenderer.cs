@@ -1,4 +1,6 @@
-﻿namespace YuraSoft.QueryBuilder.Renderers
+﻿#nullable enable
+
+namespace YuraSoft.QueryBuilder.Renderers
 {
 	public interface IRenderer
 	{
@@ -28,5 +30,14 @@
 		public string RenderJoin(InnerJoin join);
 		public string RenderJoin(CrossJoin join);
 		public string RenderOrderBy(OrderBy join);
+		public string RenderValue(Int8Value value);
+		public string RenderValue(Int16Value value);
+		public string RenderValue(Int32Value value);
+		public string RenderValue(Int64Value value);
+		public string RenderValue(FloatValue value);
+		public string RenderValue(DoubleValue value);
+		public string RenderValue(DecimalValue value);
+		public string RenderValue(DateTimeValue value);
+		public string RenderValue(StringValue value);
 	}
 }

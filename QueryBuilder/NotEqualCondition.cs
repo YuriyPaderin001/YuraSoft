@@ -2,6 +2,8 @@
 using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
 
+#nullable enable
+
 namespace YuraSoft.QueryBuilder
 {
 	public class NotEqualCondition : BinaryCondition

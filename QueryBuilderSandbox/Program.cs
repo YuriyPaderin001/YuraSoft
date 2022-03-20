@@ -26,7 +26,7 @@ namespace QueryBuilderSandbox
 						new ICondition[] {
 							new EqualCondition(column1, column2),
 							new LikeCondition(column2, "%test%"),
-							new BetweenCondition(column1, column2, column3),
+							new BetweenCondition(column1, column2, new StringValue("Test")),
 							new OrCondition(
 								new ICondition[] {
 									new NotEqualCondition(column3, column4),

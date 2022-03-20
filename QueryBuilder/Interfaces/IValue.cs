@@ -4,8 +4,8 @@
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
-	public interface IExpression
+	public interface IValue : IExpression
 	{
-		public string RenderExpression(IRenderer renderer);
+		public string RenderValue(IRenderer renderer);
 	}
 }
