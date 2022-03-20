@@ -4,8 +4,8 @@
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
-	public interface ISource
+	public interface ISource : IIdentificator
 	{
-		public string RenderFrom(IRenderer renderer);
+		public string RenderSource(IRenderer renderer);
 	}
 }

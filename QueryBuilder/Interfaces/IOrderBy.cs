@@ -4,8 +4,8 @@
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
-	public interface IColumn : IIdentificator, IExpression
+	public interface IOrderBy
 	{
-		public string RenderColumn(IRenderer renderer);
+		public string RenderOrderBy(IRenderer renderer);
 	}
 }

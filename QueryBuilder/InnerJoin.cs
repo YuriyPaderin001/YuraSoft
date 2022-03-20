@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
 
@@ -14,20 +13,20 @@ namespace YuraSoft.QueryBuilder
 
 		public InnerJoin(ISource source, ICondition condition)
 		{
-			_source = source ?? throw new ArgumentNullException(nameof(source), "{0} can't be null");
-			_condition = condition ?? throw new ArgumentNullException(nameof(condition), "{0} can't be null");
+			_source = source ?? throw new ArgumentShouldNotBeNullException(nameof(source));
+			_condition = condition ?? throw new ArgumentShouldNotBeNullException(nameof(condition));
 		}
 
 		public ISource Source 
 		{ 
-			get => _source; 
-			set => _source = value ?? throw new ArgumentNullException(nameof(Source)); 
+			get => _source;
+			set => _source = value ?? throw new ArgumentShouldNotBeNullException(nameof(Source));
 		}
 
 		public ICondition Condition 
 		{ 
 			get => _condition; 
-			set => _condition = value ?? throw new ArgumentNullException(nameof(Condition)); 
+			set => _condition = value ?? throw new ArgumentShouldNotBeNullException(nameof(Condition)); 
 		}
 
 		public string RenderJoin(IRenderer renderer) => renderer.RenderJoin(this);

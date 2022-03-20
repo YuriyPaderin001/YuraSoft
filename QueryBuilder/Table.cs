@@ -51,6 +51,7 @@ namespace YuraSoft.QueryBuilder
 			set => _namespace = value;
 		}
 
-		public string RenderFrom(IRenderer renderer) => renderer.RenderFrom(this);
+		public string RenderSource(IRenderer renderer) => renderer.RenderSource(this);
+		public string RenderIdentificator(IRenderer renderer) => renderer.RenderIdentificator(this);
 	}
 }
