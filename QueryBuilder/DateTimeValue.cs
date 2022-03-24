@@ -16,6 +16,8 @@ namespace YuraSoft.QueryBuilder
 			_format = string.IsNullOrEmpty(format) ? "s" : format;
 		}
 
+		public static implicit operator DateTimeValue(DateTime value) => new DateTimeValue(value);
+
 		public string Format
 		{
 			get => _format;

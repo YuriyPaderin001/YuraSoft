@@ -15,6 +15,8 @@ namespace YuraSoft.QueryBuilder
 			_value = value ?? throw new ArgumentShouldNotBeNullException(nameof(value));
 		}
 
+		public static implicit operator StringValue(string value) => new StringValue(value);
+
 		public string Value 
 		{ 
 			get => _value; 

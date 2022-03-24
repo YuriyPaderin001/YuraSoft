@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
+		public static implicit operator DoubleValue(double value) => new DoubleValue(value);
+
 		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
 	}
 }

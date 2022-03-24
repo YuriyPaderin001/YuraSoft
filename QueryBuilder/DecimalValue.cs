@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
+		public static implicit operator DecimalValue(decimal value) => new DecimalValue(value);
+
 		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
 	}
 }

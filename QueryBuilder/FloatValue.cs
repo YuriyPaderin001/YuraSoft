@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
+		public static implicit operator FloatValue(float value) => new FloatValue(value);
+
 		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
 	}
 }

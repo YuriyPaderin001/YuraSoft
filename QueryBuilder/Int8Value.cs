@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
+		public static implicit operator Int8Value(sbyte value) => new Int8Value(value);
+
 		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
 	}
 }
