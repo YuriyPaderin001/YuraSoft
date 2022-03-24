@@ -10,7 +10,7 @@ namespace YuraSoft.QueryBuilder
 {
 	public class OrCondition : ICondition
 	{
-		private IEnumerable<ICondition> _conditions;
+		private List<ICondition> _conditions;
 
 		public OrCondition(IEnumerable<ICondition> conditions)
 		{
@@ -24,10 +24,10 @@ namespace YuraSoft.QueryBuilder
 				throw new CollectionShouldNotBeEmptyException(nameof(conditions));
 			}
 
-			_conditions = conditions;
+			_conditions = new List<ICondition>(conditions);
 		}
 
-		public IEnumerable<ICondition> Conditions
+		public List<ICondition> Conditions
 		{
 			get => _conditions;
 			set
