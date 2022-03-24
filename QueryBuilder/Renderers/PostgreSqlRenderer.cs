@@ -48,7 +48,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			StringBuilder sql = new StringBuilder();
 			sql.Append(condition.Expression.RenderExpression(this));
 			sql.Append(" in (");
-			sql.AppendJoin(", ", condition.ValueExpressions.Select(ve => ve.RenderExpression(this)));
+			sql.AppendJoin(", ", condition.Values.Select(ve => ve.RenderExpression(this)));
 			sql.Append(")");
 
 			return sql.ToString();
@@ -64,7 +64,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			StringBuilder sql = new StringBuilder();
 			sql.Append(condition.Expression.RenderExpression(this));
 			sql.Append(" not in (");
-			sql.AppendJoin(", ", condition.ValueExpressions.Select(ve => ve.RenderExpression(this)));
+			sql.AppendJoin(", ", condition.Values.Select(ve => ve.RenderExpression(this)));
 			sql.Append(")");
 
 			return sql.ToString();
@@ -294,6 +294,12 @@ namespace YuraSoft.QueryBuilder.Renderers
 			{
 				sql.Append(" from ");
 				sql.AppendJoin(", ", select.Sources.ConvertAll(s => s.RenderSource(this)));
+			}
+
+			if (select.Joins.Count > 0)
+			{
+				sql.Append(" ");
+				sql.AppendJoin(" ", select.Joins.ConvertAll(s => s.RenderJoin(this)));
 			}
 
 			if (select.WhereCondition != null)

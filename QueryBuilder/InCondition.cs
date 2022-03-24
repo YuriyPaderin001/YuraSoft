@@ -11,22 +11,22 @@ namespace YuraSoft.QueryBuilder
 	public class InCondition : ICondition
 	{
 		private IExpression _expression;
-		private IEnumerable<IExpression> _valueExpressions;
+		private IEnumerable<IExpression> _values;
 
-		public InCondition(IExpression expression, IEnumerable<IExpression> valueExpressions)
+		public InCondition(IExpression expression, IEnumerable<IExpression> values)
 		{
 			_expression = expression ?? throw new ArgumentShouldNotBeNullException(nameof(expression));
 			
-			if (valueExpressions == null)
+			if (values == null)
 			{
-				throw new ArgumentShouldNotBeNullException(nameof(valueExpressions));
+				throw new ArgumentShouldNotBeNullException(nameof(values));
 			}
-			else if (!valueExpressions.GetEnumerator().MoveNext())
+			else if (!values.GetEnumerator().MoveNext())
 			{
-				throw new CollectionShouldNotBeEmptyException(nameof(valueExpressions));
+				throw new CollectionShouldNotBeEmptyException(nameof(values));
 			}
 
-			_valueExpressions = valueExpressions;
+			_values = values;
 		}
 
 		public IExpression Expression 
@@ -35,21 +35,21 @@ namespace YuraSoft.QueryBuilder
 			set => _expression = value ?? throw new ArgumentShouldNotBeNullException(nameof(Expression)); 
 		}
 
-		public IEnumerable<IExpression> ValueExpressions 
+		public IEnumerable<IExpression> Values 
 		{ 
-			get => _valueExpressions;
+			get => _values;
 			set
 			{
 				if (value == null)
 				{
-					throw new ArgumentShouldNotBeNullException(nameof(ValueExpressions));
+					throw new ArgumentShouldNotBeNullException(nameof(Values));
 				}
 				else if (!value.GetEnumerator().MoveNext())
 				{
-					throw new CollectionShouldNotBeEmptyException(nameof(ValueExpressions));
+					throw new CollectionShouldNotBeEmptyException(nameof(Values));
 				}
 
-				_valueExpressions = value;
+				_values = value;
 			}
 		}
 

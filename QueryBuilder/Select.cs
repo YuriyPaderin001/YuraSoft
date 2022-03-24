@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using YuraSoft.QueryBuilder.Exceptions;
@@ -85,17 +86,65 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public Select Where(Action<ConditionBuilder> buildConditionMethod)
+		{
+			ConditionBuilder builder = new ConditionBuilder();
+			buildConditionMethod.Invoke(builder);
+
+			WhereCondition = builder.Build();
+
+			return this;
+		}
+
 		public Select LeftJoin(string table, ICondition condition) => AddJoin(new LeftJoin(new Table(table), condition));
+		public Select LeftJoin(string table, Action<ConditionBuilder> buildConditionMethod) => LeftJoin(new Table(table), buildConditionMethod);
 		public Select LeftJoin(ISource source, ICondition condition) => AddJoin(new LeftJoin(source, condition));
-		public Select LeftJoin(LeftJoin join) => AddJoin(join);
+		public Select LeftJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
+		{
+			ConditionBuilder builder = new ConditionBuilder();
+			buildConditionMethod.Invoke(builder);
+
+			ICondition condition = builder.Build();
+
+			AddJoin(new LeftJoin(source, condition));
+
+			return this;
+		}
 
 		public Select RightJoin(string table, ICondition condition) => AddJoin(new RightJoin(new Table(table), condition));
+		public Select RightJoin(string table, Action<ConditionBuilder> buildConditionMethod) => RightJoin(new Table(table), buildConditionMethod);
 		public Select RightJoin(ISource source, ICondition condition) => AddJoin(new RightJoin(source, condition));
-		public Select RightJoin(RightJoin join) => AddJoin(join);
+		public Select RightJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
+		{
+			ConditionBuilder builder = new ConditionBuilder();
+			buildConditionMethod.Invoke(builder);
+
+			ICondition condition = builder.Build();
+
+			AddJoin(new RightJoin(source, condition));
+
+			return this;
+		}
 
 		public Select InnerJoin(string table, ICondition condition) => AddJoin(new InnerJoin(new Table(table), condition));
+		public Select InnerJoin(string table, Action<ConditionBuilder> buildConditionMethod) => InnerJoin(new Table(table), buildConditionMethod);
 		public Select InnerJoin(ISource source, ICondition condition) => AddJoin(new InnerJoin(source, condition));
-		public Select InnerJoin(InnerJoin join) => AddJoin(join);
+		public Select InnerJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
+		{
+			ConditionBuilder builder = new ConditionBuilder();
+			buildConditionMethod.Invoke(builder);
+
+			ICondition condition = builder.Build();
+
+			AddJoin(new RightJoin(source, condition));
+
+			return this;
+		}
+
+		public Select CrossJoin(string table) => AddJoin(new CrossJoin(new Table(table)));
+		public Select CrossJoin(ISource source) => AddJoin(new CrossJoin(source));
+
+		public Select Join(IJoin join) => AddJoin(join);
 
 		public Select Having(ICondition condition)
 		{
