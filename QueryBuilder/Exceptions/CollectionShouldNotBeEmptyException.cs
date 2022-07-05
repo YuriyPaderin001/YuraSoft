@@ -8,7 +8,7 @@ namespace YuraSoft.QueryBuilder.Exceptions
 {
 	public class CollectionShouldNotBeEmptyException : ArgumentException
 	{
-		public CollectionShouldNotBeEmptyException(string collectionName) : base(Errors.CollectionShouldNotBeEmpty, collectionName)
+		public CollectionShouldNotBeEmptyException(string collectionName) : base(Shared.Err_CollectionShouldNotBeEmpty, collectionName)
 		{
 		}
 	}

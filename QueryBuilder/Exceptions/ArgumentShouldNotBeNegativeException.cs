@@ -8,7 +8,7 @@ namespace YuraSoft.QueryBuilder.Exceptions
 {
 	public class ArgumentShouldNotBeNegativeException : ArgumentNullException
 	{
-		public ArgumentShouldNotBeNegativeException(string argumentName) : base(argumentName, Errors.ArgumentShouldNotBeNegative)
+		public ArgumentShouldNotBeNegativeException(string argumentName) : base(argumentName, Shared.Err_ArgumentShouldNotBeNegative)
 		{
 		}
 	}

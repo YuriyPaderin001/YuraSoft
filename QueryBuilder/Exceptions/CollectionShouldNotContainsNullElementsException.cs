@@ -8,7 +8,7 @@ namespace YuraSoft.QueryBuilder.Exceptions
 {
 	public class CollectionShouldNotContainsNullElementsException : ArgumentException
 	{
-		public CollectionShouldNotContainsNullElementsException(string collectionName) : base(Errors.CollectionShouldNotContainsNullElements, collectionName)
+		public CollectionShouldNotContainsNullElementsException(string collectionName) : base(Shared.Err_CollectionShouldNotContainsNullElements, collectionName)
 		{
 		}
 	}

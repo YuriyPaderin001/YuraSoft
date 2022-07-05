@@ -6,7 +6,15 @@ namespace YuraSoft.QueryBuilder.Renderers
 	{
 		public string RenderSelect(Select select);
 
-		public string RenderColumn(Column column);
+		#region Column render methods
+
+		public string RenderColumn(SourceColumn column);
+		public string RenderColumn(ExpressionColumn column);
+
+		#endregion Column render methods
+
+		#region Condition render methods
+
 		public string RenderCondition(EqualCondition condition);
 		public string RenderCondition(NotEqualCondition condition);
 		public string RenderCondition(InCondition condition);
@@ -22,14 +30,42 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public string RenderCondition(NotLikeCondition condition);
 		public string RenderCondition(AndCondition condition);
 		public string RenderCondition(OrCondition condition);
+
+		#endregion Condition render methods
+
+		#region Expression render methods
+
+		public string RenderExpression(GeneralCaseExpression expression);
+		public string RenderExpression(SimpleCaseExpression expression);
+		public string RenderExpression(MinusExpression expression);
+		public string RenderExpression(PlusExpression expression);
+		public string RenderExpression(MultiplyExpression expression);
+		public string RenderExpression(DivideExpression expression);
+
+		#endregion Expression render methods
+
+		#region Function render methods
+
+		public string RenderFunction(Function function);
+		public string RenderFunction(CountFunction function);
+		public string RenderFunction(SumFunction function);
+		public string RenderFunction(MaxFunction function);
+		public string RenderFunction(MinFunction function);
+		public string RenderFunction(ConcatFunction function);
+		public string RenderFunction(CoalesceFunction function);
+
+		#endregion Function render methods
+
 		public string RenderSource(Table table);
-		public string RenderIdentificator(Column column);
+		public string RenderIdentificator(SourceColumn column);
+		public string RenderIdentificator(ExpressionColumn column);
 		public string RenderIdentificator(Table table);
 		public string RenderJoin(LeftJoin join);
 		public string RenderJoin(RightJoin join);
 		public string RenderJoin(InnerJoin join);
 		public string RenderJoin(CrossJoin join);
 		public string RenderOrderBy(OrderBy join);
+		public string RenderParameter(Parameter parameter);
 		public string RenderValue(Int8Value value);
 		public string RenderValue(Int16Value value);
 		public string RenderValue(Int32Value value);

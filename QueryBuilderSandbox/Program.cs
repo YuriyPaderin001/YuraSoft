@@ -10,38 +10,36 @@ namespace QueryBuilderSandbox
 	{
 		public static void Main(string[] args)
 		{
-			ISource table1 = new Table("table1", "t1");
-			ISource table2 = new Table("table2", null, "public");
-			ISource table3 = new Table("table3", "t3");
-
-			IColumn column1 = new Column("column1", "c1", "table1");
-			IColumn column2 = new Column("column2", null, new Table("table1", "t1"));
-			IColumn column3 = new Column("column3", null, new Table("table2", null, "public"));
-			IColumn column4 = new Column("column4", "c4", table3);
-
-			new InCondition(column1, new IValue[] { (Int32Value)32, (StringValue)"test" });
-
-			Select select = new Select(column1, column2, column3, column4)
-				.From(table1, table2)
-				.LeftJoin(table3, cb => cb.Equal(column3, column4))
-				.Where(cb =>
-				{
-					cb.Equal(column1, "test");
-					cb.Greater(column2, 33);
-					cb.And(cb =>
-					{
-						cb.IsNotNull(column3);
-						cb.Like(column3, "%name%");
-					});
-				})
-				.GroupBy("table1")
-				.OrderByAsc("table1")
-				.Offset(100)
-				.Limit(10);
-
 			IRenderer renderer = new PostgreSqlRenderer();
 
-			Console.WriteLine(select.RenderSelect(renderer));
+			Table table1 = new Table("user_group", "ug", "public");
+
+			Select select1 = new Select(c => c.Column("id", table1))
+				.From(table1)
+				.Where(c => c
+					.And(c => c
+						.Equal("name", "group_name")
+						.Equal("is_deleted", bool.FalseString)
+						.In("id", new int[] { 1, 2, 3 })));
+
+			Table table2 = new Table("AspNetUsers", "anu", "auth_remote");
+
+			Select select2 = new Select(c => c
+				.Column("Id", table2)
+				.Column("LastName", table2)
+				.Column("FirstName", table2)
+				.Column("MiddleName", table2))
+				.From(table2)
+				.LeftJoin(table1, c => c.Equal(new SourceColumn("Id", table2), new SourceColumn("creator_sid", table1)))
+				.Where(c => c
+					.Equal("Id", table2, "test_guid")
+					.And(c => c
+						.Equal("FirstName", table2, "Юра")
+						.Equal("MiddleName", table2, "Падерин")
+						.Between("BirthDate", table2, new DateTime(2022, 01, 01), new DateTime(2022, 01, 30))));
+
+			Console.WriteLine(select2.RenderSelect(renderer));
+
 		}
 	}
 }

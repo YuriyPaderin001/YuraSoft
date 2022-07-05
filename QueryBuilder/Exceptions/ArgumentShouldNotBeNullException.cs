@@ -8,7 +8,7 @@ namespace YuraSoft.QueryBuilder.Exceptions
 {
 	public class ArgumentShouldNotBeNullException : ArgumentNullException
 	{
-		public ArgumentShouldNotBeNullException(string argumentName) : base(argumentName, Errors.ArgumentShouldNotBeNullOrEmpty)
+		public ArgumentShouldNotBeNullException(string argumentName) : base(argumentName, Shared.Err_ArgumentShouldNotBeNullOrEmpty)
 		{
 		}
 	}

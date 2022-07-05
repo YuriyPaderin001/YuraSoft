@@ -1,5 +1,7 @@
 /QueryBuilder/bin
 /QueryBuilder/obj
+/QueryBuilder.Tests/bin
+/QueryBuilder.Tests/obj
 /QueryBuilderSandbox/bin
 /QueryBuilderSandbox/obj
 /.vs
