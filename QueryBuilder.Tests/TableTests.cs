@@ -1,92 +1,76 @@
+using System;
 using Xunit;
 
-using YuraSoft.QueryBuilder;
-
-namespace QueryBuilder.Tests
+namespace YuraSoft.QueryBuilder.Tests
 {
 	public class TableTests
 	{
 		[Fact]
-		public void CreateTableWithFullParametersTest()
+		public void Create_WithAllParameters_SuccessCreate()
 		{
 			const string name = "table_name";
 			const string alias = "table_alias";
-			const string @namespace = "table_namespace";
+			const string scheme = "table_namespace";
 
-			Table table = new Table(name, alias, @namespace);
-
-			Assert.Equal(name, table.Name);
-			Assert.Equal(alias, table.Alias);
-			Assert.Equal(@namespace, table.Schema);
-		}
-
-		[Fact]
-		public void CreateTableWithNullNamespaceTest()
-		{
-			const string name = "table_name";
-			const string alias = "table_alias";
-			const string @namespace = null;
-
-			Table table = new Table(name, alias, @namespace);
+			Table table = new Table(name, alias, scheme);
 
 			Assert.Equal(name, table.Name);
 			Assert.Equal(alias, table.Alias);
-			Assert.Null(table.Schema);
+			Assert.Equal(scheme, table.Schema);
 		}
 
-		[Fact]
-		public void CreateTableWithEmptyNamespaceTest()
+		[Theory]
+		[InlineData("")]
+		[InlineData(null)]
+		public void Create_NameIsEmptyOrNull_ThrowException(string? name)
 		{
-			const string name = "table_name";
-			const string alias = "table_alias";
-			const string @namespace = "";
-
-			Table table = new Table(name, alias, @namespace);
-
-			Assert.Equal(name, table.Name);
-			Assert.Equal(alias, table.Alias);
-			Assert.Null(table.Schema);
+			Assert.Throws<ArgumentException>(() => new Table(name!));
 		}
 
-		[Fact]
-		public void CreateTableWithoutNamespaceTest()
+		[Theory]
+		[InlineData("")]
+		[InlineData(null)]
+		public void Create_AliasIsEmptyOrNull_AliasIsNull(string? alias)
 		{
 			const string name = "table_name";
-			const string alias = "table_alias";
+			const string schema = "table_namespace";
 
-			Table table = new Table(name, alias);
-
-			Assert.Equal(name, table.Name);
-			Assert.Equal(alias, table.Alias);
-			Assert.Null(table.Schema);
-		}
-
-		[Fact]
-		public void CreateTableWithNullAliasTest()
-		{
-			const string name = "table_name";
-			const string alias = null;
-			const string @namespace = "table_namespace";
-
-			Table table = new Table(name, alias, @namespace);
+			Table table = new Table(name, alias, schema);
 
 			Assert.Equal(name, table.Name);
 			Assert.Null(table.Alias);
-			Assert.Equal(@namespace, table.Schema);
+			Assert.Equal(schema, table.Schema);
 		}
 
-		[Fact]
-		public void CreateTableWithEmptyAliasTest()
+		[Theory]
+		[InlineData("")]
+		[InlineData(null)]
+		public void Create_SchemaIsEmptyOrNull_SchemaIsNull(string? schema)
 		{
 			const string name = "table_name";
-			const string alias = "";
-			const string @namespace = "table_namespace";
+			const string alias = "table_alias";
 
-			Table table = new Table(name, alias, @namespace);
+			Table table = new Table(name, alias, schema);
+
+			Assert.Equal(name, table.Name);
+			Assert.Equal(alias, table.Alias);
+			Assert.Null(table.Schema);
+		}
+
+		[Theory]
+		[InlineData("", "")]
+		[InlineData("", null)]
+		[InlineData(null, "")]
+		[InlineData(null, null)]
+		public void Create_AliasAndSchemaAreEmptyOrNull_AliasAndSchemaAreNull(string? alias, string? schema)
+		{
+			const string name = "table_name";
+
+			Table table = new Table(name, alias, schema);
 
 			Assert.Equal(name, table.Name);
 			Assert.Null(table.Alias);
-			Assert.Equal(@namespace, table.Schema);
+			Assert.Null(table.Schema);
 		}
 	}
 }

@@ -21,8 +21,9 @@ namespace YuraSoft.QueryBuilder
 			}
 
 			_name = name;
-			_alias = alias;
-			_schema = schema;
+
+			_alias = alias == string.Empty ? null : alias;
+			_schema = schema == string.Empty ? null : schema;
 		}
 
 		public string Name
