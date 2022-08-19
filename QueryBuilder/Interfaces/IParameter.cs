@@ -1,11 +1,11 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface IParameter : IValue
 	{
-		public string RenderParameter(IRenderer renderer);
+		public void RenderParameter(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

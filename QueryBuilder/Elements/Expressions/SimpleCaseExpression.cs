@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
 
 #nullable enable
@@ -17,47 +17,33 @@ namespace YuraSoft.QueryBuilder
 
 		public SimpleCaseExpression(IExpression expression, IEnumerable<Tuple<IExpression, IExpression>> whenThens, IExpression? @else = null)
 		{
-			_expression = expression ?? throw new ArgumentShouldNotBeNullException(nameof(expression));
-			
-			if (whenThens == null)
-			{
-				throw new ArgumentShouldNotBeNullException(nameof(whenThens));
-			} 
-			else if (!whenThens.Any())
-			{
-				throw new CollectionShouldNotBeEmptyException(nameof(whenThens));
-			}
-
-			_whenThens = new List<Tuple<IExpression, IExpression>>(whenThens);
+			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
+			_whenThens = new List<Tuple<IExpression, IExpression>>(Validator.ThrowIfArgumentIsNullOrEmpty(whenThens, nameof(whenThens)));
 			Else = @else;
 		}
 
-		public IExpression Expression 
-		{ 
-			get => _expression; 
-			set => _expression = value ?? throw new ArgumentShouldNotBeNullException(nameof(Expression)); 
+		public IExpression Expression
+		{
+			get => _expression;
+			set => _expression = Validator.ThrowIfArgumentIsNull(value, nameof(Expression));
 		}
 
-		public List<Tuple<IExpression, IExpression>> WhenThens 
-		{ 
-			get => _whenThens; 
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentShouldNotBeNullException(nameof(WhenThens));
-				}
-				else if (!value.Any())
-				{
-					throw new CollectionShouldNotBeEmptyException(nameof(WhenThens));
-				}
-
-				_whenThens = value;
-			} 
+		public List<Tuple<IExpression, IExpression>> WhenThens
+		{
+			get => _whenThens;
+			set => _whenThens = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(WhenThens));
 		}
 
 		public IExpression? Else { get; set; }
 
-		public string RenderExpression(IRenderer renderer) => renderer.RenderExpression(this);
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderExpression(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderExpression(this, stringBuilder);
 	}
 }

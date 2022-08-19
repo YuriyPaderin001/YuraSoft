@@ -1,6 +1,6 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
 
 namespace YuraSoft.QueryBuilder.Tests
@@ -25,7 +25,7 @@ namespace YuraSoft.QueryBuilder.Tests
 		[Fact]
 		public void Create_ExpressionIsNull_ThrowArgumentShouldNotBeNullException()
 		{
-			Assert.Throws<ArgumentShouldNotBeNullException>(() => new ExpressionColumn(null!));
+			Assert.Throws<ArgumentNullException>(() => new ExpressionColumn(null!));
 		}
 
 		[Theory]

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
-
-#nullable enable
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -24,10 +22,7 @@ namespace YuraSoft.QueryBuilder
 
 		public GeneralCaseExpression Build()
 		{
-			if (_whenThens.Count == 0)
-			{
-				throw new CollectionShouldNotBeEmptyException(nameof(_whenThens));
-			}
+			Validator.ThrowIfArgumentIsEmpty(_whenThens, nameof(_whenThens));
 
 			GeneralCaseExpression caseExpression = new GeneralCaseExpression(_whenThens, _else);
 

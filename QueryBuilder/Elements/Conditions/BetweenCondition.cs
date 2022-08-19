@@ -1,8 +1,8 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -13,22 +13,22 @@ namespace YuraSoft.QueryBuilder
 
 		public BetweenCondition(IExpression expression, IExpression lessExpression, IExpression hightExpression) : base(expression)
 		{
-			_lessExpression = lessExpression ?? throw new ArgumentShouldNotBeNullException(nameof(lessExpression));
-			_hightExpression = hightExpression ?? throw new ArgumentShouldNotBeNullException(nameof(hightExpression));
+			_lessExpression = Validator.ThrowIfArgumentIsNull(lessExpression, nameof(lessExpression));
+			_hightExpression = Validator.ThrowIfArgumentIsNull(hightExpression, nameof(hightExpression));
 		}
 
 		public IExpression LessExpression
 		{
 			get => _lessExpression;
-			set => _lessExpression = value ?? throw new ArgumentShouldNotBeNullException(nameof(LessExpression));
+			set => _lessExpression = Validator.ThrowIfArgumentIsNull(value, nameof(LessExpression));
 		}
 
 		public IExpression HightExpression
 		{
 			get => _hightExpression;
-			set => _hightExpression = value ?? throw new ArgumentShouldNotBeNullException(nameof(HightExpression));
+			set => _hightExpression = Validator.ThrowIfArgumentIsNull(value, nameof(HightExpression));
 		}
 
-		public override string RenderCondition(IRenderer renderer) => renderer.RenderCondition(this);
+		public override void RenderCondition(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderCondition(this, stringBuilder);
 	}
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
-
-#nullable enable
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -16,12 +14,7 @@ namespace YuraSoft.QueryBuilder
 
 		public SimpleCaseBuilder(IExpression expression)
 		{
-			if (expression == null)
-			{
-				throw new ArgumentShouldNotBeNullException(nameof(expression));
-			}
-
-			_expression = expression;
+			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 		}
 
 		public SimpleCaseBuilder WhenThen(IExpression condition, IExpression expression)
@@ -35,10 +28,7 @@ namespace YuraSoft.QueryBuilder
 
 		public SimpleCaseExpression Build()
 		{
-			if (_whenThens.Count == 0)
-			{
-				throw new CollectionShouldNotBeEmptyException(nameof(_whenThens));
-			}
+			Validator.ThrowIfArgumentIsEmpty(_whenThens, nameof(_whenThens));
 
 			SimpleCaseExpression caseExpression = new SimpleCaseExpression(_expression, _whenThens, _else);
 

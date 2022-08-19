@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
 
 namespace YuraSoft.QueryBuilder
 {
@@ -15,36 +13,23 @@ namespace YuraSoft.QueryBuilder
 
 		public ArithmeticExpression(IEnumerable<IExpression> expressions)
 		{
-			if (expressions == null)
-			{
-				throw new ArgumentShouldNotBeNullException(nameof(expressions));
-			}
-			else if (expressions.Count() < 2)
-			{
-				throw new CollectionShouldNotBeLessThanException(nameof(expressions), 2);
-			}
-
-			_expressions = new List<IExpression>(expressions);
+			_expressions = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrArgumentSizeIsLessThan(expressions, 2, nameof(expressions)));
 		}
 
 		public List<IExpression> Expressions
 		{
 			get => _expressions;
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentShouldNotBeNullException(nameof(Expressions));
-				}
-				else if (value.Count() < 2)
-				{
-					throw new CollectionShouldNotBeLessThanException(nameof(Expressions), 2);
-				}
-
-				_expressions = value;
-			}
+			set => _expressions = Validator.ThrowIfArgumentIsNullOrArgumentSizeIsLessThan(value, 2, nameof(Expressions));
 		}
 
-		public abstract string RenderExpression(IRenderer renderer);
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderExpression(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+		
+		public abstract void RenderExpression(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

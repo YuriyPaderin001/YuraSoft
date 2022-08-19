@@ -1,5 +1,7 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
+﻿using System.Text;
+
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
@@ -10,15 +12,23 @@ namespace YuraSoft.QueryBuilder
 
 		public Join(ISource source)
 		{
-			_source = source ?? throw new ArgumentShouldNotBeNullException(nameof(source));
+			_source = Validator.ThrowIfArgumentIsNull(source, nameof(source));
 		}
 
 		public ISource Source
 		{
 			get => _source;
-			set => _source = value ?? throw new ArgumentShouldNotBeNullException(nameof(Source));
+			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
 		}
 
-		public abstract string RenderJoin(IRenderer renderer);
+		public string RenderJoin(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderJoin(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public abstract void RenderJoin(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

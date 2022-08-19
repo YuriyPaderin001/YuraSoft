@@ -1,5 +1,5 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
+﻿using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -9,13 +9,13 @@ namespace YuraSoft.QueryBuilder
 
 		public ConditionalJoin(ISource source, ICondition condition) : base(source)
 		{
-			_condition = condition ?? throw new ArgumentShouldNotBeNullException(nameof(condition));
+			_condition = Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
 		}
 
 		public ICondition Condition
 		{
 			get => _condition;
-			set => _condition = value ?? throw new ArgumentShouldNotBeNullException(nameof(Condition));
+			set => _condition = Validator.ThrowIfArgumentIsNull(value, nameof(Condition));
 		}
 	}
 }

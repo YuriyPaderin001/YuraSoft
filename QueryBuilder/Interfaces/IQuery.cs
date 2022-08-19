@@ -4,8 +4,8 @@ using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
-	public interface IOrderBy
+	public interface IQuery
 	{
-		public void RenderOrderBy(IRenderer renderer, StringBuilder stringBuilder);
+		public void RenderQuery(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

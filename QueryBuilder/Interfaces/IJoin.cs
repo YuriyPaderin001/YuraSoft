@@ -1,11 +1,11 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface IJoin
 	{
-		public string RenderJoin(IRenderer renderer);
+		public void RenderJoin(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

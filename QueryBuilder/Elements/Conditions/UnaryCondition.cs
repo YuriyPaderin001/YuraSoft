@@ -1,8 +1,8 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -12,15 +12,23 @@ namespace YuraSoft.QueryBuilder
 
 		public UnaryCondition(IExpression expression)
 		{
-			_expression = expression ?? throw new ArgumentShouldNotBeNullException(nameof(expression));
+			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 		}
 
 		public IExpression Expression 
 		{ 
 			get => _expression; 
-			set => _expression = value ?? throw new ArgumentShouldNotBeNullException(nameof(Expression)); 
+			set => _expression = Validator.ThrowIfArgumentIsNull(value, nameof(Expression));
 		}
 
-		public abstract string RenderCondition(IRenderer renderer);
+		public string RenderCondition(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderCondition(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public abstract void RenderCondition(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

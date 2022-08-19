@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 using YuraSoft.QueryBuilder.Abstractions;
 using YuraSoft.QueryBuilder.Renderers;
@@ -24,6 +25,6 @@ namespace YuraSoft.QueryBuilder
 			set => _format = string.IsNullOrEmpty(value) ? "s" : value;
 		}
 
-		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
+		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
 	}
 }

@@ -1,8 +1,8 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -12,15 +12,15 @@ namespace YuraSoft.QueryBuilder
 
 		public CoalesceFunction(IColumn column, IExpression defaultValue) : base(column)
 		{
-			_defaultValue = defaultValue ?? throw new ArgumentShouldNotBeNullException(nameof(defaultValue));
+			_defaultValue = Validator.ThrowIfArgumentIsNull(defaultValue, nameof(defaultValue));
 		}
 
 		public IExpression DefaultValue 
 		{ 
 			get => _defaultValue;
-			set => _defaultValue = value ?? throw new ArgumentShouldNotBeNullException(nameof(DefaultValue));
+			set => _defaultValue = Validator.ThrowIfArgumentIsNull(value, nameof(DefaultValue));
 		}
 
-		public override string RenderFunction(IRenderer renderer) => renderer.RenderFunction(this);
+		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
 	}
 }

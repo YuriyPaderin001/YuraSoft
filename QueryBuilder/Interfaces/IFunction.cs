@@ -1,11 +1,11 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface IFunction : IExpression
 	{
-		public string RenderFunction(IRenderer renderer);
+		public void RenderFunction(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

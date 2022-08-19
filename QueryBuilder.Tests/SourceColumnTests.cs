@@ -1,6 +1,6 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
 
 namespace YuraSoft.QueryBuilder.Tests
@@ -68,7 +68,7 @@ namespace YuraSoft.QueryBuilder.Tests
 		[InlineData(null)]
 		public void Create_NameIsEmptyOrNull_ThrowArgumentShouldNotBeNullOrEmptyException(string? name)
 		{
-			Assert.Throws<ArgumentShouldNotBeNullOrEmptyException>(() => new SourceColumn(name!));
+			Assert.Throws<ArgumentException>(() => new SourceColumn(name!));
 		}
 
 		[Theory]
@@ -76,15 +76,15 @@ namespace YuraSoft.QueryBuilder.Tests
 		[InlineData(null)]
 		public void Create_AliasIsEmptyOrNull_ThrowArgumentShouldNotBeNullOrEmptyException(string? alias)
 		{
-			Assert.Throws<ArgumentShouldNotBeNullOrEmptyException>(() => new SourceColumn("column_name", alias!));
-			Assert.Throws<ArgumentShouldNotBeNullOrEmptyException>(() => new SourceColumn("column_name", alias!, new Table("table_name")));
+			Assert.Throws<ArgumentException>(() => new SourceColumn("column_name", alias!));
+			Assert.Throws<ArgumentException>(() => new SourceColumn("column_name", alias!, new Table("table_name")));
 		}
 
 		[Fact]
 		public void Create_SourceIsNull_ThrowArgumentShouldNotBeNullException()
 		{
-			Assert.Throws<ArgumentShouldNotBeNullException>(() => new SourceColumn("column_name", (ISource)null!));
-			Assert.Throws<ArgumentShouldNotBeNullException>(() => new SourceColumn("column_name", "column_alias", null!));
+			Assert.Throws<ArgumentNullException>(() => new SourceColumn("column_name", (ISource)null!));
+			Assert.Throws<ArgumentNullException>(() => new SourceColumn("column_name", "column_alias", null!));
 		}
 	}
 }

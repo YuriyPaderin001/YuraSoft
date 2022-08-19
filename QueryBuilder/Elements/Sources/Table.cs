@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 #nullable enable
 
@@ -15,13 +16,7 @@ namespace YuraSoft.QueryBuilder
 
 		public Table(string name, string? alias = null, string? schema = null)
 		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentException("{0} can't be null or empty", nameof(name)); 
-			}
-
-			_name = name;
-
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 			_alias = alias == string.Empty ? null : alias;
 			_schema = schema == string.Empty ? null : schema;
 		}
@@ -29,15 +24,7 @@ namespace YuraSoft.QueryBuilder
 		public string Name
 		{
 			get => _name;
-			set
-			{
-				if (string.IsNullOrEmpty(value))
-				{
-					throw new ArgumentException("{0} can't be null or empty", nameof(Name));
-				}
-
-				_name = value;
-			}
+			set => _name = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Name));
 		}
 
 		public string? Alias
@@ -52,7 +39,24 @@ namespace YuraSoft.QueryBuilder
 			set => _schema = value == string.Empty ? null : value;
 		}
 
-		public string RenderSource(IRenderer renderer) => renderer.RenderSource(this);
-		public string RenderIdentificator(IRenderer renderer) => renderer.RenderIdentificator(this);
+		public string RenderSource(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderSource(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public virtual void RenderSource(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderSource(this, stringBuilder);
+		
+		public string RenderIdentificator(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderIdentificator(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+		
+		public virtual void RenderIdentificator(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderIdentificator(this, stringBuilder);
 	}
 }

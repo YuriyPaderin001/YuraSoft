@@ -20,7 +20,7 @@ namespace QueryBuilderSandbox
 					.And(c => c
 						.Equal("name", "group_name")
 						.Equal("is_deleted", bool.FalseString)
-						.In("id", new int[] { 1, 2, 3 })));
+						.In("id", 1, 2, 3 )));
 
 			Table table2 = new Table("AspNetUsers", "anu", "auth_remote");
 
@@ -30,7 +30,7 @@ namespace QueryBuilderSandbox
 				.Column("FirstName", table2)
 				.Column("MiddleName", table2))
 				.From(table2)
-				.LeftJoin(table1, c => c.Equal(new SourceColumn("Id", table2), new SourceColumn("creator_sid", table1)))
+				.LeftJoin(table1, c => c.Equal("Id", table2, "creator_sid", table1))
 				.Where(c => c
 					.Equal("Id", table2, "test_guid")
 					.And(c => c
@@ -38,8 +38,34 @@ namespace QueryBuilderSandbox
 						.Equal("MiddleName", table2, "Падерин")
 						.Between("BirthDate", table2, new DateTime(2022, 01, 01), new DateTime(2022, 01, 30))));
 
-			Console.WriteLine(select2.RenderSelect(renderer));
+			Console.WriteLine(select2.RenderQuery(renderer));
 
+			Table table3 = new Table("AspNetUsers", "anu", "auth_remote");
+
+			Insert insert1 = new Insert(table3)
+				.Columns(c => c
+					.Column("Id")
+					.Column("LastName")
+					.Column("FirstName")
+					.Column("MiddleName"))
+				.Values(v => v
+					.Int32(3)
+					.String("last_name")
+					.String("first_name")
+					.String("middle_name"))
+				.Values(
+					new Int32Value(3),
+					new StringValue("last_name"))
+				.Values(
+					new Int32Value(3),
+					new StringValue("last_name"),
+					new StringValue("first_name"),
+					new StringValue("middle_name"))
+				.Values(
+					new Int32Value(3),
+					new StringValue("last_name"));
+
+			Console.WriteLine(insert1.RenderQuery(renderer));
 		}
 	}
 }

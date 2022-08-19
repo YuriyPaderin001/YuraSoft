@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Err_ArgumentShouldNotBeEmpty" xml:space="preserve">
+    <value>{0} should not be empty</value>
+  </data>
   <data name="Err_ArgumentShouldNotBeNegative" xml:space="preserve">
     <value>{0} should not be negative</value>
   </data>
@@ -126,16 +129,13 @@
   <data name="Err_ArgumentShouldNotBeNullOrEmpty" xml:space="preserve">
     <value>{0} should not be null or empty</value>
   </data>
-  <data name="Err_CollectionShouldNotBeEmpty" xml:space="preserve">
-    <value>{0} should not be empty</value>
-  </data>
-  <data name="Err_CollectionShouldNotContainsNullElements" xml:space="preserve">
+  <data name="Err_ArgumentShouldNotContainsNullElements" xml:space="preserve">
     <value>{0} should not contains null elements</value>
   </data>
-  <data name="Err_CollectionShouldNotContainsNullOrEmptyElements" xml:space="preserve">
+  <data name="Err_ArgumentShouldNotContainsNullOrEmptyElements" xml:space="preserve">
     <value>{0} should not contains null or empty elements</value>
   </data>
-  <data name="Err_CollectionSizeShouldNotBeLessThan" xml:space="preserve">
+  <data name="Err_ArgumentSizeShouldNotBeLessThan" xml:space="preserve">
     <value>{0} collection size should not be less than {1}</value>
   </data>
 </root>

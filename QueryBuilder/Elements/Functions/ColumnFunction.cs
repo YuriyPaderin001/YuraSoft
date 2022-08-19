@@ -1,5 +1,5 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
+﻿using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -9,13 +9,13 @@ namespace YuraSoft.QueryBuilder
 
 		public ColumnFunction(IColumn column)
 		{
-			_column = column ?? throw new ArgumentShouldNotBeNullException(nameof(column));
+			_column = Validator.ThrowIfArgumentIsNull(column, nameof(column));
 		}
 
 		public IColumn Column
 		{
 			get => _column;
-			set => _column = value ?? throw new ArgumentShouldNotBeNullException(nameof(Column));
+			set => _column = Validator.ThrowIfArgumentIsNull(value, nameof(Column));
 		}
 	}
 }

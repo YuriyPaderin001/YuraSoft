@@ -1,11 +1,11 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface IIdentificator
 	{
-		public string RenderIdentificator(IRenderer renderer);
+		public void RenderIdentificator(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

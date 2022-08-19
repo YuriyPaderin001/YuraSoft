@@ -1,7 +1,7 @@
-﻿using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -11,6 +11,6 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
-		public override string RenderFunction(IRenderer renderer) => renderer.RenderFunction(this);
+		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
 	}
 }

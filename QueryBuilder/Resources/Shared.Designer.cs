@@ -19,7 +19,7 @@ namespace YuraSoft.QueryBuilder.Resources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Shared {
@@ -61,6 +61,15 @@ namespace YuraSoft.QueryBuilder.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на {0} should not be empty.
+        /// </summary>
+        internal static string Err_ArgumentShouldNotBeEmpty {
+            get {
+                return ResourceManager.GetString("Err_ArgumentShouldNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на {0} should not be negative.
         /// </summary>
         internal static string Err_ArgumentShouldNotBeNegative {
@@ -88,38 +97,29 @@ namespace YuraSoft.QueryBuilder.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на {0} should not be empty.
-        /// </summary>
-        internal static string Err_CollectionShouldNotBeEmpty {
-            get {
-                return ResourceManager.GetString("Err_CollectionShouldNotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на {0} should not contains null elements.
         /// </summary>
-        internal static string Err_CollectionShouldNotContainsNullElements {
+        internal static string Err_ArgumentShouldNotContainsNullElements {
             get {
-                return ResourceManager.GetString("Err_CollectionShouldNotContainsNullElements", resourceCulture);
+                return ResourceManager.GetString("Err_ArgumentShouldNotContainsNullElements", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} should not contains null or empty elements.
         /// </summary>
-        internal static string Err_CollectionShouldNotContainsNullOrEmptyElements {
+        internal static string Err_ArgumentShouldNotContainsNullOrEmptyElements {
             get {
-                return ResourceManager.GetString("Err_CollectionShouldNotContainsNullOrEmptyElements", resourceCulture);
+                return ResourceManager.GetString("Err_ArgumentShouldNotContainsNullOrEmptyElements", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} collection size should not be less than {1}.
         /// </summary>
-        internal static string Err_CollectionSizeShouldNotBeLessThan {
+        internal static string Err_ArgumentSizeShouldNotBeLessThan {
             get {
-                return ResourceManager.GetString("Err_CollectionSizeShouldNotBeLessThan", resourceCulture);
+                return ResourceManager.GetString("Err_ArgumentSizeShouldNotBeLessThan", resourceCulture);
             }
         }
     }

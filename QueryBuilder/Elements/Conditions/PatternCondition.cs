@@ -1,5 +1,5 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
+﻿using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -9,28 +9,13 @@ namespace YuraSoft.QueryBuilder
 
 		public PatternCondition(IExpression expression, string pattern) : base(expression)
 		{
-			Validate(pattern, nameof(pattern));
-
-			_pattern = pattern;
+			_pattern = Validator.ThrowIfArgumentIsNullOrEmpty(pattern, nameof(pattern));
 		}
 
 		public string Pattern
 		{
 			get => _pattern;
-			set
-			{
-				Validate(value, nameof(Pattern));
-
-				_pattern = value;
-			}
-		}
-
-		private void Validate(string pattern, string parameterName)
-		{
-			if (string.IsNullOrEmpty(pattern))
-			{
-				throw new ArgumentShouldNotBeNullOrEmptyException(nameof(pattern));
-			}
+			set => _pattern = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Pattern));
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace YuraSoft.QueryBuilder.Tests
 		[InlineData(null)]
 		public void Create_NameIsEmptyOrNull_ThrowException(string? name)
 		{
-			Assert.Throws<ArgumentException>(() => new Table(name!));
+			Assert.ThrowsAny<ArgumentException>(() => new Table(name!));
 		}
 
 		[Theory]

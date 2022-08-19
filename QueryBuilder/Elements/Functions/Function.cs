@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
 
 namespace YuraSoft.QueryBuilder
 {
@@ -14,32 +13,18 @@ namespace YuraSoft.QueryBuilder
 
 		public Function(string name, IEnumerable<IExpression>? parameters)
 		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentShouldNotBeNullOrEmptyException(nameof(name));
-			}
-
-			_name = name;
-
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 			Parameters = parameters != null ? new List<IExpression>(parameters) : null;
 		}
 
 		public string Name
 		{
 			get => _name;
-			set
-			{
-				if (string.IsNullOrEmpty(value))
-				{
-					throw new ArgumentShouldNotBeNullOrEmptyException(nameof(Name));
-				}
-
-				_name = value;
-			}
+			set => _name = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Name));
 		}
 
 		public List<IExpression>? Parameters { get; set; }
 
-		public override string RenderFunction(IRenderer renderer) => renderer.RenderFunction(this);
+		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
 	}
 }

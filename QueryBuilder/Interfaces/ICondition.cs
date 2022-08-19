@@ -1,11 +1,11 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface ICondition
 	{
-		public string RenderCondition(IRenderer renderer); 
+		public void RenderCondition(IRenderer renderer, StringBuilder stringBuilder); 
 	}
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
 
 namespace YuraSoft.QueryBuilder
 {
@@ -13,6 +12,6 @@ namespace YuraSoft.QueryBuilder
 		{ 
 		}
 
-		public override string RenderExpression(IRenderer renderer) => renderer.RenderExpression(this);
+		public override void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderExpression(this, stringBuilder);
 	}
 }

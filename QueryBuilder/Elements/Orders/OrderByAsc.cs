@@ -1,7 +1,5 @@
 ﻿using YuraSoft.QueryBuilder.Interfaces;
 
-#nullable enable
-
 namespace YuraSoft.QueryBuilder
 {
 	public class OrderByAsc : OrderBy

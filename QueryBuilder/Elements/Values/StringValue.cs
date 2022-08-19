@@ -1,6 +1,8 @@
-﻿using YuraSoft.QueryBuilder.Abstractions;
-using YuraSoft.QueryBuilder.Exceptions;
+﻿using System.Text;
+
+using YuraSoft.QueryBuilder.Abstractions;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 #nullable enable
 
@@ -14,14 +16,8 @@ namespace YuraSoft.QueryBuilder
 
 		public static implicit operator StringValue(string value) => new StringValue(value);
 
-		protected override void Validate(string data, string parameterName)
-		{
-			if (data == null)
-			{
-				throw new ArgumentShouldNotBeNullException(parameterName);
-			}
-		}
+		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
 
-		public override string RenderValue(IRenderer renderer) => renderer.RenderValue(this);
+		protected override string Validate(string data, string parameterName) => Validator.ThrowIfArgumentIsNull(data, parameterName);
 	}
 }

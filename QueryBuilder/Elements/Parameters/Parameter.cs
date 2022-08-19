@@ -1,8 +1,8 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
 
-#nullable enable
+using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
+using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -12,30 +12,43 @@ namespace YuraSoft.QueryBuilder
 
 		public Parameter(string name)
 		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentShouldNotBeNullOrEmptyException(nameof(name));
-			}
-
-			_name = name;
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 		}
 
 		public string Name
 		{
 			get => _name;
-			set
-			{
-				if (string.IsNullOrEmpty(value))
-				{
-					throw new ArgumentShouldNotBeNullOrEmptyException(nameof(Name));
-				}
-
-				_name = value;
-			}
+			set => _name = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Name));
 		}
 
-		public string RenderValue(IRenderer renderer) => RenderParameter(renderer);
-		public string RenderExpression(IRenderer renderer) => RenderParameter(renderer);
-		public string RenderParameter(IRenderer renderer) => renderer.RenderParameter(this);
+		public string RenderValue(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderValue(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public virtual void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => RenderParameter(renderer, stringBuilder);
+		
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderExpression(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+		
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderParameter(renderer, stringBuilder);
+		
+		public string RenderParameter(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderParameter(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public virtual void RenderParameter(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderParameter(this, stringBuilder);
 	}
 }

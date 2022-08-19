@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
-
-#nullable enable
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -619,35 +617,20 @@ namespace YuraSoft.QueryBuilder
 
 		internal ICondition BuildAnd()
 		{
-			if (_conditions.Count == 0)
-			{
-				// TODO: Add normal error message
-				throw new ArgumentShouldNotBeNullException(nameof(_conditions));
-			}
-			else if (_conditions.Count == 1)
-			{
-				return _conditions[0];
-			}
-			else
-			{
-				return new AndCondition(_conditions);
-			}
+			Validator.ThrowIfArgumentIsEmpty(_conditions, nameof(_conditions));
+
+			ICondition condition = _conditions.Count == 1 ? _conditions[0] : new AndCondition(_conditions);
+
+			return condition;
 		}
 
 		internal ICondition BuildOr()
 		{
-			if (_conditions.Count == 0)
-			{
-				throw new ArgumentShouldNotBeNullException(nameof(_conditions));
-			}
-			else if (_conditions.Count == 1)
-			{
-				return _conditions[0];
-			}
-			else
-			{
-				return new OrCondition(_conditions);
-			}
+			Validator.ThrowIfArgumentIsEmpty(_conditions, nameof(_conditions));
+
+			ICondition condition = _conditions.Count == 1 ? _conditions[0] : new OrCondition(_conditions);
+
+			return condition;
 		}
 
 		private ConditionBuilder Add(ICondition condition)

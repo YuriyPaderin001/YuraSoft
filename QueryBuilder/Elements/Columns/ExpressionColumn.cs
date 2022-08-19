@@ -1,5 +1,7 @@
-﻿using YuraSoft.QueryBuilder.Exceptions;
+﻿using System.Text;
+
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
@@ -11,14 +13,14 @@ namespace YuraSoft.QueryBuilder
 
 		public ExpressionColumn(IExpression expression, string? name = null)
 		{
-			_expression = expression ?? throw new ArgumentShouldNotBeNullException(nameof(expression));
+			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 			_name = name == string.Empty ? null : name;
 		}
 
 		public IExpression Expression 
 		{ 
 			get => _expression;
-			set => _expression = value ?? throw new ArgumentShouldNotBeNullException(nameof(Expression));
+			set => _expression = Validator.ThrowIfArgumentIsNull(value, nameof(Expression));
 		}
 
 		public string? Name
@@ -28,7 +30,27 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public string RenderExpression(IRenderer renderer) => RenderIdentificator(renderer);
-		public string RenderIdentificator(IRenderer renderer) => renderer.RenderIdentificator(this);
-		public string RenderColumn(IRenderer renderer) => renderer.RenderColumn(this);
+
+		public void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderIdentificator(renderer, stringBuilder);
+
+		public string RenderIdentificator(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderIdentificator(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+
+		public void RenderIdentificator(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderIdentificator(this, stringBuilder);
+		
+		public string RenderColumn(IRenderer renderer)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			RenderColumn(renderer, stringBuilder);
+
+			return stringBuilder.ToString();
+		}
+		
+		public void RenderColumn(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderColumn(this, stringBuilder);
 	}
 }

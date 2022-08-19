@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace YuraSoft.QueryBuilder
+﻿namespace YuraSoft.QueryBuilder
 {
 	public enum OrderDirection
 	{

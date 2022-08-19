@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
-using YuraSoft.QueryBuilder.Exceptions;
 using YuraSoft.QueryBuilder.Interfaces;
+using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
 
 namespace YuraSoft.QueryBuilder
 {
@@ -15,36 +13,15 @@ namespace YuraSoft.QueryBuilder
 
 		public ConcatFunction(IEnumerable<IExpression> values) 
 		{
-			if (values == null)
-			{
-				throw new ArgumentShouldNotBeNullException(nameof(values));
-			}
-			else if (!values.Any())
-			{
-				throw new CollectionShouldNotBeEmptyException(nameof(values));
-			}
-
-			_values = new List<IExpression>(values);
+			_values = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrEmpty(values, nameof(values)));
 		}
 
 		public List<IExpression> Values 
 		{ 
 			get => _values;
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentShouldNotBeNullException(nameof(Values));
-				}
-				else if (!value.Any())
-				{
-					throw new CollectionShouldNotBeEmptyException(nameof(Values));
-				}
-
-				_values = value;
-			} 
+			set => _values = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Values)));
 		}
 
-		public override string RenderFunction(IRenderer renderer) => renderer.RenderFunction(this);
+		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
 	}
 }
