@@ -8,17 +8,18 @@ namespace YuraSoft.QueryBuilder.Validation
 {
 	public static class Validator
 	{
+		public static T ThrowIfArgumentIsNullOrEmptyOrContainsNullElements<T>(T argument, string argumentName) where T : IEnumerable
+		{
+			ThrowIfArgumentIsNullOrEmpty(argument, argumentName);
+			ThrowIfArgumentContainsNullElements(argument, argumentName);
+
+			return argument;
+		}
+
 		public static T ThrowIfArgumentIsNullOrContainsNullElements<T>(T argument, string argumentName) where T : IEnumerable
 		{
 			ThrowIfArgumentIsNull(argument, argumentName);
-
-			foreach (object? item in argument)
-			{
-				if (item == null)
-				{
-					throw new ArgumentException(argumentName, Shared.Err_ArgumentShouldNotContainsNullElements);
-				}
-			}
+			ThrowIfArgumentContainsNullElements(argument, argumentName);
 
 			return argument;
 		}
@@ -26,14 +27,7 @@ namespace YuraSoft.QueryBuilder.Validation
 		public static T ThrowIfArgumentIsNullOrContainsNullOrEmptyElements<T>(T argument, string argumentName) where T : IEnumerable<string>
 		{
 			ThrowIfArgumentIsNull(argument, argumentName);
-
-			foreach (string item in argument)
-			{
-				if (string.IsNullOrEmpty(item))
-				{
-					throw new ArgumentException(argumentName, Shared.Err_ArgumentShouldNotContainsNullOrEmptyElements);
-				}
-			}
+			ThrowIfArgumentContainsNullOrEmptyElements(argument, argumentName);
 
 			return argument;
 		}
@@ -102,6 +96,28 @@ namespace YuraSoft.QueryBuilder.Validation
 			}
 
 			return argument;
+		}
+
+		private static void ThrowIfArgumentContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName) 
+		{
+			foreach (string? item in argument)
+			{
+				if (string.IsNullOrEmpty(item))
+				{
+					throw new ArgumentException(argumentName, Shared.Err_ArgumentShouldNotContainsNullOrEmptyElements);
+				}
+			}
+		}
+
+		private static void ThrowIfArgumentContainsNullElements(IEnumerable argument, string argumentName)
+		{
+			foreach (object? item in argument)
+			{
+				if (item == null)
+				{
+					throw new ArgumentException(argumentName, Shared.Err_ArgumentShouldNotContainsNullElements);
+				}
+			}
 		}
 	}
 }
