@@ -9,8 +9,6 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Int32Value : Value<int>
 	{
-		public static implicit operator int(Int32Value value) => value.Data;
-
 		public Int32Value(int value) : base(value)
 		{
 		}
