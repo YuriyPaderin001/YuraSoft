@@ -18,6 +18,7 @@ namespace YuraSoft.QueryBuilder
 		public ExpressionBuilder Decimal(decimal value) => AddExpression(new DecimalValue(value));
 		public ExpressionBuilder DateTime(DateTime value, string? format = null) => AddExpression(new DateTimeValue(value, format));
 		public ExpressionBuilder String(string value) => AddExpression(new StringValue(value));
+		public ExpressionBuilder Null() => AddExpression(new NullValue());
 
 		public List<IExpression> Build() => _expressions;
 

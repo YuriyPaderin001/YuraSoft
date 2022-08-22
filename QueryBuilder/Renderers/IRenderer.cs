@@ -87,6 +87,8 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 		public void RenderQuery(Select select, StringBuilder stringBuilder);
 		public void RenderQuery(Insert insert, StringBuilder stringBuilder);
+		public void RenderQuery(Update update, StringBuilder stringBuilder);
+		public void RenderQuery(Delete delete, StringBuilder stringBuilder);
 
 		#endregion Query render methods
 
@@ -107,6 +109,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderValue(DecimalValue value, StringBuilder stringBuilder);
 		public void RenderValue(DateTimeValue value, StringBuilder stringBuilder);
 		public void RenderValue(StringValue value, StringBuilder stringBuilder);
+		public void RenderValue(NullValue value, StringBuilder stringBuilder);
 
 		#endregion Value render methods
 	}

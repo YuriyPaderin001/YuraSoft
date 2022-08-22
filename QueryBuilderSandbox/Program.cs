@@ -49,23 +49,48 @@ namespace QueryBuilderSandbox
 					.Column("FirstName")
 					.Column("MiddleName"))
 				.Values(v => v
+					.Int32(1)
+					.String("last_name_1")
+					.String("first_name_1")
+					.Null())
+				.Values(v => v
+					.Int32(2)
+					.String("last_name_2")
+					.String("first_name_2")
+					.String("middle_name_2"))
+				.Values(v => v
 					.Int32(3)
-					.String("last_name")
-					.String("first_name")
-					.String("middle_name"))
-				.Values(
-					new Int32Value(3),
-					new StringValue("last_name"))
-				.Values(
-					new Int32Value(3),
-					new StringValue("last_name"),
-					new StringValue("first_name"),
-					new StringValue("middle_name"))
-				.Values(
-					new Int32Value(3),
-					new StringValue("last_name"));
+					.String("last_name_3")
+					.String("first_name_3")
+					.String("middle_name_3"))
+				.Returning(rc => rc
+					.Column("Id"));
 
 			Console.WriteLine(insert1.RenderQuery(renderer));
+
+			Console.WriteLine();
+
+			Update update1 = new Update(table1)
+				.Set("test_column1", 10)
+				.Set("test_column2", "test_value_1")
+				.Set("test_column3", "test_value_2")
+				.SetNull("test_column4")
+				.Where(c => c
+					.Equal("test_column1", table1, 9)
+					.Equal("test_column2", table1, "9999")
+					.Between("test_column4", table1, new DateTime(1999, 01, 01), new DateTime(2000, 01, 01)));
+
+			Console.WriteLine(update1.RenderQuery(renderer));
+
+			Console.WriteLine();
+
+			Delete delete1 = new Delete(table2)
+				.Where(c => c
+					.Equal("FirstName", table2, "Юра")
+					.Equal("MiddleName", table2, "Падерин")
+					.Between("BirthDate", table2, new DateTime(1999, 01, 01), new DateTime(2000, 01, 01)));
+
+			Console.WriteLine(delete1.RenderQuery(renderer));
 		}
 	}
 }

@@ -406,6 +406,49 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
+		public void RenderQuery(Update update, StringBuilder stringBuilder)
+		{
+			Validator.ThrowIfArgumentIsNull(update, nameof(update));
+			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+
+			stringBuilder.Append("update ");
+			stringBuilder.Append(update.Source.RenderSource(this));
+			stringBuilder.Append(" set ");
+
+			update.SetCollection[0].Item1.RenderIdentificator(this, stringBuilder);
+			stringBuilder.Append(" = ");
+			update.SetCollection[0].Item2.RenderExpression(this, stringBuilder);
+
+			for (int i = 1; i < update.SetCollection.Count; i++)
+			{
+				stringBuilder.Append(", ");
+				update.SetCollection[i].Item1.RenderIdentificator(this, stringBuilder);
+				stringBuilder.Append(" = ");
+				update.SetCollection[i].Item2.RenderExpression(this, stringBuilder);
+			}
+
+			if (update.Condition != null)
+			{
+				stringBuilder.Append(" where ");
+				update.Condition.RenderCondition(this, stringBuilder);
+			}
+		}
+
+		public void RenderQuery(Delete delete, StringBuilder stringBuilder)
+		{
+			Validator.ThrowIfArgumentIsNull(delete, nameof(delete));
+			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+
+			stringBuilder.Append("delete from ");
+			stringBuilder.Append(delete.Source.RenderSource(this));
+			
+			if (delete.Condition != null)
+			{
+				stringBuilder.Append(" where ");
+				delete.Condition.RenderCondition(this, stringBuilder);
+			}
+		}
+
 		public void RenderIdentificator(SourceColumn column, StringBuilder stringBuilder)
 		{
 			Validator.ThrowIfArgumentIsNull(column, nameof(column));
@@ -478,21 +521,22 @@ namespace YuraSoft.QueryBuilder.Renderers
 			stringBuilder.Append(parameter.Name);
 		}
 
-		public void RenderValue(Int8Value value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(Int16Value value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(Int32Value value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(Int64Value value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(FloatValue value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(DoubleValue value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(DecimalValue value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(DateTimeValue value, StringBuilder stringBuilder) => RenderValue((object)value.Data, stringBuilder);
-		public void RenderValue(StringValue value, StringBuilder stringBuilder) => RenderValue((object)$"'{value.Data}'", stringBuilder);
+		public void RenderValue(Int8Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(Int16Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(Int32Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(Int64Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(FloatValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(DoubleValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(DecimalValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
+		public void RenderValue(DateTimeValue value, StringBuilder stringBuilder) => RenderValue(value, $"'{value?.Data.ToString(value.Format)}'", stringBuilder);
+		public void RenderValue(StringValue value, StringBuilder stringBuilder) => RenderValue(value, $"'{value?.Data}'", stringBuilder);
+		public void RenderValue(NullValue value, StringBuilder stringBuilder) => RenderValue(value, "null", stringBuilder);
 
-		private void RenderValue(object value, StringBuilder stringBuilder)
+		private void RenderValue(IValue value, object? data, StringBuilder stringBuilder)
 		{
 			Validator.ThrowIfArgumentIsNull(value, nameof(value));
 
-			stringBuilder.Append(value);
+			stringBuilder.Append(data);
 		}
 
 		private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder stringBuilder)
