@@ -191,6 +191,18 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public virtual Select Having(Action<ConditionBuilder> buildConditionMethod)
+		{
+			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
+
+			ConditionBuilder builder = new ConditionBuilder();
+			buildConditionMethod.Invoke(builder);
+
+			HavingCondition = builder.Build();
+
+			return this;
+		}
+
 		public virtual Select OrderByAsc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
