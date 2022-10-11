@@ -29,14 +29,28 @@ namespace YuraSoft.QueryBuilder.Abstractions
 			set => _rightExpression = Validator.ThrowIfArgumentIsNull(value, nameof(RightExpression));
 		}
 
-		public string RenderCondition(IRenderer renderer)
-		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderCondition(renderer, stringBuilder);
+		#region Rendering methods
 
-			return stringBuilder.ToString();
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderExpression(renderer, query);
+
+			return query.ToString();
 		}
 
-		public abstract void RenderCondition(IRenderer renderer, StringBuilder stringBuilder);
-	}
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => RenderCondition(renderer, query);
+
+    public string RenderCondition(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderCondition(renderer, query);
+
+			return query.ToString();
+		}
+
+		public abstract void RenderCondition(IRenderer renderer, StringBuilder query);
+
+    #endregion Rendering methods
+  }
 }

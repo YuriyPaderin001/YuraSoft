@@ -7,583 +7,682 @@ using YuraSoft.QueryBuilder.Abstractions;
 using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Validation;
 
-#nullable enable
-
 namespace YuraSoft.QueryBuilder.Renderers
 {
 	public class PostgreSqlRenderer : IRenderer
 	{
-		public void RenderColumn(SourceColumn column, StringBuilder stringBuilder)
+    #region Column rendering methods
+
+    public void RenderColumn(SourceColumn column, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(column, nameof(column));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			if (column.Source != null)
 			{
-				column.Source.RenderIdentificator(this, stringBuilder);
-				stringBuilder.Append('.');
+				column.Source.RenderIdentificator(this, query);
+				query.Append('.');
 			}
 
-			RenderIdentificator(column.Name, stringBuilder);
+			RenderIdentificator(column.Name, query);
 
 			if (!string.IsNullOrEmpty(column.Alias))
 			{
-				stringBuilder.Append(' ');
-				RenderIdentificator(column.Alias, stringBuilder);
+				query.Append(" AS ");
+				RenderIdentificator(column.Alias, query);
 			}
 		}
 
-		public void RenderColumn(ExpressionColumn column, StringBuilder stringBuilder)
+		public void RenderColumn(ExpressionColumn column, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(column, nameof(column));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 			
-			column.Expression.RenderExpression(this, stringBuilder);
+			column.Expression.RenderExpression(this, query);
 
 			if (!string.IsNullOrEmpty(column.Name))
 			{
-				stringBuilder.Append(' ');
-				RenderIdentificator(column.Name, stringBuilder);
+				query.Append(" AS ");
+				RenderIdentificator(column.Name, query);
 			}
 		}
 
-		#region Render condition methods
+    #endregion Column rendering methods
 
-		public void RenderCondition(EqualCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, "=", stringBuilder);
-		public void RenderCondition(NotEqualCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, "<>", stringBuilder);
-		public void RenderCondition(LessCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, "<", stringBuilder);
-		public void RenderCondition(LessOrEqualCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, "<=", stringBuilder);
-		public void RenderCondition(GreaterCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, ">", stringBuilder);
-		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder stringBuilder) => RenderBinaryCondition(condition, ">=", stringBuilder);
-		public void RenderCondition(IsNullCondition condition, StringBuilder stringBuilder) => RenderUnaryCondition(condition, "is null", stringBuilder);
-		public void RenderCondition(IsNotNullCondition condition, StringBuilder stringBuilder) => RenderUnaryCondition(condition, "is not null", stringBuilder);
-		public void RenderCondition(InCondition condition, StringBuilder stringBuilder) => RenderCondition(condition, "in", stringBuilder);
-		public void RenderCondition(NotInCondition condition, StringBuilder stringBuilder) => RenderCondition(condition, "not in", stringBuilder);
-		public void RenderCondition(LikeCondition condition, StringBuilder stringBuilder) => RenderPatternCondition(condition, "ilike", stringBuilder);
-		public void RenderCondition(NotLikeCondition condition, StringBuilder stringBuilder) => RenderPatternCondition(condition, "not ilike", stringBuilder);
-		public void RenderCondition(AndCondition condition, StringBuilder stringBuilder) => RenderLogicalCondition(condition, "and", stringBuilder);
-		public void RenderCondition(OrCondition condition, StringBuilder stringBuilder) => RenderLogicalCondition(condition, "or", stringBuilder);
+    #region Condition rendeting methods
+
+    public void RenderCondition(EqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "=", query);
+		public void RenderCondition(NotEqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<>", query);
+		public void RenderCondition(LessCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<", query);
+		public void RenderCondition(LessOrEqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<=", query);
+		public void RenderCondition(GreaterCondition condition, StringBuilder query) => RenderBinaryCondition(condition, ">", query);
+		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, ">=", query);
+		public void RenderCondition(IsNullCondition condition, StringBuilder query) => RenderUnaryCondition(condition, "IS NULL", query);
+		public void RenderCondition(IsNotNullCondition condition, StringBuilder query) => RenderUnaryCondition(condition, "IS NOT NULL", query);
+		public void RenderCondition(InCondition condition, StringBuilder query) => RenderCondition(condition, "IN", query);
+		public void RenderCondition(NotInCondition condition, StringBuilder query) => RenderCondition(condition, "NOT IN", query);
+		public void RenderCondition(LikeCondition condition, StringBuilder query) => RenderPatternCondition(condition, "ILIKE", query);
+		public void RenderCondition(NotLikeCondition condition, StringBuilder query) => RenderPatternCondition(condition, "NOT ILIKE", query);
+		public void RenderCondition(AndCondition condition, StringBuilder query) => RenderLogicalCondition(condition, "AND", query);
+		public void RenderCondition(OrCondition condition, StringBuilder query) => RenderLogicalCondition(condition, "OR", query);
 		
-		public void RenderCondition(BetweenCondition condition, StringBuilder stringBuilder)
+		public void RenderCondition(BetweenCondition condition, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			condition.Expression.RenderExpression(this, stringBuilder);
+			condition.Expression.RenderExpression(this, query);
 			
-			stringBuilder.Append(" between ");
+			query.Append(" BETWEEN ");
 			
-			condition.LessExpression.RenderExpression(this, stringBuilder);
+			condition.LessExpression.RenderExpression(this, query);
 			
-			stringBuilder.Append(" and ");
+			query.Append(" AND ");
 			
-			condition.HightExpression.RenderExpression(this, stringBuilder);
+			condition.HightExpression.RenderExpression(this, query);
 		}
 
-		private void RenderCondition(CollectionCondition condition, string conditionType, StringBuilder stringBuilder)
+		private void RenderCondition(CollectionCondition condition, string conditionType, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			condition.Expression.RenderExpression(this, stringBuilder);
-			stringBuilder.Append(' ');
-			stringBuilder.Append(conditionType);
-			stringBuilder.Append(" (");
+			condition.Expression.RenderExpression(this, query);
+			query.Append(' ');
+			query.Append(conditionType);
+			query.Append(" (");
 
 			if (condition.Values.Count > 0)
 			{
-				condition.Values[0].RenderExpression(this, stringBuilder);
+				condition.Values[0].RenderExpression(this, query);
 				for (int i = 1; i < condition.Values.Count; i++)
 				{
-					stringBuilder.Append(", ");
-					condition.Values[i].RenderExpression(this, stringBuilder);
+					query.Append(", ");
+					condition.Values[i].RenderExpression(this, query);
 				}
 			}
 
-			stringBuilder.Append(')');
+			query.Append(')');
 		}
 
-		private void RenderLogicalCondition(LogicalCondition condition, string conditionType, StringBuilder stringBuilder)
+		private void RenderLogicalCondition(LogicalCondition condition, string conditionType, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNullOrEmpty(conditionType, nameof(conditionType));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			string conditionOperator = $" {conditionType} ";
 
-			stringBuilder.Append('(');
+			query.Append('(');
 
-			condition.Conditions[0].RenderCondition(this, stringBuilder);
+			condition.Conditions[0].RenderCondition(this, query);
 			for (int i = 1; i < condition.Conditions.Count; i++)
 			{
-				stringBuilder.Append(conditionOperator);
-				condition.Conditions[i].RenderCondition(this, stringBuilder);
+				query.Append(conditionOperator);
+				condition.Conditions[i].RenderCondition(this, query);
 			}
 			
-			stringBuilder.Append(')');
+			query.Append(')');
 		}
 
-		private void RenderPatternCondition(PatternCondition condition, string conditionType, StringBuilder stringBuilder)
+		private void RenderPatternCondition(PatternCondition condition, string conditionType, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+      Validator.ThrowIfArgumentIsNullOrEmpty(conditionType, nameof(conditionType));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			condition.Expression.RenderExpression(this, stringBuilder);
-			stringBuilder.Append(' ');
-			stringBuilder.Append(conditionType);
-			stringBuilder.Append(" '");
-			stringBuilder.Append(condition.Pattern);
-			stringBuilder.Append('\'');
+      condition.Expression.RenderExpression(this, query);
+			query.Append(' ');
+			query.Append(conditionType);
+			query.Append(" '");
+			query.Append(condition.Pattern);
+			query.Append('\'');
 		}
 
-		#endregion Render condition methods
+    private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+      Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-		#region Expression render methods
+      condition.Expression.RenderExpression(this, query);
+      query.Append(' ');
+      query.Append(operation);
+    }
 
-		public void RenderExpression(GeneralCaseExpression expression, StringBuilder stringBuilder)
+    private void RenderBinaryCondition(BinaryCondition condition, string operation, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+      Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      condition.LeftExpression.RenderExpression(this, query);
+      query.Append(' ');
+      query.Append(operation);
+      query.Append(' ');
+      condition.RightExpression.RenderExpression(this, query);
+    }
+
+    #endregion Condition rendeting methods
+
+    #region Expression rendering methods
+
+    public void RenderExpression(GeneralCaseExpression expression, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("case");
+			query.Append("CASE");
 
 			for (int i = 0; i < expression.WhenThens.Count; i++)
 			{
-				stringBuilder.Append(" when ");
+				query.Append(" WHEN ");
 
-				expression.WhenThens[i].Item1.RenderCondition(this, stringBuilder);
+				expression.WhenThens[i].Item1.RenderCondition(this, query);
 				
-				stringBuilder.Append(" then ");
+				query.Append(" THEN ");
 				
-				expression.WhenThens[i].Item2.RenderExpression(this, stringBuilder);
+				expression.WhenThens[i].Item2.RenderExpression(this, query);
 			}
 
 			if (expression.Else != null)
 			{
-				stringBuilder.Append(' ');
-				expression.Else.RenderExpression(this, stringBuilder);
+				query.Append(" ELSE ");
+				expression.Else.RenderExpression(this, query);
 			}
+
+			query.Append(" END");
 		}
 
-		public void RenderExpression(SimpleCaseExpression expression, StringBuilder stringBuilder)
+		public void RenderExpression(SimpleCaseExpression expression, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("case ");
-			expression.Expression.RenderExpression(this, stringBuilder);
+      query.Append("CASE ");
+			expression.Expression.RenderExpression(this, query);
 			
 			for (int i = 0; i < expression.WhenThens.Count; i++)
 			{
-				stringBuilder.Append(" when ");
-				expression.WhenThens[i].Item1.RenderExpression(this, stringBuilder);
-				stringBuilder.Append(" then ");
-				expression.WhenThens[i].Item2.RenderExpression(this, stringBuilder);
+				query.Append(" WHEN ");
+				expression.WhenThens[i].Item1.RenderExpression(this, query);
+				query.Append(" THEN ");
+				expression.WhenThens[i].Item2.RenderExpression(this, query);
 			}
 
 			if (expression.Else != null)
 			{
-				stringBuilder.Append(' ');
-				expression.Else.RenderExpression(this, stringBuilder);
+				query.Append(" ELSE ");
+				expression.Else.RenderExpression(this, query);
 			}
+
+			query.Append(" END");
 		}
 
-		public void RenderExpression(MinusExpression expression, StringBuilder stringBuilder) => RenderArithmeticExpression(expression, "-", stringBuilder);
-		public void RenderExpression(PlusExpression expression, StringBuilder stringBuilder) => RenderArithmeticExpression(expression, "+", stringBuilder);
-		public void RenderExpression(MultiplyExpression expression, StringBuilder stringBuilder) => RenderArithmeticExpression(expression, "*", stringBuilder);
-		public void RenderExpression(DivideExpression expression, StringBuilder stringBuilder) => RenderArithmeticExpression(expression, "/", stringBuilder);
+		public void RenderExpression(MinusExpression expression, StringBuilder query) => RenderArithmeticExpression(expression, "-", query);
+		public void RenderExpression(PlusExpression expression, StringBuilder query) => RenderArithmeticExpression(expression, "+", query);
+		public void RenderExpression(MultiplyExpression expression, StringBuilder query) => RenderArithmeticExpression(expression, "*", query);
+		public void RenderExpression(DivideExpression expression, StringBuilder query) => RenderArithmeticExpression(expression, "/", query);
 
-		private void RenderArithmeticExpression(ArithmeticExpression expression, string operation, StringBuilder stringBuilder)
+		public void RenderExpression(Select select, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(select, nameof(select));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			query.Append('(');
+
+			select.RenderQuery(this, query);
+
+			query.Append(')');
+		}
+
+		private void RenderArithmeticExpression(ArithmeticExpression expression, string operation, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
+			Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			if (expression.Expressions.Count > 0)
 			{
 				if (expression.Expressions[0] is ArithmeticException)
 				{
-					stringBuilder.Append('(');
-					expression.Expressions[0].RenderExpression(this, stringBuilder);
-					stringBuilder.Append(')');
+					query.Append('(');
+
+					expression.Expressions[0].RenderExpression(this, query);
+					
+					query.Append(')');
 				}
 				else
 				{
-					expression.Expressions[0].RenderExpression(this, stringBuilder);
+					expression.Expressions[0].RenderExpression(this, query);
 				}
 				
 				for (int i = 1; i < expression.Expressions.Count; i++)
 				{
 					if (expression.Expressions[i] is ArithmeticException)
 					{
-						stringBuilder.Append('(');
-						expression.Expressions[i].RenderExpression(this, stringBuilder);
-						stringBuilder.Append(')');
+						query.Append('(');
+						expression.Expressions[i].RenderExpression(this, query);
+						query.Append(')');
 					}
 					else
 					{
-						expression.Expressions[i].RenderExpression(this, stringBuilder);
+						expression.Expressions[i].RenderExpression(this, query);
 					}
 				}
 			}
 		}
 
-		#endregion Expression render methods
+    #endregion Expression rendering methods
 
-		public void RenderFunction(Function function, StringBuilder stringBuilder) => RenderFunction(function.Name, function, function.Parameters, stringBuilder);
-		public void RenderFunction(CountFunction function, StringBuilder stringBuilder) => RenderColumnFunction("count", function, stringBuilder);
-		public void RenderFunction(SumFunction function, StringBuilder stringBuilder) => RenderColumnFunction("sum", function, stringBuilder);
-		public void RenderFunction(MaxFunction function, StringBuilder stringBuilder) => RenderColumnFunction("max", function, stringBuilder);
-		public void RenderFunction(MinFunction function, StringBuilder stringBuilder) => RenderColumnFunction("min", function, stringBuilder);
-		public void RenderFunction(ConcatFunction function, StringBuilder stringBuilder) => RenderFunction("concat", function, function.Values, stringBuilder);
-		public void RenderFunction(CoalesceFunction function, StringBuilder stringBuilder) => RenderFunction("coalesce", function, stringBuilder, function.Column, function.DefaultValue);
+    #region Function rendering methods
 
-		public void RenderSource(Table table, StringBuilder stringBuilder)
+    public void RenderFunction(Function function, StringBuilder query) => RenderFunction(function.Name, function, function.Parameters, query);
+		public void RenderFunction(CountFunction function, StringBuilder query) => RenderColumnFunction("count", function, query);
+		public void RenderFunction(SumFunction function, StringBuilder query) => RenderColumnFunction("sum", function, query);
+		public void RenderFunction(MaxFunction function, StringBuilder query) => RenderColumnFunction("max", function, query);
+		public void RenderFunction(MinFunction function, StringBuilder query) => RenderColumnFunction("min", function, query);
+		public void RenderFunction(ConcatFunction function, StringBuilder query) => RenderFunction("concat", function, function.Values, query);
+		public void RenderFunction(CoalesceFunction function, StringBuilder query) => RenderFunction("coalesce", function, query, function.Column, function.DefaultValue);
+
+    private void RenderColumnFunction(string name, ColumnFunction function, StringBuilder query) => RenderFunction(name, function, query, function.Column);
+    private void RenderFunction(string name, IFunction function, StringBuilder query, params IExpression[] parameters) => RenderFunction(name, function, parameters, query);
+
+    private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder query)
+    {
+			Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
+      Validator.ThrowIfArgumentIsNull(function, nameof(function));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      query.Append(name);
+      query.Append('(');
+
+      if (parameters != null && parameters.Any())
+      {
+        IEnumerator<IExpression> enumerator = parameters.GetEnumerator();
+        enumerator.MoveNext();
+        enumerator.Current.RenderExpression(this, query);
+        while (enumerator.MoveNext())
+        {
+          query.Append(", ");
+          enumerator.Current.RenderExpression(this, query);
+        }
+      }
+
+      query.Append(')');
+    }
+
+    #endregion Function rendering methods
+
+    #region Identificator rendering methods
+
+    public void RenderIdentificator(SourceColumn column, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(column, nameof(column));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      if (!string.IsNullOrEmpty(column.Alias))
+      {
+        RenderIdentificator(column.Alias, query);
+
+        return;
+      }
+
+      if (column.Source != null)
+      {
+        column.Source.RenderIdentificator(this, query);
+        query.Append('.');
+      }
+
+      RenderIdentificator(column.Name, query);
+    }
+
+    public void RenderIdentificator(ExpressionColumn column, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(column, nameof(column));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      if (!string.IsNullOrEmpty(column.Name))
+      {
+        RenderIdentificator(column.Name, query);
+
+        return;
+      }
+
+      column.Expression.RenderExpression(this, query);
+    }
+
+    public void RenderIdentificator(Table table, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(table, nameof(table));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      if (!string.IsNullOrEmpty(table.Alias))
+      {
+        RenderIdentificator(table.Alias, query);
+
+        return;
+      }
+
+      if (!string.IsNullOrEmpty(table.Schema))
+      {
+        RenderIdentificator(table.Schema, query);
+        query.Append('.');
+      }
+
+      RenderIdentificator(table.Name, query);
+    }
+
+		public virtual void RenderIdentificator(Subquery subquery, StringBuilder query)
 		{
-			Validator.ThrowIfArgumentIsNull(table, nameof(table));
-			
-			if (!string.IsNullOrEmpty(table.Schema))
-			{
-				RenderIdentificator(table.Schema, stringBuilder);
-				stringBuilder.Append('.');
-			}
+			Validator.ThrowIfArgumentIsNull(subquery, nameof(subquery));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			RenderIdentificator(table.Name, stringBuilder);
-
-			if (!string.IsNullOrEmpty(table.Alias))
-			{
-				stringBuilder.Append(' ');
-				RenderIdentificator(table.Alias, stringBuilder);
-			}
+			RenderIdentificator(subquery.Name, query);
 		}
 
-		public void RenderJoin(LeftJoin join, StringBuilder stringBuilder) => RenderJoin("left join", join, join.Condition, stringBuilder);
-		public void RenderJoin(RightJoin join, StringBuilder stringBuilder) => RenderJoin("right join", join, join.Condition, stringBuilder);
-		public void RenderJoin(InnerJoin join, StringBuilder stringBuilder) => RenderJoin("inner join", join, join.Condition, stringBuilder);
-		public void RenderJoin(CrossJoin join, StringBuilder stringBuilder) => RenderJoin("cross join", join, null, stringBuilder);
+    public void RenderIdentificator(string identificator, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNullOrEmpty(identificator, nameof(identificator));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-		private void RenderJoin(string joinType, Join join, ICondition? condition, StringBuilder stringBuilder)
+      query.Append('\"');
+      query.Append(identificator);
+      query.Append('\"');
+    }
+
+    #endregion Identificator rendering methods
+
+    #region Join rendering methods
+
+    public void RenderJoin(LeftJoin join, StringBuilder query) => RenderJoin("LEFT JOIN", join, join.Condition, query);
+		public void RenderJoin(RightJoin join, StringBuilder query) => RenderJoin("RIGHT JOIN", join, join.Condition, query);
+		public void RenderJoin(InnerJoin join, StringBuilder query) => RenderJoin("INNER JOIN", join, join.Condition, query);
+		public void RenderJoin(CrossJoin join, StringBuilder query) => RenderJoin("CROSS JOIN", join, null, query);
+
+		private void RenderJoin(string joinType, Join join, ICondition? condition, StringBuilder query)
 		{
+			Validator.ThrowIfArgumentIsNullOrEmpty(joinType, nameof(joinType));
 			Validator.ThrowIfArgumentIsNull(join, nameof(join));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append($"{joinType} {join.Source.RenderSource(this)}");
+			query.Append($"{joinType} {join.Source.RenderSource(this)}");
 			if (condition != null)
 			{
-				stringBuilder.Append(" on ");
+				query.Append(" ON ");
 
-				condition.RenderCondition(this, stringBuilder);
+				condition.RenderCondition(this, query);
 			}
 		}
 
-		public void RenderOrderBy(OrderBy orderBy, StringBuilder stringBuilder)
+    #endregion Join rendering methods
+
+    #region Order by rendering methods
+
+    public void RenderOrderBy(OrderBy orderBy, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(orderBy, nameof(orderBy));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			orderBy.Column.RenderIdentificator(this, stringBuilder);
-			stringBuilder.Append(orderBy.Direction == OrderDirection.Asc ? "asc" : "desc");
+			orderBy.Column.RenderIdentificator(this, query);
+			
+			query.Append(orderBy.Direction == OrderDirection.Asc ? "ASC" : "DESC");
 		}
 
-		public void RenderQuery(Select select, StringBuilder stringBuilder)
+    #endregion Order by rendering methods
+
+    #region Parameter rendering methods
+
+    public void RenderParameter(Parameter parameter, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(parameter, nameof(parameter));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+      query.Append('@');
+      query.Append(parameter.Name);
+    }
+
+    #endregion Parameter rendering methods
+
+    #region Query rendering methods
+
+    public void RenderQuery(Select select, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(select, nameof(select));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("select ");
+			query.Append("SELECT ");
 
 			if (select.ColumnCollection.Count > 0)
 			{
-				select.ColumnCollection[0].RenderColumn(this, stringBuilder);
+				select.ColumnCollection[0].RenderColumn(this, query);
 				for (int i = 1; i < select.ColumnCollection.Count; i++)
 				{
-					stringBuilder.Append(", ");
-					select.ColumnCollection[i].RenderColumn(this, stringBuilder);
+					query.Append(", ");
+					select.ColumnCollection[i].RenderColumn(this, query);
 				}
 			}
 
 			if (select.SourceCollection.Count > 0)
 			{
-				stringBuilder.Append(" from ");
-				stringBuilder.AppendJoin(", ", select.SourceCollection.ConvertAll(s => s.RenderSource(this)));
+				query.Append(" FROM ");
+				query.AppendJoin(", ", select.SourceCollection.ConvertAll(s => s.RenderSource(this)));
 			}
 
 			foreach (IJoin join in select.JoinCollection)
 			{
-				stringBuilder.Append(' ');
-				join.RenderJoin(this, stringBuilder);
+				query.Append(' ');
+				join.RenderJoin(this, query);
 			}
 
 			if (select.WhereCondition != null)
 			{
-				stringBuilder.Append(" where ");
-				select.WhereCondition.RenderCondition(this, stringBuilder);
+				query.Append(" WHERE ");
+				select.WhereCondition.RenderCondition(this, query);
 			}
 
 			if (select.GroupByCollection.Count > 0)
 			{
-				stringBuilder.Append(" group by ");
+				query.Append(" GROUP BY ");
 				
-				select.GroupByCollection[0].RenderIdentificator(this, stringBuilder);
+				select.GroupByCollection[0].RenderIdentificator(this, query);
 				for (int i = 1; i < select.GroupByCollection.Count; i++)
 				{
-					stringBuilder.Append(", ");
-					select.GroupByCollection[i].RenderIdentificator(this, stringBuilder);
+					query.Append(", ");
+					select.GroupByCollection[i].RenderIdentificator(this, query);
 				}
 			}
 
 			if (select.HavingCondition != null)
 			{
-				stringBuilder.Append(" having ");
-				select.HavingCondition.RenderCondition(this, stringBuilder);
+				query.Append(" HAVING ");
+				select.HavingCondition.RenderCondition(this, query);
 			}
 
 			if (select.OrderByCollection.Count > 0)
 			{
-				stringBuilder.Append(" order by ");
+				query.Append(" ORDER BY ");
 
-				select.OrderByCollection[0].RenderOrderBy(this, stringBuilder);
+				select.OrderByCollection[0].RenderOrderBy(this, query);
 				for (int i = 1; i < select.OrderByCollection.Count; i++)
 				{
-					stringBuilder.Append(", ");
-					select.OrderByCollection[i].RenderOrderBy(this, stringBuilder);
+					query.Append(", ");
+					select.OrderByCollection[i].RenderOrderBy(this, query);
 				}
 			}
 
 			if (select.OffsetValue.HasValue)
 			{
-				stringBuilder.Append(" offset ");
-				stringBuilder.Append(select.OffsetValue.Value);
+				query.Append(" OFFSET ");
+				query.Append(select.OffsetValue.Value);
 			}
 
 			if (select.LimitValue.HasValue)
 			{
-				stringBuilder.Append(" limit ");
-				stringBuilder.Append(select.LimitValue.Value);
+				query.Append(" LIMIT ");
+				query.Append(select.LimitValue.Value);
 			}
 		}
 
-		public void RenderQuery(Insert insert, StringBuilder stringBuilder)
+		public void RenderQuery(Insert insert, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(insert, nameof(insert));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("insert into ");
-			stringBuilder.Append(insert.Source.RenderSource(this));
-			stringBuilder.Append(" (");
+			query.Append("INSERT INTO ");
+			query.Append(insert.Source.RenderSource(this));
+			query.Append(" (");
 
-			insert.ColumnCollection[0].RenderColumn(this, stringBuilder);
+			insert.ColumnCollection[0].RenderColumn(this, query);
 			for (int i = 1; i < insert.ColumnCollection.Count; i++)
 			{
-				stringBuilder.Append(", ");
-				insert.ColumnCollection[i].RenderColumn(this, stringBuilder);
+				query.Append(", ");
+				insert.ColumnCollection[i].RenderColumn(this, query);
 			}
 
-			stringBuilder.Append(") values ");
+			query.Append(") VALUES ");
 
 			int step = insert.ColumnCollection.Count;
 			for (int i = 0; i < insert.ValueCollection.Count; i += step)
 			{
 				if (i == 0)
 				{
-					stringBuilder.Append('(');
+					query.Append('(');
 				}
 				else
 				{
-					stringBuilder.Append(", (");
+					query.Append(", (");
 				}
 
-				insert.ValueCollection[i].RenderExpression(this, stringBuilder);
+				insert.ValueCollection[i].RenderExpression(this, query);
 
 				int limit = i + step > insert.ValueCollection.Count ? insert.ValueCollection.Count : i + step;
 				for (int j = i + 1; j < limit; j++)
 				{
-					stringBuilder.Append(", ");
-					insert.ValueCollection[j].RenderExpression(this, stringBuilder);
+					query.Append(", ");
+					insert.ValueCollection[j].RenderExpression(this, query);
 				}
 
-				stringBuilder.Append(')');
+				query.Append(')');
 			}
 
 			if (insert.ReturningColumnCollection.Count > 0)
 			{
-				stringBuilder.Append(" returning ");
+				query.Append(" RETURNING ");
 
-				insert.ReturningColumnCollection[0].RenderColumn(this, stringBuilder);
+				insert.ReturningColumnCollection[0].RenderColumn(this, query);
 				for (int i = 1; i < insert.ReturningColumnCollection.Count; i++)
 				{
-					stringBuilder.Append(", ");
-					insert.ReturningColumnCollection[i].RenderColumn(this, stringBuilder);
+					query.Append(", ");
+					insert.ReturningColumnCollection[i].RenderColumn(this, query);
 				}
 			}
 		}
 
-		public void RenderQuery(Update update, StringBuilder stringBuilder)
+		public void RenderQuery(Update update, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(update, nameof(update));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("update ");
-			stringBuilder.Append(update.Source.RenderSource(this));
-			stringBuilder.Append(" set ");
+			query.Append("UPDATE ");
+			query.Append(update.Source.RenderSource(this));
+			query.Append(" SET ");
 
-			update.SetCollection[0].Item1.RenderIdentificator(this, stringBuilder);
-			stringBuilder.Append(" = ");
-			update.SetCollection[0].Item2.RenderExpression(this, stringBuilder);
+			update.SetCollection[0].Item1.RenderIdentificator(this, query);
+			query.Append(" = ");
+			update.SetCollection[0].Item2.RenderExpression(this, query);
 
 			for (int i = 1; i < update.SetCollection.Count; i++)
 			{
-				stringBuilder.Append(", ");
-				update.SetCollection[i].Item1.RenderIdentificator(this, stringBuilder);
-				stringBuilder.Append(" = ");
-				update.SetCollection[i].Item2.RenderExpression(this, stringBuilder);
+				query.Append(", ");
+				update.SetCollection[i].Item1.RenderIdentificator(this, query);
+				query.Append(" = ");
+				update.SetCollection[i].Item2.RenderExpression(this, query);
 			}
 
 			if (update.Condition != null)
 			{
-				stringBuilder.Append(" where ");
-				update.Condition.RenderCondition(this, stringBuilder);
+				query.Append(" WHERE ");
+				update.Condition.RenderCondition(this, query);
 			}
 		}
 
-		public void RenderQuery(Delete delete, StringBuilder stringBuilder)
+		public void RenderQuery(Delete delete, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(delete, nameof(delete));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append("delete from ");
-			stringBuilder.Append(delete.Source.RenderSource(this));
+			query.Append("DELETE FROM ");
+			query.Append(delete.Source.RenderSource(this));
 			
 			if (delete.Condition != null)
 			{
-				stringBuilder.Append(" where ");
-				delete.Condition.RenderCondition(this, stringBuilder);
+				query.Append(" WHERE ");
+				delete.Condition.RenderCondition(this, query);
 			}
 		}
 
-		public void RenderIdentificator(SourceColumn column, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(column, nameof(column));
-			
-			if (!string.IsNullOrEmpty(column.Alias))
-			{
-				RenderIdentificator(column.Alias, stringBuilder);
+    #endregion Query rendering methods
 
-				return;
-			}
+    #region Source rendering methods
 
-			if (column.Source != null)
-			{
-				column.Source.RenderIdentificator(this, stringBuilder);
-				stringBuilder.Append('.');
-			}
+    public void RenderSource(Table table, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(table, nameof(table));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			RenderIdentificator(column.Name, stringBuilder);
-		}
+      if (!string.IsNullOrEmpty(table.Schema))
+      {
+        RenderIdentificator(table.Schema, query);
+        query.Append('.');
+      }
 
-		public void RenderIdentificator(ExpressionColumn column, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(column, nameof(column));
+      RenderIdentificator(table.Name, query);
 
-			if (!string.IsNullOrEmpty(column.Name))
-			{
-				RenderIdentificator(column.Name, stringBuilder);
+      if (!string.IsNullOrEmpty(table.Alias))
+      {
+        query.Append(" AS ");
+        RenderIdentificator(table.Alias, query);
+      }
+    }
 
-				return;
-			}
+    public void RenderSource(Subquery subquery, StringBuilder query)
+    {
+      Validator.ThrowIfArgumentIsNull(subquery, nameof(subquery));
+      Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			column.Expression.RenderExpression(this, stringBuilder);
-		}
+      query.Append('(');
 
-		public void RenderIdentificator(Table table, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(table, nameof(table));
-			Validator.ThrowIfArgumentIsNull(stringBuilder, nameof(stringBuilder));
+      subquery.Select.RenderQuery(this, query);
 
-			if (!string.IsNullOrEmpty(table.Alias))
-			{
-				RenderIdentificator(table.Alias, stringBuilder);
+      query.Append(") AS ");
 
-				return;
-			}
+      RenderIdentificator(subquery.Name, query);
+    }
 
-			if (!string.IsNullOrEmpty(table.Schema))
-			{
-				RenderIdentificator(table.Schema, stringBuilder);
-				stringBuilder.Append('.');
-			}
+    #endregion Source rendering methods
 
-			RenderIdentificator(table.Name, stringBuilder);
-		}
+    #region Value rendering methods
 
-		public void RenderIdentificator(string identificator, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNullOrEmpty(identificator, nameof(identificator));
+    public void RenderValue(Int8Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(Int16Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(Int32Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(Int64Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(FloatValue value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(DoubleValue value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(DecimalValue value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(DateTimeValue value, StringBuilder query) => RenderValue(value, $"'{value?.Data.ToString(value.Format)}'", query);
+		public void RenderValue(StringValue value, StringBuilder query) => RenderValue(value, $"'{value?.Data}'", query);
+		public void RenderValue(NullValue value, StringBuilder query) => RenderValue(value, "null", query);
 
-			stringBuilder.Append('\"');
-			stringBuilder.Append(identificator);
-			stringBuilder.Append('\"');
-		}
-
-		public void RenderParameter(Parameter parameter, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(parameter, nameof(parameter));
-
-			stringBuilder.Append('@');
-			stringBuilder.Append(parameter.Name);
-		}
-
-		public void RenderValue(Int8Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(Int16Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(Int32Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(Int64Value value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(FloatValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(DoubleValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(DecimalValue value, StringBuilder stringBuilder) => RenderValue(value, value?.Data, stringBuilder);
-		public void RenderValue(DateTimeValue value, StringBuilder stringBuilder) => RenderValue(value, $"'{value?.Data.ToString(value.Format)}'", stringBuilder);
-		public void RenderValue(StringValue value, StringBuilder stringBuilder) => RenderValue(value, $"'{value?.Data}'", stringBuilder);
-		public void RenderValue(NullValue value, StringBuilder stringBuilder) => RenderValue(value, "null", stringBuilder);
-
-		private void RenderValue(IValue value, object? data, StringBuilder stringBuilder)
+		private void RenderValue(IValue value, object? data, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(value, nameof(value));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			stringBuilder.Append(data);
+			query.Append(data);
 		}
 
-		private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
-			Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
-
-			condition.Expression.RenderExpression(this, stringBuilder);
-			stringBuilder.Append(' ');
-			stringBuilder.Append(operation);
-		}
-
-		private void RenderBinaryCondition(BinaryCondition condition, string operation, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
-			Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
-
-			condition.LeftExpression.RenderExpression(this, stringBuilder);
-			stringBuilder.Append(' ');
-			stringBuilder.Append(operation);
-			stringBuilder.Append(' ');
-			condition.RightExpression.RenderExpression(this, stringBuilder);
-		}
-
-		private void RenderColumnFunction(string name, ColumnFunction function, StringBuilder stringBuilder) => RenderFunction(name, function, stringBuilder, function.Column);
-		private void RenderFunction(string name, IFunction function, StringBuilder stringBuilder, params IExpression[] parameters) => RenderFunction(name, function, parameters, stringBuilder);
-
-		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder stringBuilder)
-		{
-			Validator.ThrowIfArgumentIsNull(function, nameof(function));
-
-			stringBuilder.Append(name);
-			stringBuilder.Append('(');
-			
-			if (parameters != null && parameters.Any())
-			{
-				IEnumerator<IExpression> enumerator = parameters.GetEnumerator();
-				enumerator.MoveNext();
-				enumerator.Current.RenderExpression(this, stringBuilder);
-				while (enumerator.MoveNext())
-				{
-					stringBuilder.Append(", ");
-					enumerator.Current.RenderExpression(this, stringBuilder);
-				}
-			}
-
-			stringBuilder.Append(')');
-		}
+    #endregion Value rendering methods
 	}
 }

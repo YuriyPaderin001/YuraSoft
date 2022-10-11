@@ -9,7 +9,7 @@ using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
-	public class Select : IQuery
+	public class Select : IQuery, IExpression
 	{
 		private List<IColumn> _columnCollection = new List<IColumn>();
 		private List<ISource> _sourceCollection = new List<ISource>();
@@ -249,23 +249,37 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
-		public virtual string RenderQuery(IRenderer renderer)
-		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderQuery(renderer, stringBuilder);
+    private Select AddJoin(IJoin join)
+    {
+      Validator.ThrowIfArgumentIsNull(join, nameof(join));
 
-			return stringBuilder.ToString();
+      JoinCollection.Add(join);
+
+      return this;
+    }
+
+    #region Rendering methods
+
+    public string RenderExpression(IRenderer renderer)
+    {
+      StringBuilder query = new StringBuilder();
+      RenderExpression(renderer, query);
+
+      return query.ToString();
+    }
+
+    public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => renderer.RenderExpression(this, query);
+
+    public virtual string RenderQuery(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderQuery(renderer, query);
+
+			return query.ToString();
 		}
 
-		public virtual void RenderQuery(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderQuery(this, stringBuilder);
+    public virtual void RenderQuery(IRenderer renderer, StringBuilder query) => renderer.RenderQuery(this, query);
 
-		private Select AddJoin(IJoin join)
-		{
-			Validator.ThrowIfArgumentIsNull(join, nameof(join));
-
-			JoinCollection.Add(join);
-
-			return this;
-		}
-	}
+    #endregion Rendering methods
+  }
 }

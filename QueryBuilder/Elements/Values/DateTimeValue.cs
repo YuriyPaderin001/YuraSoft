@@ -14,7 +14,7 @@ namespace YuraSoft.QueryBuilder
 
 		public DateTimeValue(DateTime value, string? format = null) : base(value)
 		{
-			_format = string.IsNullOrEmpty(format) ? "s" : format;
+			_format = string.IsNullOrEmpty(format) ? "o" : format;
 		}
 
 		public static implicit operator DateTimeValue(DateTime value) => new DateTimeValue(value);
@@ -22,7 +22,7 @@ namespace YuraSoft.QueryBuilder
 		public string Format
 		{
 			get => _format;
-			set => _format = string.IsNullOrEmpty(value) ? "s" : value;
+			set => _format = string.IsNullOrEmpty(value) ? "o" : value;
 		}
 
 		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);

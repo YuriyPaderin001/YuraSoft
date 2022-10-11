@@ -595,7 +595,9 @@ namespace YuraSoft.QueryBuilder
 
 		public ConditionBuilder And(params ICondition[] conditions) => Add(new AndCondition(conditions));
 		public ConditionBuilder And(IEnumerable<ICondition> conditions) => Add(new AndCondition(conditions));
-		public ConditionBuilder And(Action<ConditionBuilder> buildConditionMethod)
+    public ConditionBuilder And(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildAnd());
+   
+    public ConditionBuilder And(Action<ConditionBuilder> buildConditionMethod)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
 			buildConditionMethod.Invoke(builder);
@@ -605,7 +607,9 @@ namespace YuraSoft.QueryBuilder
 
 		public ConditionBuilder Or(params ICondition[] conditions) => Add(new OrCondition(conditions));
 		public ConditionBuilder Or(IEnumerable<ICondition> conditions) => Add(new OrCondition(conditions));
-		public ConditionBuilder Or(Action<ConditionBuilder> buildConditionMethod)
+    public ConditionBuilder Or(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildOr());
+
+    public ConditionBuilder Or(Action<ConditionBuilder> buildConditionMethod)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
 			buildConditionMethod.Invoke(builder);

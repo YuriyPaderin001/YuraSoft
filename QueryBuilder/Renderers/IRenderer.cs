@@ -6,110 +6,113 @@ namespace YuraSoft.QueryBuilder.Renderers
 	{
 		#region Column render methods
 
-		public void RenderColumn(SourceColumn column, StringBuilder stringBuilder);
-		public void RenderColumn(ExpressionColumn column, StringBuilder stringBuilder);
+		public void RenderColumn(SourceColumn column, StringBuilder query);
+		public void RenderColumn(ExpressionColumn column, StringBuilder query);
 
 		#endregion Column render methods
 
 		#region Condition render methods
 
-		public void RenderCondition(EqualCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(NotEqualCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(InCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(NotInCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(IsNullCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(IsNotNullCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(LessCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(LessOrEqualCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(GreaterCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(BetweenCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(LikeCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(NotLikeCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(OrCondition condition, StringBuilder stringBuilder);
-		public void RenderCondition(AndCondition condition, StringBuilder stringBuilder);
+		public void RenderCondition(EqualCondition condition, StringBuilder query);
+		public void RenderCondition(NotEqualCondition condition, StringBuilder query);
+		public void RenderCondition(InCondition condition, StringBuilder query);
+		public void RenderCondition(NotInCondition condition, StringBuilder query);
+		public void RenderCondition(IsNullCondition condition, StringBuilder query);
+		public void RenderCondition(IsNotNullCondition condition, StringBuilder query);
+		public void RenderCondition(LessCondition condition, StringBuilder query);
+		public void RenderCondition(LessOrEqualCondition condition, StringBuilder query);
+		public void RenderCondition(GreaterCondition condition, StringBuilder query);
+		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder query);
+		public void RenderCondition(BetweenCondition condition, StringBuilder query);
+		public void RenderCondition(LikeCondition condition, StringBuilder query);
+		public void RenderCondition(NotLikeCondition condition, StringBuilder query);
+		public void RenderCondition(OrCondition condition, StringBuilder query);
+		public void RenderCondition(AndCondition condition, StringBuilder query);
 
 		#endregion Condition render methods
 
 		#region Expression render methods
 
-		public void RenderExpression(GeneralCaseExpression expression, StringBuilder stringBuilder);
-		public void RenderExpression(SimpleCaseExpression expression, StringBuilder stringBuilder);
-		public void RenderExpression(MinusExpression expression, StringBuilder stringBuilder);
-		public void RenderExpression(PlusExpression expression, StringBuilder stringBuilder);
-		public void RenderExpression(MultiplyExpression expression, StringBuilder stringBuilder);
-		public void RenderExpression(DivideExpression expression, StringBuilder stringBuilder);
+		public void RenderExpression(GeneralCaseExpression expression, StringBuilder query);
+		public void RenderExpression(SimpleCaseExpression expression, StringBuilder query);
+		public void RenderExpression(MinusExpression expression, StringBuilder query);
+		public void RenderExpression(PlusExpression expression, StringBuilder query);
+		public void RenderExpression(MultiplyExpression expression, StringBuilder query);
+		public void RenderExpression(DivideExpression expression, StringBuilder query);
+		public void RenderExpression(Select select, StringBuilder query);
 
 		#endregion Expression render methods
 
 		#region Function render methods
 
-		public void RenderFunction(Function function, StringBuilder stringBuilder);
-		public void RenderFunction(CountFunction function, StringBuilder stringBuilder);
-		public void RenderFunction(SumFunction function, StringBuilder stringBuilder);
-		public void RenderFunction(MaxFunction function, StringBuilder stringBuilder);
-		public void RenderFunction(MinFunction function, StringBuilder stringBuilder);
-		public void RenderFunction(ConcatFunction function, StringBuilder stringBuilder);
-		public void RenderFunction(CoalesceFunction function, StringBuilder stringBuilder);
+		public void RenderFunction(Function function, StringBuilder query);
+		public void RenderFunction(CountFunction function, StringBuilder query);
+		public void RenderFunction(SumFunction function, StringBuilder query);
+		public void RenderFunction(MaxFunction function, StringBuilder query);
+		public void RenderFunction(MinFunction function, StringBuilder query);
+		public void RenderFunction(ConcatFunction function, StringBuilder query);
+		public void RenderFunction(CoalesceFunction function, StringBuilder query);
 
 		#endregion Function render methods
 
 		#region Identificator render methods
 
-		public void RenderIdentificator(SourceColumn column, StringBuilder stringBuilder);
-		public void RenderIdentificator(ExpressionColumn column, StringBuilder stringBuilder);
-		public void RenderIdentificator(Table table, StringBuilder stringBuilder);
+		public void RenderIdentificator(SourceColumn column, StringBuilder query);
+		public void RenderIdentificator(ExpressionColumn column, StringBuilder query);
+		public void RenderIdentificator(Table table, StringBuilder query);
+		public void RenderIdentificator(Subquery subquery, StringBuilder query);
 
 		#endregion Identificator render methods
 
 		#region Join render methods
 
-		public void RenderJoin(LeftJoin join, StringBuilder stringBuilder);
-		public void RenderJoin(RightJoin join, StringBuilder stringBuilder);
-		public void RenderJoin(InnerJoin join, StringBuilder stringBuilder);
-		public void RenderJoin(CrossJoin join, StringBuilder stringBuilder);
+		public void RenderJoin(LeftJoin join, StringBuilder query);
+		public void RenderJoin(RightJoin join, StringBuilder query);
+		public void RenderJoin(InnerJoin join, StringBuilder query);
+		public void RenderJoin(CrossJoin join, StringBuilder query);
 
 		#endregion Join render methods
 
 		#region OrderBy render methods
 
-		public void RenderOrderBy(OrderBy join, StringBuilder stringBuilder);
+		public void RenderOrderBy(OrderBy join, StringBuilder query);
 		
 		#endregion OrderBy render methods
 
 		#region Parameter render methods
 
-		public void RenderParameter(Parameter parameter, StringBuilder stringBuilder);
+		public void RenderParameter(Parameter parameter, StringBuilder query);
 		
 		#endregion Parameter render methods
 
 		#region Query render methods
 
-		public void RenderQuery(Select select, StringBuilder stringBuilder);
-		public void RenderQuery(Insert insert, StringBuilder stringBuilder);
-		public void RenderQuery(Update update, StringBuilder stringBuilder);
-		public void RenderQuery(Delete delete, StringBuilder stringBuilder);
+		public void RenderQuery(Select select, StringBuilder query);
+		public void RenderQuery(Insert insert, StringBuilder query);
+		public void RenderQuery(Update update, StringBuilder query);
+		public void RenderQuery(Delete delete, StringBuilder query);
 
 		#endregion Query render methods
 
 		#region Source render methods
 
-		public void RenderSource(Table table, StringBuilder stringBuilder);
+		public void RenderSource(Table table, StringBuilder query);
+		public void RenderSource(Subquery subquery, StringBuilder query);
 		
 		#endregion Source render methods
 
 		#region Value render methods
 
-		public void RenderValue(Int8Value value, StringBuilder stringBuilder);
-		public void RenderValue(Int16Value value, StringBuilder stringBuilder);
-		public void RenderValue(Int32Value value, StringBuilder stringBuilder);
-		public void RenderValue(Int64Value value, StringBuilder stringBuilder);
-		public void RenderValue(FloatValue value, StringBuilder stringBuilder);
-		public void RenderValue(DoubleValue value, StringBuilder stringBuilder);
-		public void RenderValue(DecimalValue value, StringBuilder stringBuilder);
-		public void RenderValue(DateTimeValue value, StringBuilder stringBuilder);
-		public void RenderValue(StringValue value, StringBuilder stringBuilder);
-		public void RenderValue(NullValue value, StringBuilder stringBuilder);
+		public void RenderValue(Int8Value value, StringBuilder query);
+		public void RenderValue(Int16Value value, StringBuilder query);
+		public void RenderValue(Int32Value value, StringBuilder query);
+		public void RenderValue(Int64Value value, StringBuilder query);
+		public void RenderValue(FloatValue value, StringBuilder query);
+		public void RenderValue(DoubleValue value, StringBuilder query);
+		public void RenderValue(DecimalValue value, StringBuilder query);
+		public void RenderValue(DateTimeValue value, StringBuilder query);
+		public void RenderValue(StringValue value, StringBuilder query);
+		public void RenderValue(NullValue value, StringBuilder query);
 
 		#endregion Value render methods
 	}
