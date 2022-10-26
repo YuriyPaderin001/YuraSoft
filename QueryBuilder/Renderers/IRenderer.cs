@@ -28,6 +28,8 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderCondition(NotLikeCondition condition, StringBuilder query);
 		public void RenderCondition(OrCondition condition, StringBuilder query);
 		public void RenderCondition(AndCondition condition, StringBuilder query);
+		public void RenderCondition(ExistsCondition condition, StringBuilder query);
+		public void RenderCondition(NotExistsCondition condition, StringBuilder query);
 
 		#endregion Condition render methods
 
@@ -89,6 +91,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 		public void RenderQuery(Select select, StringBuilder query);
 		public void RenderQuery(Insert insert, StringBuilder query);
+		public void RenderQuery(InsertSelect insertSelect, StringBuilder query);
 		public void RenderQuery(Update update, StringBuilder query);
 		public void RenderQuery(Delete delete, StringBuilder query);
 
