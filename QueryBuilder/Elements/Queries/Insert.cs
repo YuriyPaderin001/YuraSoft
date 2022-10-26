@@ -11,10 +11,16 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Insert : IQuery
 	{
+		#region Fields
+
 		private ISource _source;
 		private List<IColumn> _sourceColumns = new List<IColumn>();
 		private List<IExpression> _values = new List<IExpression>();
 		private List<IColumn> _returningColumns = new List<IColumn>();
+
+		#endregion Fields
+
+		#region Constructors
 
 		public Insert(string name, string? alias = null, string? schema = null)
 		{
@@ -27,6 +33,10 @@ namespace YuraSoft.QueryBuilder
 		{
 			_source = Validator.ThrowIfArgumentIsNull(table, nameof(table));
 		}
+
+		#endregion Constructors
+
+		#region Properties
 
 		public ISource Source 
 		{ 
@@ -51,6 +61,10 @@ namespace YuraSoft.QueryBuilder
 			get => _returningColumns;
 			set => _returningColumns = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(ReturningColumnCollection));
 		}
+
+		#endregion Properties
+
+		#region Methods
 
 		public virtual Insert Columns(params string[] columns) => Columns((IEnumerable<string>)columns);
 		public virtual Insert Columns(IEnumerable<string> columns)
@@ -147,5 +161,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public virtual void RenderQuery(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderQuery(this, stringBuilder);
+
+		#endregion Methods
 	}
 }

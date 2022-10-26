@@ -15,9 +15,9 @@ namespace YuraSoft.QueryBuilder
 			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 		}
 
-		public IExpression Expression 
-		{ 
-			get => _expression; 
+		public IExpression Expression
+		{
+			get => _expression;
 			set => _expression = Validator.ThrowIfArgumentIsNull(value, nameof(Expression));
 		}
 
@@ -33,7 +33,7 @@ namespace YuraSoft.QueryBuilder
 
 		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => RenderCondition(renderer, query);
 
-    public string RenderCondition(IRenderer renderer)
+		public string RenderCondition(IRenderer renderer)
 		{
 			StringBuilder query = new StringBuilder();
 			RenderCondition(renderer, query);
@@ -43,6 +43,6 @@ namespace YuraSoft.QueryBuilder
 
 		public abstract void RenderCondition(IRenderer renderer, StringBuilder query);
 
-    #endregion Rendering methods
-  }
+		#endregion Rendering methods
+	}
 }

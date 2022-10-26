@@ -11,9 +11,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 {
 	public class PostgreSqlRenderer : IRenderer
 	{
-    #region Column rendering methods
+		#region Column rendering methods
 
-    public void RenderColumn(SourceColumn column, StringBuilder query)
+		public void RenderColumn(SourceColumn column, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(column, nameof(column));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
@@ -37,7 +37,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		{
 			Validator.ThrowIfArgumentIsNull(column, nameof(column));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
-			
+
 			column.Expression.RenderExpression(this, query);
 
 			if (!string.IsNullOrEmpty(column.Name))
@@ -47,11 +47,11 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
-    #endregion Column rendering methods
+		#endregion Column rendering methods
 
-    #region Condition rendeting methods
+		#region Condition rendeting methods
 
-    public void RenderCondition(EqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "=", query);
+		public void RenderCondition(EqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "=", query);
 		public void RenderCondition(NotEqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<>", query);
 		public void RenderCondition(LessCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<", query);
 		public void RenderCondition(LessOrEqualCondition condition, StringBuilder query) => RenderBinaryCondition(condition, "<=", query);
@@ -65,20 +65,20 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderCondition(NotLikeCondition condition, StringBuilder query) => RenderPatternCondition(condition, "NOT ILIKE", query);
 		public void RenderCondition(AndCondition condition, StringBuilder query) => RenderLogicalCondition(condition, "AND", query);
 		public void RenderCondition(OrCondition condition, StringBuilder query) => RenderLogicalCondition(condition, "OR", query);
-		
+
 		public void RenderCondition(BetweenCondition condition, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			condition.Expression.RenderExpression(this, query);
-			
+
 			query.Append(" BETWEEN ");
-			
+
 			condition.LessExpression.RenderExpression(this, query);
-			
+
 			query.Append(" AND ");
-			
+
 			condition.HightExpression.RenderExpression(this, query);
 		}
 
@@ -121,17 +121,17 @@ namespace YuraSoft.QueryBuilder.Renderers
 				query.Append(conditionOperator);
 				condition.Conditions[i].RenderCondition(this, query);
 			}
-			
+
 			query.Append(')');
 		}
 
 		private void RenderPatternCondition(PatternCondition condition, string conditionType, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
-      Validator.ThrowIfArgumentIsNullOrEmpty(conditionType, nameof(conditionType));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+			Validator.ThrowIfArgumentIsNullOrEmpty(conditionType, nameof(conditionType));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      condition.Expression.RenderExpression(this, query);
+			condition.Expression.RenderExpression(this, query);
 			query.Append(' ');
 			query.Append(conditionType);
 			query.Append(" '");
@@ -139,35 +139,63 @@ namespace YuraSoft.QueryBuilder.Renderers
 			query.Append('\'');
 		}
 
-    private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
-      Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      condition.Expression.RenderExpression(this, query);
-      query.Append(' ');
-      query.Append(operation);
-    }
+			condition.Expression.RenderExpression(this, query);
+			query.Append(' ');
+			query.Append(operation);
+		}
 
-    private void RenderBinaryCondition(BinaryCondition condition, string operation, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
-      Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		private void RenderBinaryCondition(BinaryCondition condition, string operation, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNullOrEmpty(operation, nameof(operation));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      condition.LeftExpression.RenderExpression(this, query);
-      query.Append(' ');
-      query.Append(operation);
-      query.Append(' ');
-      condition.RightExpression.RenderExpression(this, query);
-    }
+			condition.LeftExpression.RenderExpression(this, query);
+			query.Append(' ');
+			query.Append(operation);
+			query.Append(' ');
+			condition.RightExpression.RenderExpression(this, query);
+		}
 
-    #endregion Condition rendeting methods
+		public void RenderCondition(ExistsCondition condition, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-    #region Expression rendering methods
+			condition.Expression.RenderExpression(this, query);
 
-    public void RenderExpression(GeneralCaseExpression expression, StringBuilder query)
+			query.Append(" EXISTS (");
+
+			condition.Select.RenderQuery(this, query);
+
+			query.Append(')');
+		}
+
+		public void RenderCondition(NotExistsCondition condition, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			condition.Expression.RenderExpression(this, query);
+
+			query.Append(" NOT EXISTS (");
+
+			condition.Select.RenderQuery(this, query);
+
+			query.Append(')');
+		}
+
+		#endregion Condition rendeting methods
+
+		#region Expression rendering methods
+
+		public void RenderExpression(GeneralCaseExpression expression, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
@@ -179,9 +207,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 				query.Append(" WHEN ");
 
 				expression.WhenThens[i].Item1.RenderCondition(this, query);
-				
+
 				query.Append(" THEN ");
-				
+
 				expression.WhenThens[i].Item2.RenderExpression(this, query);
 			}
 
@@ -197,11 +225,11 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderExpression(SimpleCaseExpression expression, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      query.Append("CASE ");
+			query.Append("CASE ");
 			expression.Expression.RenderExpression(this, query);
-			
+
 			for (int i = 0; i < expression.WhenThens.Count; i++)
 			{
 				query.Append(" WHEN ");
@@ -249,14 +277,14 @@ namespace YuraSoft.QueryBuilder.Renderers
 					query.Append('(');
 
 					expression.Expressions[0].RenderExpression(this, query);
-					
+
 					query.Append(')');
 				}
 				else
 				{
 					expression.Expressions[0].RenderExpression(this, query);
 				}
-				
+
 				for (int i = 1; i < expression.Expressions.Count; i++)
 				{
 					if (expression.Expressions[i] is ArithmeticException)
@@ -273,11 +301,11 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
-    #endregion Expression rendering methods
+		#endregion Expression rendering methods
 
-    #region Function rendering methods
+		#region Function rendering methods
 
-    public void RenderFunction(Function function, StringBuilder query) => RenderFunction(function.Name, function, function.Parameters, query);
+		public void RenderFunction(Function function, StringBuilder query) => RenderFunction(function.Name, function, function.Parameters, query);
 		public void RenderFunction(CountFunction function, StringBuilder query) => RenderColumnFunction("count", function, query);
 		public void RenderFunction(SumFunction function, StringBuilder query) => RenderColumnFunction("sum", function, query);
 		public void RenderFunction(MaxFunction function, StringBuilder query) => RenderColumnFunction("max", function, query);
@@ -285,93 +313,93 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderFunction(ConcatFunction function, StringBuilder query) => RenderFunction("concat", function, function.Values, query);
 		public void RenderFunction(CoalesceFunction function, StringBuilder query) => RenderFunction("coalesce", function, query, function.Column, function.DefaultValue);
 
-    private void RenderColumnFunction(string name, ColumnFunction function, StringBuilder query) => RenderFunction(name, function, query, function.Column);
-    private void RenderFunction(string name, IFunction function, StringBuilder query, params IExpression[] parameters) => RenderFunction(name, function, parameters, query);
+		private void RenderColumnFunction(string name, ColumnFunction function, StringBuilder query) => RenderFunction(name, function, query, function.Column);
+		private void RenderFunction(string name, IFunction function, StringBuilder query, params IExpression[] parameters) => RenderFunction(name, function, parameters, query);
 
-    private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder query)
-    {
+		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder query)
+		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
-      Validator.ThrowIfArgumentIsNull(function, nameof(function));
+			Validator.ThrowIfArgumentIsNull(function, nameof(function));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      query.Append(name);
-      query.Append('(');
+			query.Append(name);
+			query.Append('(');
 
-      if (parameters != null && parameters.Any())
-      {
-        IEnumerator<IExpression> enumerator = parameters.GetEnumerator();
-        enumerator.MoveNext();
-        enumerator.Current.RenderExpression(this, query);
-        while (enumerator.MoveNext())
-        {
-          query.Append(", ");
-          enumerator.Current.RenderExpression(this, query);
-        }
-      }
+			if (parameters != null && parameters.Any())
+			{
+				IEnumerator<IExpression> enumerator = parameters.GetEnumerator();
+				enumerator.MoveNext();
+				enumerator.Current.RenderExpression(this, query);
+				while (enumerator.MoveNext())
+				{
+					query.Append(", ");
+					enumerator.Current.RenderExpression(this, query);
+				}
+			}
 
-      query.Append(')');
-    }
+			query.Append(')');
+		}
 
-    #endregion Function rendering methods
+		#endregion Function rendering methods
 
-    #region Identificator rendering methods
+		#region Identificator rendering methods
 
-    public void RenderIdentificator(SourceColumn column, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(column, nameof(column));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderIdentificator(SourceColumn column, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(column, nameof(column));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      if (!string.IsNullOrEmpty(column.Alias))
-      {
-        RenderIdentificator(column.Alias, query);
+			if (!string.IsNullOrEmpty(column.Alias))
+			{
+				RenderIdentificator(column.Alias, query);
 
-        return;
-      }
+				return;
+			}
 
-      if (column.Source != null)
-      {
-        column.Source.RenderIdentificator(this, query);
-        query.Append('.');
-      }
+			if (column.Source != null)
+			{
+				column.Source.RenderIdentificator(this, query);
+				query.Append('.');
+			}
 
-      RenderIdentificator(column.Name, query);
-    }
+			RenderIdentificator(column.Name, query);
+		}
 
-    public void RenderIdentificator(ExpressionColumn column, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(column, nameof(column));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderIdentificator(ExpressionColumn column, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(column, nameof(column));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      if (!string.IsNullOrEmpty(column.Name))
-      {
-        RenderIdentificator(column.Name, query);
+			if (!string.IsNullOrEmpty(column.Name))
+			{
+				RenderIdentificator(column.Name, query);
 
-        return;
-      }
+				return;
+			}
 
-      column.Expression.RenderExpression(this, query);
-    }
+			column.Expression.RenderExpression(this, query);
+		}
 
-    public void RenderIdentificator(Table table, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(table, nameof(table));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderIdentificator(Table table, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(table, nameof(table));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      if (!string.IsNullOrEmpty(table.Alias))
-      {
-        RenderIdentificator(table.Alias, query);
+			if (!string.IsNullOrEmpty(table.Alias))
+			{
+				RenderIdentificator(table.Alias, query);
 
-        return;
-      }
+				return;
+			}
 
-      if (!string.IsNullOrEmpty(table.Schema))
-      {
-        RenderIdentificator(table.Schema, query);
-        query.Append('.');
-      }
+			if (!string.IsNullOrEmpty(table.Schema))
+			{
+				RenderIdentificator(table.Schema, query);
+				query.Append('.');
+			}
 
-      RenderIdentificator(table.Name, query);
-    }
+			RenderIdentificator(table.Name, query);
+		}
 
 		public virtual void RenderIdentificator(Subquery subquery, StringBuilder query)
 		{
@@ -381,21 +409,21 @@ namespace YuraSoft.QueryBuilder.Renderers
 			RenderIdentificator(subquery.Name, query);
 		}
 
-    public void RenderIdentificator(string identificator, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNullOrEmpty(identificator, nameof(identificator));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderIdentificator(string identificator, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNullOrEmpty(identificator, nameof(identificator));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      query.Append('\"');
-      query.Append(identificator);
-      query.Append('\"');
-    }
+			query.Append('\"');
+			query.Append(identificator);
+			query.Append('\"');
+		}
 
-    #endregion Identificator rendering methods
+		#endregion Identificator rendering methods
 
-    #region Join rendering methods
+		#region Join rendering methods
 
-    public void RenderJoin(LeftJoin join, StringBuilder query) => RenderJoin("LEFT JOIN", join, join.Condition, query);
+		public void RenderJoin(LeftJoin join, StringBuilder query) => RenderJoin("LEFT JOIN", join, join.Condition, query);
 		public void RenderJoin(RightJoin join, StringBuilder query) => RenderJoin("RIGHT JOIN", join, join.Condition, query);
 		public void RenderJoin(InnerJoin join, StringBuilder query) => RenderJoin("INNER JOIN", join, join.Condition, query);
 		public void RenderJoin(CrossJoin join, StringBuilder query) => RenderJoin("CROSS JOIN", join, null, query);
@@ -406,7 +434,11 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(join, nameof(join));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			query.Append($"{joinType} {join.Source.RenderSource(this)}");
+			query.Append(joinType);
+			query.Append(' ');
+
+			join.Source.RenderSource(this, query);
+			
 			if (condition != null)
 			{
 				query.Append(" ON ");
@@ -415,38 +447,38 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
-    #endregion Join rendering methods
+		#endregion Join rendering methods
 
-    #region Order by rendering methods
+		#region Order by rendering methods
 
-    public void RenderOrderBy(OrderBy orderBy, StringBuilder query)
+		public void RenderOrderBy(OrderBy orderBy, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(orderBy, nameof(orderBy));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			orderBy.Column.RenderIdentificator(this, query);
-			
+
 			query.Append(orderBy.Direction == OrderDirection.Asc ? "ASC" : "DESC");
 		}
 
-    #endregion Order by rendering methods
+		#endregion Order by rendering methods
 
-    #region Parameter rendering methods
+		#region Parameter rendering methods
 
-    public void RenderParameter(Parameter parameter, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(parameter, nameof(parameter));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderParameter(Parameter parameter, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(parameter, nameof(parameter));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      query.Append('@');
-      query.Append(parameter.Name);
-    }
+			query.Append('@');
+			query.Append(parameter.Name);
+		}
 
-    #endregion Parameter rendering methods
+		#endregion Parameter rendering methods
 
-    #region Query rendering methods
+		#region Query rendering methods
 
-    public void RenderQuery(Select select, StringBuilder query)
+		public void RenderQuery(Select select, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(select, nameof(select));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
@@ -466,7 +498,14 @@ namespace YuraSoft.QueryBuilder.Renderers
 			if (select.SourceCollection.Count > 0)
 			{
 				query.Append(" FROM ");
-				query.AppendJoin(", ", select.SourceCollection.ConvertAll(s => s.RenderSource(this)));
+
+				select.SourceCollection[0].RenderSource(this, query);
+				for (int i = 1; i < select.SourceCollection.Count; i++)
+				{
+					query.Append(", ");
+
+					select.SourceCollection[i].RenderSource(this, query);
+				}
 			}
 
 			foreach (IJoin join in select.JoinCollection)
@@ -484,7 +523,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			if (select.GroupByCollection.Count > 0)
 			{
 				query.Append(" GROUP BY ");
-				
+
 				select.GroupByCollection[0].RenderIdentificator(this, query);
 				for (int i = 1; i < select.GroupByCollection.Count; i++)
 				{
@@ -530,7 +569,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			query.Append("INSERT INTO ");
-			query.Append(insert.Source.RenderSource(this));
+
+			insert.Source.RenderSource(this, query);
+			
 			query.Append(" (");
 
 			insert.ColumnCollection[0].RenderColumn(this, query);
@@ -579,13 +620,42 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
+		public void RenderQuery(InsertSelect insertSelect, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(insertSelect, nameof(insertSelect));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			query.Append("INSERT INTO ");
+			
+			insertSelect.Source.RenderSource(this, query);
+
+			query.Append(' ');
+
+			insertSelect.SelectQuery.RenderQuery(this, query);
+
+			if (insertSelect.ReturningColumnCollection.Count > 0)
+			{
+				query.Append(" RETURNING ");
+
+				insertSelect.ReturningColumnCollection[0].RenderColumn(this, query);
+				for (int i = 1; i < insertSelect.ReturningColumnCollection.Count; i++)
+				{
+					query.Append(", ");
+
+					insertSelect.ReturningColumnCollection[i].RenderColumn(this, query);
+				}
+			}
+		}
+
 		public void RenderQuery(Update update, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNull(update, nameof(update));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			query.Append("UPDATE ");
-			query.Append(update.Source.RenderSource(this));
+
+			update.Source.RenderSource(this, query);
+
 			query.Append(" SET ");
 
 			update.SetCollection[0].Item1.RenderIdentificator(this, query);
@@ -613,8 +683,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			query.Append("DELETE FROM ");
-			query.Append(delete.Source.RenderSource(this));
-			
+
+			delete.Source.RenderSource(this, query);
+
 			if (delete.Condition != null)
 			{
 				query.Append(" WHERE ");
@@ -622,49 +693,49 @@ namespace YuraSoft.QueryBuilder.Renderers
 			}
 		}
 
-    #endregion Query rendering methods
+		#endregion Query rendering methods
 
-    #region Source rendering methods
+		#region Source rendering methods
 
-    public void RenderSource(Table table, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(table, nameof(table));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderSource(Table table, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(table, nameof(table));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      if (!string.IsNullOrEmpty(table.Schema))
-      {
-        RenderIdentificator(table.Schema, query);
-        query.Append('.');
-      }
+			if (!string.IsNullOrEmpty(table.Schema))
+			{
+				RenderIdentificator(table.Schema, query);
+				query.Append('.');
+			}
 
-      RenderIdentificator(table.Name, query);
+			RenderIdentificator(table.Name, query);
 
-      if (!string.IsNullOrEmpty(table.Alias))
-      {
-        query.Append(" AS ");
-        RenderIdentificator(table.Alias, query);
-      }
-    }
+			if (!string.IsNullOrEmpty(table.Alias))
+			{
+				query.Append(" AS ");
+				RenderIdentificator(table.Alias, query);
+			}
+		}
 
-    public void RenderSource(Subquery subquery, StringBuilder query)
-    {
-      Validator.ThrowIfArgumentIsNull(subquery, nameof(subquery));
-      Validator.ThrowIfArgumentIsNull(query, nameof(query));
+		public void RenderSource(Subquery subquery, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(subquery, nameof(subquery));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-      query.Append('(');
+			query.Append('(');
 
-      subquery.Select.RenderQuery(this, query);
+			subquery.Select.RenderQuery(this, query);
 
-      query.Append(") AS ");
+			query.Append(") AS ");
 
-      RenderIdentificator(subquery.Name, query);
-    }
+			RenderIdentificator(subquery.Name, query);
+		}
 
-    #endregion Source rendering methods
+		#endregion Source rendering methods
 
-    #region Value rendering methods
+		#region Value rendering methods
 
-    public void RenderValue(Int8Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
+		public void RenderValue(Int8Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
 		public void RenderValue(Int16Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
 		public void RenderValue(Int32Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
 		public void RenderValue(Int64Value value, StringBuilder query) => RenderValue(value, value?.Data, query);
@@ -683,6 +754,6 @@ namespace YuraSoft.QueryBuilder.Renderers
 			query.Append(data);
 		}
 
-    #endregion Value rendering methods
+		#endregion Value rendering methods
 	}
 }

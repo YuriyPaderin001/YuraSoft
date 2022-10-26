@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Select : IQuery, IExpression
 	{
+		#region Fields
+
 		private List<IColumn> _columnCollection = new List<IColumn>();
 		private List<ISource> _sourceCollection = new List<ISource>();
 		private List<IJoin> _joinCollection = new List<IJoin>();
@@ -19,15 +21,19 @@ namespace YuraSoft.QueryBuilder
 		private int? _offset;
 		private int? _limit;
 
+		#endregion Fields
+
+		#region Constructors
+
 		public Select(params string[] columns) : this((IEnumerable<string>)columns)
-		{	
+		{
 		}
-		
-		public Select(IEnumerable<string> columns) 
+
+		public Select(IEnumerable<string> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullOrEmptyElements(columns, nameof(columns));
 
-			_columnCollection = columns.Select(c => new SourceColumn(c)).ToList<IColumn>();
+			_columnCollection.AddRange(columns.Select(c => new SourceColumn(c)));
 		}
 
 		public Select(params IColumn[] columns) : this((IEnumerable<IColumn>)columns)
@@ -38,7 +44,7 @@ namespace YuraSoft.QueryBuilder
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));
 
-			_columnCollection = new List<IColumn>(columns);
+			_columnCollection.AddRange(columns);
 		}
 
 		public Select(Action<ColumnBuilder> buildColumnAction)
@@ -48,57 +54,66 @@ namespace YuraSoft.QueryBuilder
 			ColumnBuilder builder = new ColumnBuilder();
 			buildColumnAction(builder);
 
-			_columnCollection = builder.Build();
+			_columnCollection.AddRange(builder.Build());
 		}
 
+		#endregion Constructors
+
+		#region Properties
+
 		public List<IColumn> ColumnCollection
-		{ 
+		{
 			get => _columnCollection;
 			set => _columnCollection = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(ColumnCollection));
 		}
-		
-		public List<ISource> SourceCollection 
-		{ 
-			get => _sourceCollection; 
+
+		public List<ISource> SourceCollection
+		{
+			get => _sourceCollection;
 			set => _sourceCollection = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(SourceCollection));
 		}
 
 		public ICondition? WhereCondition { get; set; }
-		public List<IJoin> JoinCollection 
-		{ 
-			get => _joinCollection; 
+
+		public List<IJoin> JoinCollection
+		{
+			get => _joinCollection;
 			set => _joinCollection = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(JoinCollection));
 		}
 
 		public ICondition? HavingCondition { get; set; }
-		
+
 		public List<IOrderBy> OrderByCollection
 		{
 			get => _orderByCollection;
 			set => _orderByCollection = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(OrderByCollection));
 		}
-		
-		public List<IColumn> GroupByCollection 
-		{ 
-			get => _groupByCollection; 
+
+		public List<IColumn> GroupByCollection
+		{
+			get => _groupByCollection;
 			set => _groupByCollection = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(GroupByCollection));
 		}
-		
-		public int? OffsetValue 
-		{ 
+
+		public int? OffsetValue
+		{
 			get => _offset;
 			set => _offset = value.HasValue ? Validator.ThrowIfArgumentIsNegative(value.Value, nameof(OffsetValue)) : value;
 		}
-		
-		public int? LimitValue 
-		{ 
+
+		public int? LimitValue
+		{
 			get => _limit;
 			set => _limit = value.HasValue ? Validator.ThrowIfArgumentIsNegative(value.Value, nameof(OffsetValue)) : value;
 		}
 
+		#endregion Properties
+
+		#region Methods
+
 		public virtual Select From(params string[] tables) => From(tables.Select<string, ISource>(t => new Table(t)));
 		public virtual Select From(IEnumerable<string> tables) => From(tables.Select<string, ISource>(t => new Table(t)));
-		public virtual Select From(params ISource[] tables) => From((IEnumerable<ISource>)tables);
+		public virtual Select From(params ISource[] sources) => From((IEnumerable<ISource>)sources);
 
 		public virtual Select From(IEnumerable<ISource> sources)
 		{
@@ -225,7 +240,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Select GroupBy(params string[] columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(IEnumerable<string> columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(params IColumn[] columns) => GroupBy(columns.AsEnumerable());
-		
+
 		public virtual Select GroupBy(IEnumerable<IColumn> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));
@@ -249,28 +264,28 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
-    private Select AddJoin(IJoin join)
-    {
-      Validator.ThrowIfArgumentIsNull(join, nameof(join));
+		private Select AddJoin(IJoin join)
+		{
+			Validator.ThrowIfArgumentIsNull(join, nameof(join));
 
-      JoinCollection.Add(join);
+			JoinCollection.Add(join);
 
-      return this;
-    }
+			return this;
+		}
 
-    #region Rendering methods
+		#region Rendering methods
 
-    public string RenderExpression(IRenderer renderer)
-    {
-      StringBuilder query = new StringBuilder();
-      RenderExpression(renderer, query);
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderExpression(renderer, query);
 
-      return query.ToString();
-    }
+			return query.ToString();
+		}
 
-    public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => renderer.RenderExpression(this, query);
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => renderer.RenderExpression(this, query);
 
-    public virtual string RenderQuery(IRenderer renderer)
+		public virtual string RenderQuery(IRenderer renderer)
 		{
 			StringBuilder query = new StringBuilder();
 			RenderQuery(renderer, query);
@@ -278,8 +293,10 @@ namespace YuraSoft.QueryBuilder
 			return query.ToString();
 		}
 
-    public virtual void RenderQuery(IRenderer renderer, StringBuilder query) => renderer.RenderQuery(this, query);
+		public virtual void RenderQuery(IRenderer renderer, StringBuilder query) => renderer.RenderQuery(this, query);
 
-    #endregion Rendering methods
-  }
+		#endregion Rendering methods
+
+		#endregion Methods
+	}
 }

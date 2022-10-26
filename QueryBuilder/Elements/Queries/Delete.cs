@@ -9,8 +9,13 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Delete : IQuery
 	{
+		#region Fields
+
 		private ISource _source;
-		private ICondition? _condition;
+
+		#endregion Fields
+
+		#region Constructors
 
 		public Delete(string name, string? alias = null, string? schema = null)
 		{
@@ -24,17 +29,21 @@ namespace YuraSoft.QueryBuilder
 			_source = Validator.ThrowIfArgumentIsNull(table, nameof(table));
 		}
 
+		#endregion Constructors
+
+		#region Properties
+
 		public ISource Source 
 		{ 
 			get => _source; 
 			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
 		}
 
-		public ICondition? Condition
-		{
-			get => _condition;
-			set => _condition = value;
-		}
+		public ICondition? Condition { get; set; }
+
+		#endregion Properties
+
+		#region Methods
 
 		public virtual Delete Where(ICondition? condition)
 		{
@@ -64,5 +73,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public virtual void RenderQuery(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderQuery(this, stringBuilder);
+
+		#endregion Methods
 	}
 }
