@@ -1,4 +1,6 @@
-﻿using YuraSoft.QueryBuilder.Renderers;
+﻿using System.Text;
+
+using YuraSoft.QueryBuilder.Renderers;
 
 #nullable enable
 
@@ -6,6 +8,6 @@ namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface ISource : IIdentificator
 	{
-		public string RenderSource(IRenderer renderer);
+		public void RenderSource(IRenderer renderer, StringBuilder query);
 	}
 }
