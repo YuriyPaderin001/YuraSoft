@@ -117,6 +117,18 @@ namespace YuraSoft.QueryBuilder
 
 		#endregion NotEqual methods
 
+		#region Exists methods
+
+		public ConditionBuilder Exists(IExpression expression, Select select) => Add(new ExistsCondition(expression, select));
+		
+		public ConditionBuilder Exists(string column, Select select) => Add(new ExistsCondition(new SourceColumn(column), select));
+		
+		public ConditionBuilder Exists(string column, string table, Select select) => Add(new ExistsCondition(new SourceColumn(column, new Table(table)), select));
+		
+		public ConditionBuilder Exists(string column, ISource source, Select select) => Add(new ExistsCondition(new SourceColumn(column, source), select));
+
+		#endregion Exists methods
+
 		#region Greater methods
 
 		public ConditionBuilder Greater(IExpression expression, sbyte value) => Add(new GreaterCondition(expression, new Int8Value(value)));
@@ -437,6 +449,18 @@ namespace YuraSoft.QueryBuilder
 
 		#endregion In methods
 
+		#region NotExists methods
+
+		public ConditionBuilder NotExists(IExpression expression, Select select) => Add(new NotExistsCondition(expression, select));
+
+		public ConditionBuilder NotExists(string column, Select select) => Add(new NotExistsCondition(new SourceColumn(column), select));
+
+		public ConditionBuilder NotExists(string column, string table, Select select) => Add(new NotExistsCondition(new SourceColumn(column, new Table(table)), select));
+
+		public ConditionBuilder NotExists(string column, ISource source, Select select) => Add(new NotExistsCondition(new SourceColumn(column, source), select));
+
+		#endregion NotExists methods
+
 		#region NotIn methods
 
 		public ConditionBuilder NotIn(IExpression expression, params sbyte[] values) => Add(new NotInCondition(expression, values.Select(v => new Int8Value(v))));
@@ -595,9 +619,9 @@ namespace YuraSoft.QueryBuilder
 
 		public ConditionBuilder And(params ICondition[] conditions) => Add(new AndCondition(conditions));
 		public ConditionBuilder And(IEnumerable<ICondition> conditions) => Add(new AndCondition(conditions));
-    public ConditionBuilder And(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildAnd());
+		public ConditionBuilder And(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildAnd());
    
-    public ConditionBuilder And(Action<ConditionBuilder> buildConditionMethod)
+		public ConditionBuilder And(Action<ConditionBuilder> buildConditionMethod)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
 			buildConditionMethod.Invoke(builder);
@@ -607,9 +631,9 @@ namespace YuraSoft.QueryBuilder
 
 		public ConditionBuilder Or(params ICondition[] conditions) => Add(new OrCondition(conditions));
 		public ConditionBuilder Or(IEnumerable<ICondition> conditions) => Add(new OrCondition(conditions));
-    public ConditionBuilder Or(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildOr());
+		public ConditionBuilder Or(ConditionBuilder conditionBuilder) => Add(conditionBuilder.BuildOr());
 
-    public ConditionBuilder Or(Action<ConditionBuilder> buildConditionMethod)
+		public ConditionBuilder Or(Action<ConditionBuilder> buildConditionMethod)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
 			buildConditionMethod.Invoke(builder);
