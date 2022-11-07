@@ -4,8 +4,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>YuraSoft.QueryBuilder</RootNamespace>
     <Nullable>enable</Nullable>
-    <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>D:\key</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>YuraSoft.$(AssemblyName)</PackageId>
     <Version>$(VersionPrefix)</Version>
