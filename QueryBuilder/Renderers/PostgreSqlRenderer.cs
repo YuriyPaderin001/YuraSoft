@@ -409,6 +409,27 @@ namespace YuraSoft.QueryBuilder.Renderers
 			RenderIdentificator(subquery.Name, query);
 		}
 
+		public void RenderIdentificator(View view, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(view, nameof(view));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			if (!string.IsNullOrEmpty(view.Alias))
+			{
+				RenderIdentificator(view.Alias, query);
+
+				return;
+			}
+
+			if (!string.IsNullOrEmpty(view.Schema))
+			{
+				RenderIdentificator(view.Schema, query);
+				query.Append('.');
+			}
+
+			RenderIdentificator(view.Name, query);
+		}
+
 		public void RenderIdentificator(string identificator, StringBuilder query)
 		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(identificator, nameof(identificator));
@@ -729,6 +750,26 @@ namespace YuraSoft.QueryBuilder.Renderers
 			query.Append(") AS ");
 
 			RenderIdentificator(subquery.Name, query);
+		}
+
+		public void RenderSource(View view, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(view, nameof(view));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			if (!string.IsNullOrEmpty(view.Schema))
+			{
+				RenderIdentificator(view.Schema, query);
+				query.Append('.');
+			}
+
+			RenderIdentificator(view.Name, query);
+
+			if (!string.IsNullOrEmpty(view.Alias))
+			{
+				query.Append(" AS ");
+				RenderIdentificator(view.Alias, query);
+			}
 		}
 
 		#endregion Source rendering methods

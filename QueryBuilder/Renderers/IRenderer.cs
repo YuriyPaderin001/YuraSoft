@@ -63,6 +63,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderIdentificator(ExpressionColumn column, StringBuilder query);
 		public void RenderIdentificator(Table table, StringBuilder query);
 		public void RenderIdentificator(Subquery subquery, StringBuilder query);
+		public void RenderIdentificator(View view, StringBuilder query);
 
 		#endregion Identificator render methods
 
@@ -101,6 +102,8 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 		public void RenderSource(Table table, StringBuilder query);
 		public void RenderSource(Subquery subquery, StringBuilder query);
+
+		public void RenderSource(View view, StringBuilder query);
 		
 		#endregion Source render methods
 
