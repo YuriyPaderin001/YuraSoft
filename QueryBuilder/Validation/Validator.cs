@@ -88,16 +88,29 @@ namespace YuraSoft.QueryBuilder.Validation
 			return argument;
 		}
 
+		/// <summary>
+		/// Throws <see cref="ArgumentOutOfRangeException"/> if <paramref name="argument"/> is negative
+		/// </summary>
+		/// <param name="argument">Number</param>
+		/// <param name="argumentName"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public static int ThrowIfArgumentIsNegative(int argument, string argumentName)
 		{
 			if (argument < 0)
 			{
-				throw new ArgumentException(argumentName, Shared.Err_ArgumentShouldNotBeNegative);
+				throw new ArgumentOutOfRangeException(argumentName, Shared.Err_ArgumentShouldNotBeNegative);
 			}
 
 			return argument;
 		}
 
+		/// <summary>
+		/// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains elements equal to <see langword="null"/> or empty string
+		/// </summary>
+		/// <param name="argument">String enumerable</param>
+		/// <param name="argumentName">Argument name</param>
+		/// <exception cref="ArgumentException"></exception>
 		private static void ThrowIfArgumentContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName) 
 		{
 			foreach (string? item in argument)
@@ -109,6 +122,12 @@ namespace YuraSoft.QueryBuilder.Validation
 			}
 		}
 
+		/// <summary>
+		/// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains elements equal to <see langword="null"/>
+		/// </summary>
+		/// <param name="argument">Enumerable</param>
+		/// <param name="argumentName">Argument name</param>
+		/// <exception cref="ArgumentException"></exception>
 		private static void ThrowIfArgumentContainsNullElements(IEnumerable argument, string argumentName)
 		{
 			foreach (object? item in argument)

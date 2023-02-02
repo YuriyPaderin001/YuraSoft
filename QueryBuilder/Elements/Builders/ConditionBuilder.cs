@@ -641,6 +641,8 @@ namespace YuraSoft.QueryBuilder
 			return Add(builder.BuildOr());
 		}
 
+		public ConditionBuilder Condition(ICondition condition) => Add(condition);
+
 		public ICondition Build() => BuildAnd();
 
 		internal ICondition BuildAnd()

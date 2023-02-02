@@ -29,6 +29,7 @@ namespace YuraSoft.QueryBuilder
 			return AddColumn(new ExpressionColumn(caseBuilder.Build(), name));
 		}
 
+		public ColumnBuilder Column(IColumn column) => AddColumn(column);
 		public ColumnBuilder Column(IExpression expression, string? name = null) => AddColumn(new ExpressionColumn(expression, name));
 		public ColumnBuilder Column(string name) => AddColumn(new SourceColumn(name));
 		public ColumnBuilder Column(string name, string alias) => AddColumn(new SourceColumn(name, alias));
