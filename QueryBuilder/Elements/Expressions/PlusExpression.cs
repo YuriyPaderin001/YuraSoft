@@ -12,6 +12,7 @@ namespace YuraSoft.QueryBuilder
 		{ 
 		}
 
-		public override void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderExpression(this, stringBuilder);
+		public override void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => 
+			renderer.RenderExpression(this, stringBuilder);
 	}
 }

@@ -10,6 +10,8 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Update : IQuery
 	{
+		private static ExpressionFactory _factory = ExpressionFactory.Instance;
+
 		private ISource _source;
 		private List<Tuple<IColumn, IExpression>> _setCollection = new List<Tuple<IColumn, IExpression>>();
 		private ICondition? _condition;
@@ -106,21 +108,10 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public virtual Update Where(Action<ConditionBuilder> buildConditionMethod) => Where(_factory.Condition(buildConditionMethod));
 		public virtual Update Where(ICondition? condition)
 		{
 			Condition = condition;
-
-			return this;
-		}
-
-		public virtual Update Where(Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			Condition = builder.Build();
 
 			return this;
 		}

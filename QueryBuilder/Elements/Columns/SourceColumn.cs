@@ -15,19 +15,17 @@ namespace YuraSoft.QueryBuilder
 			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 		}
 
-		public SourceColumn(string name, string alias) : this(name)
+		public SourceColumn(string name, ISource? source)
 		{
-			Alias = Validator.ThrowIfArgumentIsNullOrEmpty(alias, nameof(alias));
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
+			Source = source;
 		}
 
-		public SourceColumn(string name, ISource source) : this(name)
+		public SourceColumn(string name, string? alias = null, ISource? source = null)
 		{
-			Source = Validator.ThrowIfArgumentIsNull(source, nameof(source));
-		}
-
-		public SourceColumn(string name, string alias, ISource source) : this(name, alias)
-		{
-			Source = Validator.ThrowIfArgumentIsNull(source, nameof(source));
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
+			Alias = alias;
+			Source = source;
 		}
 
 		public string Name

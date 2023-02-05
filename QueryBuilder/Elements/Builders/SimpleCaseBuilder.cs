@@ -8,6 +8,8 @@ namespace YuraSoft.QueryBuilder
 {
 	public class SimpleCaseBuilder
 	{
+		public readonly ExpressionFactory Factory = ExpressionFactory.Instance;
+
 		private IExpression _expression;
 		private List<Tuple<IExpression, IExpression>> _whenThens = new List<Tuple<IExpression, IExpression>>();
 		private IExpression? _else;
@@ -19,18 +21,16 @@ namespace YuraSoft.QueryBuilder
 			_expression = new SourceColumn(column);
 		}
 
-		public SimpleCaseBuilder(string column, string table)
+		public SimpleCaseBuilder(string column, string? table)
 		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(column, nameof(column));
-			Validator.ThrowIfArgumentIsNullOrEmpty(table, nameof(table));
 
-			_expression = new SourceColumn(column, new Table(table));
+			_expression = new SourceColumn(column, string.IsNullOrEmpty(table) ? null : new Table(table));
 		}
 
-		public SimpleCaseBuilder(string column, ISource source)
+		public SimpleCaseBuilder(string column, ISource? source)
 		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(column, nameof(column));
-			Validator.ThrowIfArgumentIsNull(source, nameof(source));
 
 			_expression = new SourceColumn(column, source);
 		}
@@ -40,25 +40,40 @@ namespace YuraSoft.QueryBuilder
 			_expression = Validator.ThrowIfArgumentIsNull(expression, nameof(expression));
 		}
 
-		public SimpleCaseBuilder WhenThen(string firstColumn, string secondColumn) => WhenThen(new SourceColumn(firstColumn), new SourceColumn(secondColumn));
-		public SimpleCaseBuilder WhenThen(string firstColumn, string firstTable, string secondColumn) => WhenThen(new SourceColumn(firstColumn, new Table(firstTable)), new SourceColumn(secondColumn));
-		public SimpleCaseBuilder WhenThen(string firstColumn, ISource firstSource, string secondColumn) => WhenThen(new SourceColumn(firstColumn, firstSource), new SourceColumn(secondColumn));
-		public SimpleCaseBuilder WhenThen(string firstColumn, string secondColumn, ISource secondSource) => WhenThen(new SourceColumn(firstColumn), new SourceColumn(secondColumn, secondSource));
-		public SimpleCaseBuilder WhenThen(string firstColumn, string firstTable, string secondColumn, string secondTable) => WhenThen(new SourceColumn(firstColumn, new Table(firstTable)), new SourceColumn(secondColumn, new Table(secondTable)));
-		public SimpleCaseBuilder WhenThen(string firstColumn, ISource firstSource, string secondColumn, string secondTable) => WhenThen(new SourceColumn(firstColumn, firstSource), new SourceColumn(secondColumn, new Table(secondTable)));
-		public SimpleCaseBuilder WhenThen(string firstColumn, string firstTable, string secondColumn, ISource secondSource) => WhenThen(new SourceColumn(firstColumn, new Table(firstTable)), new SourceColumn(secondColumn, secondSource));
-		public SimpleCaseBuilder WhenThen(string firstColumn, ISource firstSource, string secondColumn, ISource secondSource) => WhenThen(new SourceColumn(firstColumn, firstSource), new SourceColumn(secondColumn, secondSource));
+		public SimpleCaseBuilder WhenThen(IExpression expression, string column) => WhenThen(expression, Factory.Column(column));
+		public SimpleCaseBuilder WhenThen(IExpression expression, string column, string table) => WhenThen(expression, Factory.Column(column, table));
+		public SimpleCaseBuilder WhenThen(IExpression expression, string column, ISource source) => WhenThen(expression, Factory.Column(column, source));
+		public SimpleCaseBuilder WhenThen(IExpression expression, Func<ExpressionFactory, IExpression> function) => WhenThen(expression, Factory.Expression(function));
+		public SimpleCaseBuilder WhenThen(IExpression condition, IExpression expression) => WhenThen(Tuple.Create(condition, expression));
 
-		public SimpleCaseBuilder WhenThen(IExpression condition, IExpression expression)
+		public SimpleCaseBuilder WhenThen(string column1, string column2) => WhenThen(column1, Factory.Column(column2));
+		public SimpleCaseBuilder WhenThen(string column1, string column2, ISource source2) => WhenThen(column1, Factory.Column(column2, source2));
+		public SimpleCaseBuilder WhenThen(string column1, Func<ExpressionFactory, IExpression> function) => WhenThen(column1, Factory.Expression(function));
+		public SimpleCaseBuilder WhenThen(string column1, IExpression expression) => WhenThen(Factory.Column(column1), expression);
+
+		public SimpleCaseBuilder WhenThen(string column1, string table1, string column2) => WhenThen(column1, table1, Factory.Column(column2));
+		public SimpleCaseBuilder WhenThen(string column1, string table1, string column2, string table2) => WhenThen(column1, table1, Factory.Column(column2, new Table(table2)));
+		public SimpleCaseBuilder WhenThen(string column1, string table1, string column2, ISource source2) => WhenThen(column1, table1, Factory.Column(column2, source2));
+		public SimpleCaseBuilder WhenThen(string column1, string table1, Func<ExpressionFactory, IExpression> function) => WhenThen(column1, table1, Factory.Expression(function));
+		public SimpleCaseBuilder WhenThen(string column1, string table1, IExpression expression) => WhenThen(Factory.Column(column1, table1), expression);
+
+		public SimpleCaseBuilder WhenThen(string column1, ISource source1, string column2) => WhenThen(Factory.Column(column1, source1), Factory.Column(column2));
+		public SimpleCaseBuilder WhenThen(string column1, ISource source1, string column2, string table2) => WhenThen(Factory.Column(column1, source1), Factory.Column(column2, table2));
+		public SimpleCaseBuilder WhenThen(string column1, ISource source1, string column2, ISource source2) => WhenThen(Factory.Column(column1, source1), Factory.Column(column2, source2));
+		public SimpleCaseBuilder WhenThen(string column1, ISource source1, Func<ExpressionFactory, IExpression> function) => WhenThen(Factory.Column(column1, source1), Factory.Expression(function));
+		public SimpleCaseBuilder WhenThen(string column1, ISource source1, IExpression expression) => WhenThen(Factory.Column(column1, source1), expression);
+
+		public SimpleCaseBuilder WhenThen(Tuple<IExpression, IExpression> whenThen)
 		{
-			_whenThens.Add(Tuple.Create(condition, expression));
+			_whenThens.Add(whenThen);
 
 			return this;
 		}
 
-		public void Else(string column) => _else = new SourceColumn(column);
-		public void Else(string column, string table) => _else = new SourceColumn(column, new Table(table));
-		public void Else(string column, ISource source) => _else = new SourceColumn(column, source);
+		public void Else(string column) => _else = Factory.Column(column);
+		public void Else(string column, string table) => _else = Factory.Column(column, table);
+		public void Else(string column, ISource source) => _else = Factory.Column(column, source);
+		public void Else(Func<ExpressionFactory, IExpression> function) => _else = Factory.Expression(function);
 		public void Else(IExpression expression) => _else = expression;
 
 		public SimpleCaseExpression Build()

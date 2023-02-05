@@ -1,7 +1,6 @@
 ﻿using System;
 
 using YuraSoft.QueryBuilder;
-using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
 
 namespace QueryBuilderSandbox
@@ -11,6 +10,24 @@ namespace QueryBuilderSandbox
 		public static void Main(string[] args)
 		{
 			IRenderer renderer = new PostgreSqlRenderer();
+
+			View view = new View("test_view", "view_alias", "view_schema");
+			Table table = new Table("table", "alias", "schema");
+
+			Select select = new Select(c => c
+				.Plus(c => c
+					.Int8(1)
+					.Int16(2)
+					.Int32(77)
+					.Multiply(c => c.Float(2.324).Int8(55)))
+				.Column("test", "alias", table))
+				.From(table, view)
+				.OrderByAsc(c => c
+					.Column("column1", table)
+					.Column("column2", table));
+
+			Console.WriteLine(select.RenderQuery(renderer));
+			Console.WriteLine();
 
 			Table table1 = new Table("user_group", "ug", "public");
 
@@ -30,7 +47,7 @@ namespace QueryBuilderSandbox
 				.Column("FirstName", table2)
 				.Column("MiddleName", table2))
 				.From(table2)
-				.LeftJoin(table1, c => c.Equal("Id", table2, "creator_sid", table1))
+				.LeftJoin(table2, table1, (c, l, r) => c.Equal("Id", l, "creator_sid", r))
 				.Where(c => c
 					.Equal("Id", table2, "test_guid")
 					.And(c => c

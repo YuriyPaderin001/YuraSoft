@@ -11,6 +11,8 @@ namespace YuraSoft.QueryBuilder
 {
 	public class Select : IQuery, IExpression
 	{
+		private static ExpressionFactory _factory = ExpressionFactory.Instance;
+
 		#region Fields
 
 		private List<IColumn> _columnCollection = new List<IColumn>();
@@ -124,6 +126,7 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public virtual Select Where(Action<ConditionBuilder> buildConditionMethod) => Where(_factory.Condition(buildConditionMethod));
 		public virtual Select Where(ICondition? condition)
 		{
 			WhereCondition = condition;
@@ -131,89 +134,39 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
-		public virtual Select Where(Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			WhereCondition = builder.Build();
-
-			return this;
-		}
-
 		public virtual Select LeftJoin(string table, ICondition condition) => AddJoin(new LeftJoin(new Table(table), condition));
 		public virtual Select LeftJoin(string table, Action<ConditionBuilder> buildConditionMethod) => LeftJoin(new Table(table), buildConditionMethod);
+		public virtual Select LeftJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => LeftJoin(new Table(leftTable), new Table(rightTable), buildConditionMethod);
+	
 		public virtual Select LeftJoin(ISource source, ICondition condition) => AddJoin(new LeftJoin(source, condition));
-		public virtual Select LeftJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			ICondition condition = builder.Build();
-
-			AddJoin(new LeftJoin(source, condition));
-
-			return this;
-		}
+		public virtual Select LeftJoin(ISource source, Action<ConditionBuilder> buildConditionMethod) => AddJoin(new LeftJoin(source, _factory.Condition(buildConditionMethod)));
+		public virtual Select LeftJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => AddJoin(new LeftJoin(rightSource, _factory.Condition(leftSource, rightSource, buildConditionMethod)));
 
 		public virtual Select RightJoin(string table, ICondition condition) => AddJoin(new RightJoin(new Table(table), condition));
 		public virtual Select RightJoin(string table, Action<ConditionBuilder> buildConditionMethod) => RightJoin(new Table(table), buildConditionMethod);
+		public virtual Select RightJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => RightJoin(new Table(leftTable), new Table(rightTable), buildConditionMethod);
+
 		public virtual Select RightJoin(ISource source, ICondition condition) => AddJoin(new RightJoin(source, condition));
-		public virtual Select RightJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			ICondition condition = builder.Build();
-
-			AddJoin(new RightJoin(source, condition));
-
-			return this;
-		}
+		public virtual Select RightJoin(ISource source, Action<ConditionBuilder> buildConditionMethod) => AddJoin(new RightJoin(source, _factory.Condition(buildConditionMethod)));
+		public virtual Select RightJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => AddJoin(new RightJoin(rightSource, _factory.Condition(leftSource, rightSource, buildConditionMethod)));
 
 		public virtual Select InnerJoin(string table, ICondition condition) => AddJoin(new InnerJoin(new Table(table), condition));
-		public virtual Select InnerJoin(string table, Action<ConditionBuilder> buildConditionMethod) => InnerJoin(new Table(table), buildConditionMethod);
+		public virtual Select InnerJoin(string table, Action<ConditionBuilder> buildConditionMethod) => AddJoin(new InnerJoin(new Table(table), _factory.Condition(buildConditionMethod)));
+		public virtual Select InnerJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => InnerJoin(new Table(leftTable), new Table(rightTable), buildConditionMethod);
+
 		public virtual Select InnerJoin(ISource source, ICondition condition) => AddJoin(new InnerJoin(source, condition));
-		public virtual Select InnerJoin(ISource source, Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			ICondition condition = builder.Build();
-
-			AddJoin(new RightJoin(source, condition));
-
-			return this;
-		}
+		public virtual Select InnerJoin(ISource source, Action<ConditionBuilder> buildConditionMethod) => AddJoin(new InnerJoin(source, _factory.Condition(buildConditionMethod)));
+		public virtual Select InnerJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => AddJoin(new InnerJoin(rightSource, _factory.Condition(leftSource, rightSource, buildConditionMethod)));
 
 		public virtual Select CrossJoin(string table) => AddJoin(new CrossJoin(new Table(table)));
 		public virtual Select CrossJoin(ISource source) => AddJoin(new CrossJoin(source));
 
 		public virtual Select Join(IJoin join) => AddJoin(join);
 
+		public virtual Select Having(Action<ConditionBuilder> buildConditionMethod) => Having(_factory.Condition(buildConditionMethod));
 		public virtual Select Having(ICondition? condition)
 		{
 			HavingCondition = condition;
-
-			return this;
-		}
-
-		public virtual Select Having(Action<ConditionBuilder> buildConditionMethod)
-		{
-			Validator.ThrowIfArgumentIsNull(buildConditionMethod, nameof(buildConditionMethod));
-
-			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
-
-			HavingCondition = builder.Build();
 
 			return this;
 		}
@@ -222,12 +175,15 @@ namespace YuraSoft.QueryBuilder
 		public virtual Select OrderByAsc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
 		public virtual Select OrderByAsc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
+		public virtual Select OrderByAsc(Action<ColumnBuilder> action) => OrderByAsc(_factory.Columns(action));
+
 		public virtual Select OrderByDesc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
 		public virtual Select OrderByDesc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
 		public virtual Select OrderByDesc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
 		public virtual Select OrderByDesc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
+		public virtual Select OrderByDesc(Action<ColumnBuilder> action) => OrderByDesc(_factory.Columns(action));
+		
 		public virtual Select OrderBy(params IOrderBy[] columns) => OrderBy((IEnumerable<IOrderBy>)columns);
-
 		public virtual Select OrderBy(IEnumerable<IOrderBy> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));
@@ -240,7 +196,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Select GroupBy(params string[] columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(IEnumerable<string> columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(params IColumn[] columns) => GroupBy(columns.AsEnumerable());
-
+		public virtual Select GroupBy(Action<ColumnBuilder> action) => GroupBy(_factory.Columns(action));
 		public virtual Select GroupBy(IEnumerable<IColumn> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));

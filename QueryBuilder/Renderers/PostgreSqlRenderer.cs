@@ -287,6 +287,10 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 				for (int i = 1; i < expression.Expressions.Count; i++)
 				{
+					query.Append(' ');
+					query.Append(operation);
+					query.Append(' ');
+
 					if (expression.Expressions[i] is ArithmeticException)
 					{
 						query.Append('(');
@@ -479,7 +483,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 			orderBy.Column.RenderIdentificator(this, query);
 
-			query.Append(orderBy.Direction == OrderDirection.Asc ? "ASC" : "DESC");
+			query.Append(orderBy.Direction == OrderDirection.Asc ? " ASC" : " DESC");
 		}
 
 		#endregion Order by rendering methods
