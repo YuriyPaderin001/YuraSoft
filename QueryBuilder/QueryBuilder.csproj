@@ -6,11 +6,12 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>YuraSoft.$(AssemblyName)</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.3</Version>
     <Authors>YuraSoft</Authors>
     <Description>Simple fluent api sql query builder</Description>
-    <AssemblyVersion>1.0.1</AssemblyVersion>
-    <FileVersion>1.0.1</FileVersion>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
+    <RepositoryUrl>https://github.com/YuriyPaderin001/QueryBuilder.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
