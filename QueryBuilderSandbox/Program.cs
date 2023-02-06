@@ -13,7 +13,6 @@ namespace QueryBuilderSandbox
 
 			View view = new View("test_view", "view_alias", "view_schema");
 			Table table = new Table("table", "alias", "schema");
-
 			Select select = new Select(c => c
 				.Plus(c => c
 					.Int8(1)
@@ -26,7 +25,12 @@ namespace QueryBuilderSandbox
 					.Column("column1", table)
 					.Column("column2", table));
 
-			Console.WriteLine(select.RenderQuery(renderer));
+			InsertSelect insertSelect = new InsertSelect(table, select)
+				.Columns(c => c
+					.Column("c1")
+					.Column("c2"));
+
+			Console.WriteLine(insertSelect.RenderQuery(renderer));
 			Console.WriteLine();
 
 			Table table1 = new Table("user_group", "ug", "public");

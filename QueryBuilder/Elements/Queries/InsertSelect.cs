@@ -14,7 +14,8 @@ namespace YuraSoft.QueryBuilder
 		#region Fields
 
 		private ISource _source;
-		private Select _select;
+    private List<IColumn> _sourceColumns = new List<IColumn>();
+    private Select _select;
 		private List<IColumn> _returningColumns = new List<IColumn>();
 
 		#endregion Fields
@@ -46,7 +47,13 @@ namespace YuraSoft.QueryBuilder
 			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
 		}
 
-		public Select SelectQuery
+    public List<IColumn> ColumnCollection
+    {
+      get => _sourceColumns;
+      set => _sourceColumns = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(ColumnCollection));
+    }
+
+    public Select SelectQuery
 		{
 			get => _select;
 			set => _select = Validator.ThrowIfArgumentIsNull(value, nameof(Select));
@@ -58,11 +65,43 @@ namespace YuraSoft.QueryBuilder
 			set => _returningColumns = Validator.ThrowIfArgumentIsNullOrContainsNullElements(value, nameof(ReturningColumnCollection));
 		}
 
-		#endregion Properties
+    #endregion Properties
 
-		#region Methods
+    #region Methods
 
-		public virtual InsertSelect Returning(params string[] columns) => Returning((IEnumerable<string>)columns);
+    public virtual InsertSelect Columns(params string[] columns) => Columns((IEnumerable<string>)columns);
+    public virtual InsertSelect Columns(IEnumerable<string> columns)
+    {
+      Validator.ThrowIfArgumentIsNullOrContainsNullOrEmptyElements(columns, nameof(columns));
+
+      _sourceColumns.AddRange(columns.Select(c => new SourceColumn(c)));
+
+      return this;
+    }
+
+    public virtual InsertSelect Columns(params IColumn[] columns) => Columns((IEnumerable<IColumn>)columns);
+    public virtual InsertSelect Columns(IEnumerable<IColumn> columns)
+    {
+      Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));
+
+      _sourceColumns.AddRange(columns);
+
+      return this;
+    }
+
+    public virtual InsertSelect Columns(Action<ColumnBuilder> buildColumnAction)
+    {
+      Validator.ThrowIfArgumentIsNull(buildColumnAction, nameof(buildColumnAction));
+
+      ColumnBuilder builder = new ColumnBuilder();
+      buildColumnAction(builder);
+
+      _sourceColumns.AddRange(builder.Build());
+
+      return this;
+    }
+
+    public virtual InsertSelect Returning(params string[] columns) => Returning((IEnumerable<string>)columns);
 		public virtual InsertSelect Returning(IEnumerable<string> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullOrEmptyElements(columns, nameof(columns));

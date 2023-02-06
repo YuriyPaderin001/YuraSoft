@@ -670,6 +670,21 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 			query.Append(' ');
 
+			if (insertSelect.ColumnCollection != null && insertSelect.ColumnCollection.Count > 0)
+			{
+				query.Append('(');
+
+        insertSelect.ColumnCollection[0].RenderColumn(this, query);
+        for (int i = 1; i < insertSelect.ColumnCollection.Count; i++)
+        {
+          query.Append(", ");
+
+          insertSelect.ColumnCollection[i].RenderColumn(this, query);
+        }
+
+				query.Append(") ");
+      }
+
 			insertSelect.SelectQuery.RenderQuery(this, query);
 
 			if (insertSelect.ReturningColumnCollection.Count > 0)
