@@ -24,7 +24,14 @@ namespace YuraSoft.QueryBuilder.Renderers
 				query.Append('.');
 			}
 
-			RenderIdentificator(column.Name, query);
+			if (column.Name == "*")
+			{
+				query.Append(column.Name);
+			}
+			else
+			{
+				RenderIdentificator(column.Name, query);
+			}
 
 			if (!string.IsNullOrEmpty(column.Alias))
 			{
@@ -366,8 +373,15 @@ namespace YuraSoft.QueryBuilder.Renderers
 				query.Append('.');
 			}
 
-			RenderIdentificator(column.Name, query);
-		}
+      if (column.Name == "*")
+      {
+        query.Append(column.Name);
+      }
+      else
+      {
+        RenderIdentificator(column.Name, query);
+      }
+    }
 
 		public void RenderIdentificator(ExpressionColumn column, StringBuilder query)
 		{
