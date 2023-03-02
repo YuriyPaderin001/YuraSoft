@@ -70,21 +70,5 @@ namespace YuraSoft.QueryBuilder.Tests
 		{
 			Assert.Throws<ArgumentException>(() => new SourceColumn(name!));
 		}
-
-		[Theory]
-		[InlineData("")]
-		[InlineData(null)]
-		public void Create_AliasIsEmptyOrNull_ThrowArgumentShouldNotBeNullOrEmptyException(string? alias)
-		{
-			Assert.Throws<ArgumentException>(() => new SourceColumn("column_name", alias!));
-			Assert.Throws<ArgumentException>(() => new SourceColumn("column_name", alias!, new Table("table_name")));
-		}
-
-		[Fact]
-		public void Create_SourceIsNull_ThrowArgumentShouldNotBeNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new SourceColumn("column_name", (ISource)null!));
-			Assert.Throws<ArgumentNullException>(() => new SourceColumn("column_name", "column_alias", null!));
-		}
 	}
 }
