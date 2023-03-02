@@ -4,31 +4,29 @@ using YuraSoft.QueryBuilder.Interfaces;
 using YuraSoft.QueryBuilder.Renderers;
 using YuraSoft.QueryBuilder.Validation;
 
-#nullable enable
-
 namespace YuraSoft.QueryBuilder
 {
 	public class Subquery : ISource
 	{
-		private string _name;
 		private Select _select;
+		private string _name;
 
-		public Subquery(string name, Select select)
+		public Subquery(Select select, string name)
 		{
-			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 			_select = Validator.ThrowIfArgumentIsNull(select, nameof(select));
-		}
-
-		public string Name
-		{
-			get => _name;
-			set => _name = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Name));
+			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 		}
 
 		public Select Select
 		{
 			get => _select;
 			set => _select = Validator.ThrowIfArgumentIsNull(value, nameof(Select));
+		}
+
+		public string Name
+		{
+			get => _name;
+			set => _name = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Name));
 		}
 
 		public string RenderSource(IRenderer renderer)
