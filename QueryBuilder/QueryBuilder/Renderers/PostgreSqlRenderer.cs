@@ -334,9 +334,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderFunction(MaxFunction function, StringBuilder query) => RenderColumnFunction("max", function, query);
 		public void RenderFunction(MinFunction function, StringBuilder query) => RenderColumnFunction("min", function, query);
 		public void RenderFunction(ConcatFunction function, StringBuilder query) => RenderFunction("concat", function, function.Values, query);
-		public void RenderFunction(CoalesceFunction function, StringBuilder query) => RenderFunction("coalesce", function, query, function.Column, function.DefaultValue);
+		public void RenderFunction(CoalesceFunction function, StringBuilder query) => RenderFunction("coalesce", function, query, function.Expression, function.DefaultValue);
 
-		private void RenderColumnFunction(string name, ColumnFunction function, StringBuilder query) => RenderFunction(name, function, query, function.Column);
+		private void RenderColumnFunction(string name, ExpressionFunction function, StringBuilder query) => RenderFunction(name, function, query, function.Expression);
 		private void RenderFunction(string name, IFunction function, StringBuilder query, params IExpression[] parameters) => RenderFunction(name, function, parameters, query);
 
 		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder query)

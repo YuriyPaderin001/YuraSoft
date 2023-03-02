@@ -7,7 +7,7 @@ namespace YuraSoft.QueryBuilder
 {
 	public class MaxFunction : ExpressionFunction
 	{
-		public MaxFunction(IExpression expression) : base(column)
+		public MaxFunction(IExpression expression) : base(expression)
 		{
 		}
 
