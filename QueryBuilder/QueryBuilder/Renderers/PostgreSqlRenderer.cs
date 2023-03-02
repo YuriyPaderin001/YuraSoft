@@ -175,13 +175,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			condition.Expression.RenderExpression(this, query);
+			query.Append("EXISTS ");
 
-			query.Append(" EXISTS (");
-
-			condition.Select.RenderQuery(this, query);
-
-			query.Append(')');
+			condition.Select.RenderExpression(this, query);
 		}
 
 		public void RenderCondition(NotExistsCondition condition, StringBuilder query)
@@ -189,13 +185,9 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(condition, nameof(condition));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			condition.Expression.RenderExpression(this, query);
+			query.Append("NOT EXISTS ");
 
-			query.Append(" NOT EXISTS (");
-
-			condition.Select.RenderQuery(this, query);
-
-			query.Append(')');
+			condition.Select.RenderExpression(this, query);
 		}
 
 		#endregion Condition rendeting methods

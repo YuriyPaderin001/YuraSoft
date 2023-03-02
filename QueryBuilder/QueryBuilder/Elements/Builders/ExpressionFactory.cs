@@ -238,21 +238,13 @@ namespace YuraSoft.QueryBuilder
 
 		#region ExistsCondition factory methods
 
-		public ExistsCondition Exists(string column, Select select) => new ExistsCondition(new SourceColumn(column), select);
-		public ExistsCondition Exists(string column, string table, Select select) => new ExistsCondition(new SourceColumn(column, new Table(table)), select);
-		public ExistsCondition Exists(string column, ISource source, Select select) => new ExistsCondition(new SourceColumn(column, source), select);
-		public ExistsCondition Exists(IExpression expression, Select select) => new ExistsCondition(expression, select);
-		public ExistsCondition Exists(Func<ExpressionFactory, IExpression> expressionFunction, Select select) => new ExistsCondition(Expression(expressionFunction), select);
+		public ExistsCondition Exists(Select select) => new ExistsCondition(select);
 		
 		#endregion ExistsCondition factory methods
 
 		#region NotExistsCondition factory methods
 
-		public NotExistsCondition NotExists(string column, Select select) => new NotExistsCondition(new SourceColumn(column), select);
-		public NotExistsCondition NotExists(string column, string table, Select select) => new NotExistsCondition(new SourceColumn(column, new Table(table)), select);
-		public NotExistsCondition NotExists(string column, ISource source, Select select) => new NotExistsCondition(new SourceColumn(column, source), select);
-		public NotExistsCondition NotExists(IExpression expression, Select select) => new NotExistsCondition(expression, select);
-		public NotExistsCondition NotExists(Func<ExpressionFactory, IExpression> expressionFunction, Select select) => new NotExistsCondition(Expression(expressionFunction), select);
+		public NotExistsCondition NotExists(Select select) => new NotExistsCondition(select);
 		
 		#endregion NotExistsCondition factory methods
 

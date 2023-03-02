@@ -171,22 +171,14 @@ namespace YuraSoft.QueryBuilder
 
 		#region ExistsCondition methods
 
-		public ExpressionBuilder Exists(string column, Select select) => Add(Factory.Exists(column, select));
-		public ExpressionBuilder Exists(string column, string table, Select select) => Add(Factory.Exists(column, table, select));
-		public ExpressionBuilder Exists(string column, ISource source, Select select) => Add(Factory.Exists(column, source, select));
-		public ExpressionBuilder Exists(IExpression expression, Select select) => Add(Factory.Exists(expression, select));
-		public ExpressionBuilder Exists(Func<ExpressionFactory, IExpression> expressionFunction, Select select) => Add(Factory.Exists(expressionFunction, select));
-
+		public ExpressionBuilder Exists(Select select) => Add(Factory.Exists(select));
+		
 		#endregion ExistsCondition methods
 
 		#region NotExistsCondition methods
 
-		public ExpressionBuilder NotExists(string column, Select select) => Add(Factory.NotExists(column, select));
-		public ExpressionBuilder NotExists(string column, string table, Select select) => Add(Factory.NotExists(column, table, select));
-		public ExpressionBuilder NotExists(string column, ISource source, Select select) => Add(Factory.NotExists(column, source, select));
-		public ExpressionBuilder NotExists(IExpression expression, Select select) => Add(Factory.NotExists(expression, select));
-		public ExpressionBuilder NotExists(Func<ExpressionFactory, IExpression> expressionFunction, Select select) => Add(Factory.Exists(expressionFunction, select));
-
+		public ExpressionBuilder NotExists(Select select) => Add(Factory.NotExists(select));
+		
 		#endregion NotExistsCondition methods
 
 		#region GreaterCondition methods

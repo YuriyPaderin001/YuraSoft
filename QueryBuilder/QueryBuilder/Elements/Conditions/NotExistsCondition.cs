@@ -6,11 +6,11 @@ using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
-	public class NotExistsCondition : UnaryCondition
+	public class NotExistsCondition : ICondition
 	{
 		private Select _select;
 
-		public NotExistsCondition(IExpression expression, Select select) : base(expression)
+		public NotExistsCondition(Select select)
 		{
 			_select = Validator.ThrowIfArgumentIsNull(select, nameof(select));
 		}
@@ -21,6 +21,30 @@ namespace YuraSoft.QueryBuilder
 			set => _select = Validator.ThrowIfArgumentIsNull(value, nameof(Select));
 		}
 
-		public override void RenderCondition(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderCondition(this, stringBuilder);
+		#region Rendering methods
+
+		public string RenderExpression(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderExpression(renderer, query);
+
+			return query.ToString();
+		}
+
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => 
+			RenderCondition(renderer, query);
+
+		public string RenderCondition(IRenderer renderer)
+		{
+			StringBuilder query = new StringBuilder();
+			RenderCondition(renderer, query);
+
+			return query.ToString();
+		}
+
+		public virtual void RenderCondition(IRenderer renderer, StringBuilder stringBuilder) => 
+			renderer.RenderCondition(this, stringBuilder);
+
+		#endregion Rendering methods
 	}
 }
