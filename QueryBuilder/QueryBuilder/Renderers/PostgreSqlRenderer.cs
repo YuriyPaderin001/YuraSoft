@@ -631,18 +631,29 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 			insert.Source.RenderSource(this, query);
 
-			query.Append(" (");
-
-			insert.ColumnCollection[0].RenderColumn(this, query);
-			for (int i = 1; i < insert.ColumnCollection.Count; i++)
+			int step;
+			if (insert.ColumnCollection != null && insert.ColumnCollection.Count > 0)
 			{
-				query.Append(", ");
-				insert.ColumnCollection[i].RenderColumn(this, query);
+				query.Append(" (");
+				
+				insert.ColumnCollection[0].RenderColumn(this, query);
+				for (int i = 1; i < insert.ColumnCollection.Count; i++)
+				{
+					query.Append(", ");
+					insert.ColumnCollection[i].RenderColumn(this, query);
+				}
+
+				query.Append(')');
+
+				step = insert.ColumnCollection.Count;
+			}
+			else
+			{
+				step = int.MaxValue;
 			}
 
-			query.Append(") VALUES ");
+			query.Append(" VALUES ");
 
-			int step = insert.ColumnCollection.Count;
 			for (int i = 0; i < insert.ValueCollection.Count; i += step)
 			{
 				if (i == 0)
