@@ -63,6 +63,8 @@ namespace YuraSoft.QueryBuilder
 
 		#region Properties
 
+		public IDistinct? DistinctValue { get; set; }
+
 		public List<IColumn> ColumnCollection
 		{
 			get => _columnCollection;
@@ -112,6 +114,15 @@ namespace YuraSoft.QueryBuilder
 		#endregion Properties
 
 		#region Methods
+
+		public virtual Select Distinct() => Distinct(new Distinct());
+
+		public virtual Select Distinct(IDistinct? distinct)
+		{
+			DistinctValue = distinct;
+
+			return this;
+		}
 
 		public virtual Select From(params string[] tables) => From(tables.Select<string, ISource>(t => new Table(t)));
 		public virtual Select From(IEnumerable<string> tables) => From(tables.Select<string, ISource>(t => new Table(t)));

@@ -11,6 +11,24 @@ namespace QueryBuilderSandbox
 		{
 			IRenderer renderer = new PostgreSqlRenderer();
 
+			Select selectSimpleSelect = new Select(c => c
+				.Column("column1", "column1Alias", "column1Table")
+				.Column("column2", alias: null, "column2Table"));
+
+			Select selectWithDistinct = new Select(c => c
+				.Column("column1", "column1Alias", "column1Table")
+				.Column("column2", alias: null, "column2Table"))
+				.Distinct();
+
+			Select selectWithoutDistinct = new Select(c => c
+				.Column("column1", "column1Alias", "column1Table")
+				.Column("column2", alias: null, "column2Table"))
+				.Distinct(distinct: null);
+
+			Console.WriteLine($"{nameof(selectSimpleSelect)}: {selectSimpleSelect.RenderQuery(renderer)}\n");
+			Console.WriteLine($"{nameof(selectWithDistinct)}: {selectWithDistinct.RenderQuery(renderer)}\n");
+			Console.WriteLine($"{nameof(selectWithoutDistinct)}: {selectWithoutDistinct.RenderQuery(renderer)}\n\n");
+
 			View view = new View("test_view", "view_alias", "view_schema");
 			Table table = new Table("table", "alias", "schema");
 			Select select = new Select(c => c
@@ -41,7 +59,7 @@ namespace QueryBuilderSandbox
 					.And(c => c
 						.Equal("name", "group_name")
 						.Equal("is_deleted", bool.FalseString)
-						.In("id", 1, 2, 3 )));
+						.In("id", 1, 2, 3)));
 
 			Table table2 = new Table("AspNetUsers", "anu", "auth_remote");
 

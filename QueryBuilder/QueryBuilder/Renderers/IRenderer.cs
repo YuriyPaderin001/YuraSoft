@@ -33,6 +33,12 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 		#endregion Condition render methods
 
+		#region Distinct render methods
+
+		public void RenderDistinct(Distinct distinct, StringBuilder query);
+
+		#endregion Distinct render methods
+
 		#region Expression render methods
 
 		public void RenderExpression(GeneralCaseExpression expression, StringBuilder query);
@@ -79,13 +85,13 @@ namespace YuraSoft.QueryBuilder.Renderers
 		#region OrderBy render methods
 
 		public void RenderOrderBy(OrderBy join, StringBuilder query);
-		
+
 		#endregion OrderBy render methods
 
 		#region Parameter render methods
 
 		public void RenderParameter(Parameter parameter, StringBuilder query);
-		
+
 		#endregion Parameter render methods
 
 		#region Query render methods
@@ -104,7 +110,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderSource(Subquery subquery, StringBuilder query);
 
 		public void RenderSource(View view, StringBuilder query);
-		
+
 		#endregion Source render methods
 
 		#region Value render methods

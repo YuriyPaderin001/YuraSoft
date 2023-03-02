@@ -200,6 +200,18 @@ namespace YuraSoft.QueryBuilder.Renderers
 
 		#endregion Condition rendeting methods
 
+		#region Distinct render methods
+
+		public void RenderDistinct(Distinct distinct, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(distinct, nameof(distinct));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			query.Append("DISTINCT");
+		}
+
+		#endregion Distinct render methods
+
 		#region Expression rendering methods
 
 		public void RenderExpression(GeneralCaseExpression expression, StringBuilder query)
@@ -373,15 +385,15 @@ namespace YuraSoft.QueryBuilder.Renderers
 				query.Append('.');
 			}
 
-      if (column.Name == "*")
-      {
-        query.Append(column.Name);
-      }
-      else
-      {
-        RenderIdentificator(column.Name, query);
-      }
-    }
+			if (column.Name == "*")
+			{
+				query.Append(column.Name);
+			}
+			else
+			{
+				RenderIdentificator(column.Name, query);
+			}
+		}
 
 		public void RenderIdentificator(ExpressionColumn column, StringBuilder query)
 		{
@@ -477,7 +489,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			query.Append(' ');
 
 			join.Source.RenderSource(this, query);
-			
+
 			if (condition != null)
 			{
 				query.Append(" ON ");
@@ -522,10 +534,18 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(select, nameof(select));
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
-			query.Append("SELECT ");
+			query.Append("SELECT");
+
+			if (select.DistinctValue != null)
+			{
+				query.Append(' ');
+				select.DistinctValue.RenderDistinct(this, query);
+			}
 
 			if (select.ColumnCollection.Count > 0)
 			{
+				query.Append(' ');
+
 				select.ColumnCollection[0].RenderColumn(this, query);
 				for (int i = 1; i < select.ColumnCollection.Count; i++)
 				{
@@ -610,7 +630,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			query.Append("INSERT INTO ");
 
 			insert.Source.RenderSource(this, query);
-			
+
 			query.Append(" (");
 
 			insert.ColumnCollection[0].RenderColumn(this, query);
@@ -665,7 +685,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			Validator.ThrowIfArgumentIsNull(query, nameof(query));
 
 			query.Append("INSERT INTO ");
-			
+
 			insertSelect.Source.RenderSource(this, query);
 
 			query.Append(' ');
@@ -674,16 +694,16 @@ namespace YuraSoft.QueryBuilder.Renderers
 			{
 				query.Append('(');
 
-        insertSelect.ColumnCollection[0].RenderColumn(this, query);
-        for (int i = 1; i < insertSelect.ColumnCollection.Count; i++)
-        {
-          query.Append(", ");
+				insertSelect.ColumnCollection[0].RenderColumn(this, query);
+				for (int i = 1; i < insertSelect.ColumnCollection.Count; i++)
+				{
+					query.Append(", ");
 
-          insertSelect.ColumnCollection[i].RenderColumn(this, query);
-        }
+					insertSelect.ColumnCollection[i].RenderColumn(this, query);
+				}
 
 				query.Append(") ");
-      }
+			}
 
 			insertSelect.SelectQuery.RenderQuery(this, query);
 
