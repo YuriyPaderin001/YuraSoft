@@ -1112,6 +1112,12 @@ namespace YuraSoft.QueryBuilder
 
 		#endregion MinFunction factory methods
 
+		#region NowFunction factory methods
+
+		public NowFunction Now() => new NowFunction();
+
+		#endregion NowFunction factory methods
+
 		#region SumFunction factory methods
 
 		public SumFunction Sum(string column) => new SumFunction(new SourceColumn(column));

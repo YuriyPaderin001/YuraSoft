@@ -199,6 +199,12 @@ namespace YuraSoft.QueryBuilder
 
 		#endregion Min methods
 
+		#region NowFunction factory methods
+
+		public ColumnBuilder Now(string? name = null) => Add(Factory.Column(Factory.Now(), name));
+
+		#endregion NowFunction factory methods
+
 		#region Sum methods
 
 		public ColumnBuilder Sum(string column, string? name = null) => Add(Factory.Column(Factory.Sum(column), name));

@@ -335,6 +335,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderFunction(SumFunction function, StringBuilder query) => RenderColumnFunction("sum", function, query);
 		public void RenderFunction(MaxFunction function, StringBuilder query) => RenderColumnFunction("max", function, query);
 		public void RenderFunction(MinFunction function, StringBuilder query) => RenderColumnFunction("min", function, query);
+		public void RenderFunction(NowFunction function, StringBuilder query) => query.Append("CURRENT_TIMESTAMP");
 		public void RenderFunction(ConcatFunction function, StringBuilder query) => RenderFunction("concat", function, function.Values, query);
 		public void RenderFunction(CoalesceFunction function, StringBuilder query) => RenderFunction("coalesce", function, query, function.Expression, function.DefaultValue);
 

@@ -59,6 +59,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		public void RenderFunction(SumFunction function, StringBuilder query);
 		public void RenderFunction(MaxFunction function, StringBuilder query);
 		public void RenderFunction(MinFunction function, StringBuilder query);
+		public void RenderFunction(NowFunction function, StringBuilder query);
 		public void RenderFunction(ConcatFunction function, StringBuilder query);
 		public void RenderFunction(CoalesceFunction function, StringBuilder query);
 

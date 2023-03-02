@@ -877,6 +877,12 @@ namespace YuraSoft.QueryBuilder
 
 		#endregion MinFunction methods
 
+		#region NowFunction factory methods
+
+		public ExpressionBuilder Now() => Add(Factory.Now());
+
+		#endregion NowFunction factory methods
+
 		#region SumFunction methods
 
 		public ExpressionBuilder Sum(string column) => Add(Factory.Sum(column));
