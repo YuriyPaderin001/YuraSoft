@@ -27,6 +27,17 @@ namespace YuraSoft.QueryBuilder
 
 		#region Constructors
 
+		public Select(string columnName, ISource? columnSource) : this(columnName, columnAlias: null, columnSource)
+		{
+		}
+
+		public Select(string columnName, string? columnAlias, ISource? columnSource)
+		{
+			Validator.ThrowIfArgumentIsNullOrEmpty(columnName, nameof(columnName));
+
+			_columnCollection.Add(new SourceColumn(columnName, columnAlias, columnSource));
+		}
+
 		public Select(params string[] columns) : this((IEnumerable<string>)columns)
 		{
 		}
@@ -182,12 +193,16 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public virtual Select OrderByAsc(string columnName, ISource? columnSource) => OrderBy(new OrderByAsc(new SourceColumn(columnName, columnSource)));
+		public virtual Select OrderByAsc(string columnName, string? columnAlias, ISource? columnSource) => OrderBy(new OrderByAsc(new SourceColumn(columnName, columnAlias, columnSource)));
 		public virtual Select OrderByAsc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
 		public virtual Select OrderByAsc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
 		public virtual Select OrderByAsc(Action<ColumnBuilder> action) => OrderByAsc(_factory.Columns(action));
 
+		public virtual Select OrderByDesc(string columnName, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnSource)));
+		public virtual Select OrderByDesc(string columnName, string? columnAlias, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnAlias, columnSource)));
 		public virtual Select OrderByDesc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
 		public virtual Select OrderByDesc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
 		public virtual Select OrderByDesc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
@@ -204,6 +219,8 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
+		public virtual Select GroupBy(string columnName, ISource? sourceName) => GroupBy(new SourceColumn(columnName, sourceName));
+		public virtual Select GroupBy(string columnName, string? columnAlias, ISource? sourceName) => GroupBy(new SourceColumn(columnName, columnAlias, sourceName));
 		public virtual Select GroupBy(params string[] columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(IEnumerable<string> columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(params IColumn[] columns) => GroupBy(columns.AsEnumerable());

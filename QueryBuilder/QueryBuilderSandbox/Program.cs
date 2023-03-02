@@ -11,6 +11,39 @@ namespace QueryBuilderSandbox
 		{
 			IRenderer renderer = new PostgreSqlRenderer();
 
+			Select selectWithColumnName = new Select("column");
+			Select selectWithColumnNameAndSource = new Select("column", new Table("table"));
+			Select selectWithColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table"));
+
+			Console.WriteLine($"{nameof(selectWithColumnName)}: {selectWithColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithColumnNameAndSource)}: {selectWithColumnNameAndSource.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithColumnNameAndAliasAndSource)}: {selectWithColumnNameAndAliasAndSource.RenderQuery(renderer)}\n");
+
+			Select selectWithOrderByAscColumnName = new Select("column").OrderByAsc("column");
+			Select selectWithOrderByAscColumnNameAndSource = new Select("column", new Table("table")).OrderByAsc("column", new Table("table"));
+			Select selectWithOrderByAscColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table")).OrderByAsc("column", "alias", new Table("table"));
+
+			Console.WriteLine($"{nameof(selectWithOrderByAscColumnName)}: {selectWithOrderByAscColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithOrderByAscColumnNameAndSource)}: {selectWithOrderByAscColumnNameAndSource.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithOrderByAscColumnNameAndAliasAndSource)}: {selectWithOrderByAscColumnNameAndAliasAndSource.RenderQuery(renderer)}\n");
+
+			Select selectWithOrderByDescColumnName = new Select("column").OrderByDesc("column");
+			Select selectWithOrderByDescColumnNameAndSource = new Select("column", new Table("table")).OrderByDesc("column", new Table("table"));
+			Select selectWithOrderByDescColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table")).OrderByDesc("column", "alias", new Table("table"));
+
+			Console.WriteLine($"{nameof(selectWithOrderByDescColumnName)}: {selectWithOrderByDescColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithOrderByDescColumnNameAndSource)}: {selectWithOrderByDescColumnNameAndSource.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithOrderByDescColumnNameAndAliasAndSource)}: {selectWithOrderByDescColumnNameAndAliasAndSource.RenderQuery(renderer)}\n");
+
+			Select selectWithGroupByColumnName = new Select("column").GroupBy("column");
+			Select selectWithGroupByColumnNameAndSource = new Select("column", new Table("table")).GroupBy("column", new Table("table"));
+			Select selectWithGroupByColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table")).GroupBy("column", "alias", new Table("table"));
+
+			Console.WriteLine($"{nameof(selectWithGroupByColumnName)}: {selectWithGroupByColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithGroupByColumnNameAndSource)}: {selectWithGroupByColumnNameAndSource.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(selectWithGroupByColumnNameAndAliasAndSource)}: {selectWithGroupByColumnNameAndAliasAndSource.RenderQuery(renderer)}\n");
+
+
 			Select selectSimpleSelect = new Select(c => c
 				.Column("column1", "column1Alias", "column1Table")
 				.Column("column2", alias: null, "column2Table"));
