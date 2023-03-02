@@ -1204,6 +1204,7 @@ namespace YuraSoft.QueryBuilder
 		public CoalesceFunction Coalesce(string column, string value) => new CoalesceFunction(new SourceColumn(column), new StringValue(value));
 		public CoalesceFunction Coalesce(string column, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column), Expression(function));
 		public CoalesceFunction Coalesce(string column, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column), defaultValue);
+		public CoalesceFunction Coalesce(string column1, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1), new SourceColumn(column2, column2Source));
 
 		public CoalesceFunction Coalesce(string column, string table, sbyte value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int8Value(value));
 		public CoalesceFunction Coalesce(string column, string table, short value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int16Value(value));
@@ -1215,6 +1216,7 @@ namespace YuraSoft.QueryBuilder
 		public CoalesceFunction Coalesce(string column, string table, string value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new StringValue(value));
 		public CoalesceFunction Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column, new Table(table)), Expression(function));
 		public CoalesceFunction Coalesce(string column, string table, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column, new Table(table)), defaultValue);
+		public CoalesceFunction Coalesce(string column1, string column1Table, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1, new Table(column1Table)), new SourceColumn(column2, column2Source));
 
 		public CoalesceFunction Coalesce(string column, ISource source, sbyte value) => new CoalesceFunction(new SourceColumn(column, source), new Int8Value(value));
 		public CoalesceFunction Coalesce(string column, ISource source, short value) => new CoalesceFunction(new SourceColumn(column, source), new Int16Value(value));
@@ -1226,28 +1228,31 @@ namespace YuraSoft.QueryBuilder
 		public CoalesceFunction Coalesce(string column, ISource source, string value) => new CoalesceFunction(new SourceColumn(column, source), new StringValue(value));
 		public CoalesceFunction Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column, source), Expression(function));
 		public CoalesceFunction Coalesce(string column, ISource source, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column, source), defaultValue);
+		public CoalesceFunction Coalesce(string column1, ISource column1Source, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1, column1Source), new SourceColumn(column2, column2Source));
 
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, sbyte value) => new CoalesceFunction(Column(columnFunction), new Int8Value(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, short value) => new CoalesceFunction(Column(columnFunction), new Int16Value(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, int value) => new CoalesceFunction(Column(columnFunction), new Int32Value(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, long value) => new CoalesceFunction(Column(columnFunction), new Int64Value(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, float value) => new CoalesceFunction(Column(columnFunction), new FloatValue(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, double value) => new CoalesceFunction(Column(columnFunction), new DoubleValue(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, DateTime value, string? format = null) => new CoalesceFunction(Column(columnFunction), new DateTimeValue(value, format));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, string value) => new CoalesceFunction(Column(columnFunction), new StringValue(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(Column(columnFunction), Expression(function));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IColumn> columnFunction, IExpression defaultValue) => new CoalesceFunction(Column(columnFunction), defaultValue);
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => new CoalesceFunction(Expression(expressionFunction), new Int8Value(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, short value) => new CoalesceFunction(Expression(expressionFunction), new Int16Value(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, int value) => new CoalesceFunction(Expression(expressionFunction), new Int32Value(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, long value) => new CoalesceFunction(Expression(expressionFunction), new Int64Value(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, float value) => new CoalesceFunction(Expression(expressionFunction), new FloatValue(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, double value) => new CoalesceFunction(Expression(expressionFunction), new DoubleValue(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => new CoalesceFunction(Expression(expressionFunction), new DateTimeValue(value, format));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string value) => new CoalesceFunction(Expression(expressionFunction), new StringValue(value));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(Expression(expressionFunction), Expression(function));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression defaultValue) => new CoalesceFunction(Expression(expressionFunction), defaultValue);
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource column2Source) => new CoalesceFunction(Expression(expressionFunction), new SourceColumn(column2, column2Source));
 
-		public CoalesceFunction Coalesce(IColumn column, sbyte value) => new CoalesceFunction(column, new Int8Value(value));
-		public CoalesceFunction Coalesce(IColumn column, short value) => new CoalesceFunction(column, new Int16Value(value));
-		public CoalesceFunction Coalesce(IColumn column, int value) => new CoalesceFunction(column, new Int32Value(value));
-		public CoalesceFunction Coalesce(IColumn column, long value) => new CoalesceFunction(column, new Int64Value(value));
-		public CoalesceFunction Coalesce(IColumn column, float value) => new CoalesceFunction(column, new FloatValue(value));
-		public CoalesceFunction Coalesce(IColumn column, double value) => new CoalesceFunction(column, new DoubleValue(value));
-		public CoalesceFunction Coalesce(IColumn column, DateTime value, string? format = null) => new CoalesceFunction(column, new DateTimeValue(value, format));
-		public CoalesceFunction Coalesce(IColumn column, string value) => new CoalesceFunction(column, new StringValue(value));
-		public CoalesceFunction Coalesce(IColumn column, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(column, Expression(function));
-		public CoalesceFunction Coalesce(IColumn column, IExpression defaultValue) => new CoalesceFunction(column, defaultValue);
+		public CoalesceFunction Coalesce(IExpression expression, sbyte value) => new CoalesceFunction(expression, new Int8Value(value));
+		public CoalesceFunction Coalesce(IExpression expression, short value) => new CoalesceFunction(expression, new Int16Value(value));
+		public CoalesceFunction Coalesce(IExpression expression, int value) => new CoalesceFunction(expression, new Int32Value(value));
+		public CoalesceFunction Coalesce(IExpression expression, long value) => new CoalesceFunction(expression, new Int64Value(value));
+		public CoalesceFunction Coalesce(IExpression expression, float value) => new CoalesceFunction(expression, new FloatValue(value));
+		public CoalesceFunction Coalesce(IExpression expression, double value) => new CoalesceFunction(expression, new DoubleValue(value));
+		public CoalesceFunction Coalesce(IExpression expression, DateTime value, string? format = null) => new CoalesceFunction(expression, new DateTimeValue(value, format));
+		public CoalesceFunction Coalesce(IExpression expression, string value) => new CoalesceFunction(expression, new StringValue(value));
+		public CoalesceFunction Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(expression, Expression(function));
+		public CoalesceFunction Coalesce(IExpression expression, IExpression defaultValue) => new CoalesceFunction(expression, defaultValue);
+		public CoalesceFunction Coalesce(IExpression expression, string column2, ISource column2Source) => new CoalesceFunction(expression, new SourceColumn(column2, column2Source));
 
 		#endregion CoalesceFunction factory methods
 
@@ -1264,8 +1269,8 @@ namespace YuraSoft.QueryBuilder
 		public CountFunction Count(string column) => new CountFunction(new SourceColumn(column));
 		public CountFunction Count(string column, string table) => new CountFunction(new SourceColumn(column, new Table(table)));
 		public CountFunction Count(string column, ISource source) => new CountFunction(new SourceColumn(column, source));
-		public CountFunction Count(Func<ExpressionFactory, IColumn> function) => new CountFunction(Column(function));
-		public CountFunction Count(IColumn column) => new CountFunction(column);
+		public CountFunction Count(Func<ExpressionFactory, IExpression> expressionFunction) => new CountFunction(Expression(expressionFunction));
+		public CountFunction Count(IExpression expression) => new CountFunction(expression);
 
 		#endregion CountFunction factory methods
 
@@ -1283,8 +1288,8 @@ namespace YuraSoft.QueryBuilder
 		public MaxFunction Max(string column) => new MaxFunction(new SourceColumn(column));
 		public MaxFunction Max(string column, string table) => new MaxFunction(new SourceColumn(column, new Table(table)));
 		public MaxFunction Max(string column, ISource source) => new MaxFunction(new SourceColumn(column, source));
-		public MaxFunction Max(Func<ExpressionFactory, IColumn> function) => new MaxFunction(Column(function));
-		public MaxFunction Max(IColumn column) => new MaxFunction(column);
+		public MaxFunction Max(Func<ExpressionFactory, IExpression> expressionFunction) => new MaxFunction(Expression(expressionFunction));
+		public MaxFunction Max(IExpression expression) => new MaxFunction(expression);
 
 		#endregion MaxFunction factory methods
 
@@ -1293,8 +1298,8 @@ namespace YuraSoft.QueryBuilder
 		public MinFunction Min(string column) => new MinFunction(new SourceColumn(column));
 		public MinFunction Min(string column, string table) => new MinFunction(new SourceColumn(column, new Table(table)));
 		public MinFunction Min(string column, ISource source) => new MinFunction(new SourceColumn(column, source));
-		public MinFunction Min(Func<ExpressionFactory, IColumn> function) => new MinFunction(Column(function));
-		public MinFunction Min(IColumn column) => new MinFunction(column);
+		public MinFunction Min(Func<ExpressionFactory, IExpression> expressionFunction) => new MinFunction(Column(expressionFunction));
+		public MinFunction Min(IExpression expression) => new MinFunction(expression);
 
 		#endregion MinFunction factory methods
 
@@ -1303,8 +1308,8 @@ namespace YuraSoft.QueryBuilder
 		public SumFunction Sum(string column) => new SumFunction(new SourceColumn(column));
 		public SumFunction Sum(string column, string table) => new SumFunction(new SourceColumn(column, new Table(table)));
 		public SumFunction Sum(string column, ISource source) => new SumFunction(new SourceColumn(column, source));
-		public SumFunction Sum(Func<ExpressionFactory, IColumn> function) => new SumFunction(Column(function));
-		public SumFunction Sum(IColumn column) => new SumFunction(column);
+		public SumFunction Sum(Func<ExpressionFactory, IExpression> expressionFunction) => new SumFunction(Expression(expressionFunction));
+		public SumFunction Sum(IExpression expression) => new SumFunction(expression);
 
 		#endregion SumFunction factory methods
 

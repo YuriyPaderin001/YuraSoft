@@ -22,6 +22,6 @@ namespace YuraSoft.QueryBuilder
 			set => _values = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Values)));
 		}
 
-		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
+		public override void RenderFunction(IRenderer renderer, StringBuilder query) => renderer.RenderFunction(this, query);
 	}
 }

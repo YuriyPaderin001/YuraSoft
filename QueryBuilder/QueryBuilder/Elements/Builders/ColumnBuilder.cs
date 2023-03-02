@@ -74,117 +74,128 @@ namespace YuraSoft.QueryBuilder
 
 		#region Coalesce methods
 
-		public ColumnBuilder Coalesce(string column, sbyte value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, short value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, int value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, long value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, float value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, double value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, DateTime value, string? format = null) => Add(Factory.Column(Factory.Coalesce(column, value, format)));
-		public ColumnBuilder Coalesce(string column, string value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(string column, Func<ExpressionFactory, IExpression> function) => Add(Factory.Column(Factory.Coalesce(column, function)));
-		public ColumnBuilder Coalesce(string column, IExpression defaultValue) => Add(Factory.Column(Factory.Coalesce(column, defaultValue)));
+		public ColumnBuilder Coalesce(string column, sbyte value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, short value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, int value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, long value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, float value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, double value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, DateTime value, string? format = null, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value, format), name));
+		public ColumnBuilder Coalesce(string column, string value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, value), name));
+		public ColumnBuilder Coalesce(string column, Func<ExpressionFactory, IExpression> function, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, function), name));
+		public ColumnBuilder Coalesce(string column, IExpression defaultValue, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, defaultValue), name));
+		public ColumnBuilder Coalesce(string column1, string column2, ISource column2Source, string? name = null) => Add(Factory.Column(Factory.Coalesce(column1, column2, column2Source), name));
 
-		public ColumnBuilder Coalesce(string column, string table, sbyte value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, short value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, int value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, long value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, float value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, double value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, DateTime value, string? format = null) => Add(Factory.Column(Factory.Coalesce(column, table, value, format)));
-		public ColumnBuilder Coalesce(string column, string table, string value) => Add(Factory.Column(Factory.Coalesce(column, table, value)));
-		public ColumnBuilder Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function) => Add(Factory.Column(Factory.Coalesce(column, table, function)));
-		public ColumnBuilder Coalesce(string column, string table, IExpression defaultValue) => Add(Factory.Column(Factory.Coalesce(column, table, defaultValue)));
+		public ColumnBuilder Coalesce(string column, string table, sbyte value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, short value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, int value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, long value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, float value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, double value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, DateTime value, string? name) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, DateTime value, string? format, string? name) => Add(Factory.Column(Factory.Coalesce(column, table, value, format), name));
+		public ColumnBuilder Coalesce(string column, string table, string value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), name));
+		public ColumnBuilder Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, function), name));
+		public ColumnBuilder Coalesce(string column, string table, IExpression defaultValue, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, table, defaultValue), name));
+		public ColumnBuilder Coalesce(string column1, string column1Table, string column2, ISource column2Source, string? name = null) => Add(Factory.Column(Factory.Coalesce(column1, column1Table, column2, column2Source), name));
 
-		public ColumnBuilder Coalesce(string column, ISource source, sbyte value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, short value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, int value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, long value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, float value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, double value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, DateTime value, string? format = null) => Add(Factory.Column(Factory.Coalesce(column, source, value, format)));
-		public ColumnBuilder Coalesce(string column, ISource source, string value) => Add(Factory.Column(Factory.Coalesce(column, source, value)));
-		public ColumnBuilder Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function) => Add(Factory.Column(Factory.Coalesce(column, source, function)));
-		public ColumnBuilder Coalesce(string column, ISource source, IExpression defaultValue) => Add(Factory.Column(Factory.Coalesce(column, source, defaultValue)));
+		public ColumnBuilder Coalesce(string column, ISource source, sbyte value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, short value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, int value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, long value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, float value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, double value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, DateTime value, string? name) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, DateTime value, string? format, string? name) => Add(Factory.Column(Factory.Coalesce(column, source, value, format), name));
+		public ColumnBuilder Coalesce(string column, ISource source, string value, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), name));
+		public ColumnBuilder Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, function), name));
+		public ColumnBuilder Coalesce(string column, ISource source, IExpression defaultValue, string? name = null) => Add(Factory.Column(Factory.Coalesce(column, source, defaultValue), name));
+		public ColumnBuilder Coalesce(string column1, ISource column1Source, string column2, ISource column2Source, string? name = null) => Add(Factory.Column(Factory.Coalesce(column1, column1Source, column2, column2Source), name));
 
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, sbyte value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, short value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, int value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, long value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, float value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, double value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, DateTime value, string? format = null) => Add(Factory.Column(Factory.Coalesce(columnFunction, value, format)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, string value) => Add(Factory.Column(Factory.Coalesce(columnFunction, value)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, Func<ExpressionFactory, IExpression> function) => Add(Factory.Column(Factory.Coalesce(columnFunction, function)));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IColumn> columnFunction, IExpression defaultValue) => Add(Factory.Column(Factory.Coalesce(columnFunction, defaultValue)));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, short value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, int value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, long value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, float value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, double value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? name) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format, string? name) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value, format), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> function, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, function), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression defaultValue, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, defaultValue), name));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource column2Source, string? name = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, column2, column2Source), name));
 
-		public ColumnBuilder Coalesce(IColumn column, sbyte value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, short value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, int value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, long value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, float value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, double value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, DateTime value, string? format = null) => Add(Factory.Column(Factory.Coalesce(column, value, format)));
-		public ColumnBuilder Coalesce(IColumn column, string value) => Add(Factory.Column(Factory.Coalesce(column, value)));
-		public ColumnBuilder Coalesce(IColumn column, Func<ExpressionFactory, IExpression> function) => Add(Factory.Column(Factory.Coalesce(column, function)));
-		public ColumnBuilder Coalesce(IColumn column, IExpression defaultValue) => Add(Factory.Column(Factory.Coalesce(column, defaultValue)));
+		public ColumnBuilder Coalesce(IExpression expression, sbyte value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, short value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, int value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, long value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, float value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, double value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, DateTime value, string? name) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, DateTime value, string? format, string? name) => Add(Factory.Column(Factory.Coalesce(expression, value, format), name));
+		public ColumnBuilder Coalesce(IExpression expression, string value, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, value), name));
+		public ColumnBuilder Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> function, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, function), name));
+		public ColumnBuilder Coalesce(IExpression expression, IExpression defaultValue, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, defaultValue), name));
+		public ColumnBuilder Coalesce(IExpression expression, string column2, ISource column2Source, string? name = null) => Add(Factory.Column(Factory.Coalesce(expression, column2, column2Source), name));
 
 		#endregion Coalesce methods
 
 		#region Concat methods
 
-		public ColumnBuilder Concat(params IExpression[] expressions)=> Add(Factory.Column(Factory.Concat(expressions)));
-		public ColumnBuilder Concat(Action<ExpressionBuilder> action)=> Add(Factory.Column(Factory.Concat(action)));
-		public ColumnBuilder Concat(IEnumerable<IExpression> expressions)=> Add(Factory.Column(Factory.Concat(expressions)));
+		public ColumnBuilder Concat(params IExpression[] expressions) => Add(Factory.Column(Factory.Concat(expressions)));
+		public ColumnBuilder Concat(string? name = null, params IExpression[] expressions) => Add(Factory.Column(Factory.Concat(expressions), name));
+		public ColumnBuilder Concat(Action<ExpressionBuilder> action, string? name = null) => Add(Factory.Column(Factory.Concat(action), name));
+		public ColumnBuilder Concat(IEnumerable<IExpression> expressions, string? name = null) => Add(Factory.Column(Factory.Concat(expressions), name));
 
 		#endregion Concat methods
 
 		#region Count methods
 
-		public ColumnBuilder Count(string column) => Add(Factory.Column(Factory.Count(column)));
-		public ColumnBuilder Count(string column, string table) => Add(Factory.Column(Factory.Count(column, table)));
-		public ColumnBuilder Count(string column, ISource source) => Add(Factory.Column(Factory.Count(column, source)));
-		public ColumnBuilder Count(Func<ExpressionFactory, IColumn> function) => Add(Factory.Column(Factory.Count(function)));
-		public ColumnBuilder Count(IColumn column) => Add(Factory.Column(Factory.Count(column)));
+		public ColumnBuilder Count(string column, string? name = null) => Add(Factory.Column(Factory.Count(column), name));
+		public ColumnBuilder Count(string column, string table, string? name = null) => Add(Factory.Column(Factory.Count(column, table), name));
+		public ColumnBuilder Count(string column, ISource source, string? name = null) => Add(Factory.Column(Factory.Count(column, source), name));
+		public ColumnBuilder Count(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(Factory.Count(expressionFunction), name));
+		public ColumnBuilder Count(IExpression expression, string? name = null) => Add(Factory.Column(Factory.Count(expression), name));
 
 		#endregion Count methods
 
 		#region Function methods
 
-		public ColumnBuilder Function(string name) => Add(Factory.Column(Factory.Function(name)));
-		public ColumnBuilder Function(string name, params IExpression[] parameters) => Add(Factory.Column(Factory.Function(name, parameters)));
-		public ColumnBuilder Function(string name, IEnumerable<IExpression>? parameters) => Add(Factory.Column(Factory.Function(name, parameters)));
-		public ColumnBuilder Function(string name, Action<ExpressionBuilder> action) => Add(Factory.Column(Factory.Function(name, action)));
+		public ColumnBuilder Function(string functionName, string? name = null) => Add(Factory.Column(Factory.Function(functionName), name));
+		public ColumnBuilder Function(string functionName, params IExpression[] parameters) => Add(Factory.Column(Factory.Function(functionName, parameters)));
+		public ColumnBuilder Function(string functionName, string? name = null, params IExpression[] parameters) => Add(Factory.Column(Factory.Function(functionName, parameters), name));
+		public ColumnBuilder Function(string functionName, IEnumerable<IExpression>? parameters, string? name = null) => Add(Factory.Column(Factory.Function(functionName, parameters), name));
+		public ColumnBuilder Function(string functionName, Action<ExpressionBuilder> action, string? name = null) => Add(Factory.Column(Factory.Function(functionName, action), name));
 
 		#endregion Function methods
 
 		#region Max methods
 
-		public ColumnBuilder Max(string column) => Add(Factory.Column(Factory.Max(column)));
-		public ColumnBuilder Max(string column, string table) => Add(Factory.Column(Factory.Max(column, table)));
-		public ColumnBuilder Max(string column, ISource source) => Add(Factory.Column(Factory.Max(column, source)));
-		public ColumnBuilder Max(Func<ExpressionFactory, IColumn> function) => Add(Factory.Column(Factory.Max(function)));
-		public ColumnBuilder Max(IColumn column) => Add(Factory.Column(Factory.Max(column)));
+		public ColumnBuilder Max(string column, string? name = null) => Add(Factory.Column(Factory.Max(column), name));
+		public ColumnBuilder Max(string column, string table, string? name = null) => Add(Factory.Column(Factory.Max(column, table), name));
+		public ColumnBuilder Max(string column, ISource source, string? name = null) => Add(Factory.Column(Factory.Max(column, source), name));
+		public ColumnBuilder Max(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(Factory.Max(expressionFunction), name));
+		public ColumnBuilder Max(IExpression expression, string? name = null) => Add(Factory.Column(Factory.Max(expression), name));
 
 		#endregion Max methods
 
 		#region Min methods
 
-		public ColumnBuilder Min(string column) => Add(Factory.Column(Factory.Min(column)));
-		public ColumnBuilder Min(string column, string table) => Add(Factory.Column(Factory.Min(column, table)));
-		public ColumnBuilder Min(string column, ISource source) => Add(Factory.Column(Factory.Min(column, source)));
-		public ColumnBuilder Min(Func<ExpressionFactory, IColumn> function) => Add(Factory.Column(Factory.Min(function)));
-		public ColumnBuilder Min(IColumn column) => Add(Factory.Column(Factory.Min(column)));
+		public ColumnBuilder Min(string column, string? name = null) => Add(Factory.Column(Factory.Min(column), name));
+		public ColumnBuilder Min(string column, string table, string? name = null) => Add(Factory.Column(Factory.Min(column, table), name));
+		public ColumnBuilder Min(string column, ISource source, string? name = null) => Add(Factory.Column(Factory.Min(column, source), name));
+		public ColumnBuilder Min(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(Factory.Min(expressionFunction), name));
+		public ColumnBuilder Min(IExpression expression, string? name = null) => Add(Factory.Column(Factory.Min(expression), name));
 
 		#endregion Min methods
 
 		#region Sum methods
 
-		public ColumnBuilder Sum(string column) => Add(Factory.Column(Factory.Sum(column)));
-		public ColumnBuilder Sum(string column, string table) => Add(Factory.Column(Factory.Sum(column, table)));
-		public ColumnBuilder Sum(string column, ISource source) => Add(Factory.Column(Factory.Sum(column, source)));
-		public ColumnBuilder Sum(Func<ExpressionFactory, IColumn> function) => Add(Factory.Column(Factory.Sum(function)));
-		public ColumnBuilder Sum(IColumn column) => Add(Factory.Column(Factory.Sum(column)));
+		public ColumnBuilder Sum(string column, string? name = null) => Add(Factory.Column(Factory.Sum(column), name));
+		public ColumnBuilder Sum(string column, string table, string? name = null) => Add(Factory.Column(Factory.Sum(column, table), name));
+		public ColumnBuilder Sum(string column, ISource source, string? name = null) => Add(Factory.Column(Factory.Sum(column, source), name));
+		public ColumnBuilder Sum(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(Factory.Sum(expressionFunction), name));
+		public ColumnBuilder Sum(IExpression expression, string? name = null) => Add(Factory.Column(Factory.Sum(expression), name));
 
 		#endregion Sum methods
 

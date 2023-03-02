@@ -6,6 +6,6 @@ namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface IFunction : IExpression
 	{
-		public void RenderFunction(IRenderer renderer, StringBuilder stringBuilder);
+		public void RenderFunction(IRenderer renderer, StringBuilder query);
 	}
 }

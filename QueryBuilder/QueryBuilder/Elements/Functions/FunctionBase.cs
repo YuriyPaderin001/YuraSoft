@@ -9,22 +9,22 @@ namespace YuraSoft.QueryBuilder
 	{
 		public string RenderExpression(IRenderer renderer)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderExpression(renderer, stringBuilder);
+			StringBuilder query = new StringBuilder();
+			RenderExpression(renderer, query);
 
-			return stringBuilder.ToString();
+			return query.ToString();
 		}
 
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderFunction(renderer, stringBuilder);
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => RenderFunction(renderer, query);
 		
 		public string RenderFunction(IRenderer renderer)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderFunction(renderer, stringBuilder);
+			StringBuilder query = new StringBuilder();
+			RenderFunction(renderer, query);
 
-			return stringBuilder.ToString();
+			return query.ToString();
 		}
 
-		public abstract void RenderFunction(IRenderer renderer, StringBuilder stringBuilder);
+		public abstract void RenderFunction(IRenderer renderer, StringBuilder query);
 	}
 }

@@ -5,12 +5,12 @@ using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
-	public class MinFunction : ColumnFunction
+	public class MinFunction : ExpressionFunction
 	{
-		public MinFunction(IColumn column) : base(column)
+		public MinFunction(IExpression expression) : base(expression)
 		{
 		}
 
-		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
+		public override void RenderFunction(IRenderer renderer, StringBuilder query) => renderer.RenderFunction(this, query);
 	}
 }

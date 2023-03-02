@@ -6,11 +6,11 @@ using YuraSoft.QueryBuilder.Renderers;
 
 namespace YuraSoft.QueryBuilder
 {
-	public class CoalesceFunction : ColumnFunction
+	public class CoalesceFunction : ExpressionFunction
 	{
 		private IExpression _defaultValue;
 
-		public CoalesceFunction(IColumn column, IExpression defaultValue) : base(column)
+		public CoalesceFunction(IExpression expression, IExpression defaultValue) : base(expression)
 		{
 			_defaultValue = Validator.ThrowIfArgumentIsNull(defaultValue, nameof(defaultValue));
 		}
@@ -21,6 +21,6 @@ namespace YuraSoft.QueryBuilder
 			set => _defaultValue = Validator.ThrowIfArgumentIsNull(value, nameof(DefaultValue));
 		}
 
-		public override void RenderFunction(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderFunction(this, stringBuilder);
+		public override void RenderFunction(IRenderer renderer, StringBuilder query) => renderer.RenderFunction(this, query);
 	}
 }
