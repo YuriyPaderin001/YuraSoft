@@ -43,6 +43,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Equal(IExpression expression1, IExpression expression2) => Add(Factory.Equal(expression1, expression2));
 		public ConditionBuilder Equal(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Equal(expression, expressionFunction));
 
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.Equal(expressionFunction, value, format));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.Equal(expressionFunction, value));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.Equal(expressionFunction, expression));
+		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Equal(expressionFunction1, Factory.Expression(expressionFunction2)));
+
 		public ConditionBuilder Equal(string column, sbyte value) => Add(Factory.Equal(column, value));
 		public ConditionBuilder Equal(string column, short value) => Add(Factory.Equal(column, value));
 		public ConditionBuilder Equal(string column, int value) => Add(Factory.Equal(column, value));
@@ -83,7 +95,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Equal(string column1, string table1, string column2, ISource source2) => Add(Factory.Equal(column1, table1, column2, source2));
 		public ConditionBuilder Equal(string column1, ISource source1, string column2, string table2) => Add(Factory.Equal(column1, source1, column2, table2));
 		public ConditionBuilder Equal(string column1, ISource source1, string column2, ISource source2) => Add(Factory.Equal(column1, source1, column2, source2));
-		public ConditionBuilder Equal(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Equal(expressionFunction1, expressionFunction2));
 
 		#endregion Equal methods
 
@@ -100,6 +111,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder NotEqual(IExpression expression, string value) => Add(Factory.NotEqual(expression, value));
 		public ConditionBuilder NotEqual(IExpression expression1, IExpression expression2) => Add(Factory.NotEqual(expression1, expression2));
 		public ConditionBuilder NotEqual(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.NotEqual(expression, expressionFunction));
+
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.NotEqual(expressionFunction, value, format));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.NotEqual(expressionFunction, value));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.NotEqual(expressionFunction, expression));
+		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.NotEqual(expressionFunction1, expressionFunction2));
 
 		public ConditionBuilder NotEqual(string column, sbyte value) => Add(Factory.NotEqual(column, value));
 		public ConditionBuilder NotEqual(string column, short value) => Add(Factory.NotEqual(column, value));
@@ -141,7 +164,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder NotEqual(string column1, string table1, string column2, ISource source2) => Add(Factory.NotEqual(column1, table1, column2, source2));
 		public ConditionBuilder NotEqual(string column1, ISource source1, string column2, string table2) => Add(Factory.NotEqual(column1, source1, column2, table2));
 		public ConditionBuilder NotEqual(string column1, ISource source1, string column2, ISource source2) => Add(Factory.NotEqual(column1, source1, column2, source2));
-		public ConditionBuilder NotEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.NotEqual(expressionFunction1, expressionFunction2));
 
 		#endregion NotEqual methods
 
@@ -178,6 +200,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Greater(IExpression expression, string value) => Add(Factory.Greater(expression, value));
 		public ConditionBuilder Greater(IExpression expression1, IExpression expression2) => Add(Factory.Greater(expression1, expression2));
 		public ConditionBuilder Greater(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Greater(expression, expressionFunction));
+
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.Greater(expressionFunction, value, format));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.Greater(expressionFunction, value));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.Greater(expressionFunction, expression));
+		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Greater(expressionFunction1, expressionFunction2));
 
 		public ConditionBuilder Greater(string column, sbyte value) => Add(Factory.Greater(column, value));
 		public ConditionBuilder Greater(string column, short value) => Add(Factory.Greater(column, value));
@@ -219,7 +253,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Greater(string column1, string table1, string column2, ISource source2) => Add(Factory.Greater(column1, table1, column2, source2));
 		public ConditionBuilder Greater(string column1, ISource source1, string column2, string table2) => Add(Factory.Greater(column1, source1, column2, table2));
 		public ConditionBuilder Greater(string column1, ISource source1, string column2, ISource source2) => Add(Factory.Greater(column1, source1, column2, source2));
-		public ConditionBuilder Greater(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Greater(expressionFunction1, expressionFunction2));
 
 		#endregion Greater methods
 
@@ -236,6 +269,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder GreaterOrEqual(IExpression expression, string value) => Add(Factory.GreaterOrEqual(expression, value));
 		public ConditionBuilder GreaterOrEqual(IExpression expression1, IExpression expression2) => Add(Factory.GreaterOrEqual(expression1, expression2));
 		public ConditionBuilder GreaterOrEqual(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.GreaterOrEqual(expression, expressionFunction));
+
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.GreaterOrEqual(expressionFunction, value, format));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.GreaterOrEqual(expressionFunction, value));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.GreaterOrEqual(expressionFunction, expression));
+		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.GreaterOrEqual(expressionFunction1, expressionFunction2));
 
 		public ConditionBuilder GreaterOrEqual(string column, sbyte value) => Add(Factory.GreaterOrEqual(column, value));
 		public ConditionBuilder GreaterOrEqual(string column, short value) => Add(Factory.GreaterOrEqual(column, value));
@@ -277,7 +322,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder GreaterOrEqual(string column1, string table1, string column2, ISource source2) => Add(Factory.GreaterOrEqual(column1, table1, column2, source2));
 		public ConditionBuilder GreaterOrEqual(string column1, ISource source1, string column2, string table2) => Add(Factory.GreaterOrEqual(column1, source1, column2, table2));
 		public ConditionBuilder GreaterOrEqual(string column1, ISource source1, string column2, ISource source2) => Add(Factory.GreaterOrEqual(column1, source1, column2, source2));
-		public ConditionBuilder GreaterOrEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.GreaterOrEqual(expressionFunction1, expressionFunction2));
 
 		#endregion GreaterOrEqual methods
 
@@ -294,6 +338,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Less(IExpression expression, string value) => Add(Factory.Less(expression, value));
 		public ConditionBuilder Less(IExpression expression1, IExpression expression2) => Add(Factory.Less(expression1, expression2));
 		public ConditionBuilder Less(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Less(expression, expressionFunction));
+
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.Less(expressionFunction, value, format));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.Less(expressionFunction, value));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.Less(expressionFunction, expression));
+		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Less(expressionFunction1, expressionFunction2));
 
 		public ConditionBuilder Less(string column, sbyte value) => Add(Factory.Less(column, value));
 		public ConditionBuilder Less(string column, short value) => Add(Factory.Less(column, value));
@@ -335,7 +391,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Less(string column1, string table1, string column2, ISource source2) => Add(Factory.Less(column1, table1, column2, source2));
 		public ConditionBuilder Less(string column1, ISource source1, string column2, string table2) => Add(Factory.Less(column1, source1, column2, table2));
 		public ConditionBuilder Less(string column1, ISource source1, string column2, ISource source2) => Add(Factory.Less(column1, source1, column2, source2));
-		public ConditionBuilder Less(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.Less(expressionFunction1, expressionFunction2));
 
 		#endregion Less methods
 
@@ -352,6 +407,18 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder LessOrEqual(IExpression expression, string value) => Add(Factory.LessOrEqual(expression, value));
 		public ConditionBuilder LessOrEqual(IExpression expression1, IExpression expression2) => Add(Factory.LessOrEqual(expression1, expression2));
 		public ConditionBuilder LessOrEqual(IExpression expression, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.LessOrEqual(expression, expressionFunction));
+
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, int value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, long value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, float value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, double value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, decimal value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => Add(Factory.LessOrEqual(expressionFunction, value, format));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.LessOrEqual(expressionFunction, value));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction, IExpression expression) => Add(Factory.LessOrEqual(expressionFunction, expression));
+		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.LessOrEqual(expressionFunction1, expressionFunction2));
 
 		public ConditionBuilder LessOrEqual(string column, sbyte value) => Add(Factory.LessOrEqual(column, value));
 		public ConditionBuilder LessOrEqual(string column, short value) => Add(Factory.LessOrEqual(column, value));
@@ -393,7 +460,6 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder LessOrEqual(string column1, string table1, string column2, ISource source2) => Add(Factory.LessOrEqual(column1, table1, column2, source2));
 		public ConditionBuilder LessOrEqual(string column1, ISource source1, string column2, string table2) => Add(Factory.LessOrEqual(column1, source1, column2, table2));
 		public ConditionBuilder LessOrEqual(string column1, ISource source1, string column2, ISource source2) => Add(Factory.LessOrEqual(column1, source1, column2, source2));
-		public ConditionBuilder LessOrEqual(Func<ExpressionFactory, IExpression> expressionFunction1, Func<ExpressionFactory, IExpression> expressionFunction2) => Add(Factory.LessOrEqual(expressionFunction1, expressionFunction2));
 
 		#endregion LessOrEqual methods
 
@@ -441,6 +507,28 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder In(IExpression expression, IEnumerable<string> values) => Add(Factory.In(expression, values));
 		public ConditionBuilder In(IExpression expression, IEnumerable<IExpression> values) => Add(Factory.In(expression, values));
 		public ConditionBuilder In(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.In(expression, buildExpressionMethod));
+
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params sbyte[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params short[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params int[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params long[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params float[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params double[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params decimal[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params DateTime[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, string format, params DateTime[] values) => Add(Factory.In(expressionFunction, format, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params string[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, params IExpression[] values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<sbyte> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<short> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<int> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<long> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<float> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<double> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<decimal> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<DateTime> values, string? format = null) => Add(Factory.In(expressionFunction, values, format));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<string> values) => Add(Factory.In(expressionFunction, values));
+		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<IExpression> values) => Add(Factory.In(expressionFunction, values));
 		public ConditionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.In(expressionFunction, buildExpressionMethod));
 
 		public ConditionBuilder In(string column, params sbyte[] values) => Add(Factory.In(column, values));
@@ -537,6 +625,28 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder NotIn(IExpression expression, IEnumerable<string> values) => Add(Factory.NotIn(expression, values));
 		public ConditionBuilder NotIn(IExpression expression, IEnumerable<IExpression> values) => Add(Factory.NotIn(expression, values));
 		public ConditionBuilder NotIn(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.NotIn(expression, buildExpressionMethod));
+
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params sbyte[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params short[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params int[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params long[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params float[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params double[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params decimal[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params DateTime[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, string format, params DateTime[] values) => Add(Factory.NotIn(expressionFunction, format, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params string[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params IExpression[] values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<sbyte> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<short> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<int> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<long> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<float> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<double> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<decimal> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<DateTime> values, string? format = null) => Add(Factory.NotIn(expressionFunction, values, format));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<string> values) => Add(Factory.NotIn(expressionFunction, values));
+		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<IExpression> values) => Add(Factory.NotIn(expressionFunction, values));
 		public ConditionBuilder NotIn(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.NotIn(expressionFunction, buildExpressionMethod));
 
 		public ConditionBuilder NotIn(string column, params sbyte[] values) => Add(Factory.NotIn(column, values));
@@ -642,6 +752,17 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder Between(IExpression expression, string lowBound, string hightBound) => Add(Factory.Between(expression, lowBound, hightBound));
 		public ConditionBuilder Between(IExpression expression1, IExpression lowBound, IExpression hightBound) => Add(Factory.Between(expression1, lowBound, hightBound));
 		public ConditionBuilder Between(IExpression expression, Func<ExpressionFactory, IExpression> lowBoundFunction, Func<ExpressionFactory, IExpression> hightBoundFunction) => Add(Factory.Between(expression, lowBoundFunction, hightBoundFunction));
+
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, sbyte lowBound, sbyte hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, short lowBound, short hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, int lowBound, int hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, long lowBound, long hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, float lowBound, float hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, double lowBound, double hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, decimal lowBound, decimal hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, DateTime lowBound, DateTime hightBound, string? format = null) => Add(Factory.Between(expressionFunction, lowBound, hightBound, format));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, string lowBound, string hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
+		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, IExpression lowBound, IExpression hightBound) => Add(Factory.Between(expressionFunction, lowBound, hightBound));
 		public ConditionBuilder Between(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> lowBoundFunction, Func<ExpressionFactory, IExpression> hightBoundFunction) => Add(Factory.Between(expressionFunction, lowBoundFunction, hightBoundFunction));
 
 		public ConditionBuilder Between(string column, sbyte lowBound, sbyte hightBound) => Add(Factory.Between(column, lowBound, hightBound));
