@@ -329,6 +329,16 @@ namespace YuraSoft.QueryBuilder.Renderers
 		#region Function rendering methods
 
 		public void RenderFunction(Function function, StringBuilder query) => RenderFunction(function.Name, function, function.Parameters, query);
+		public void RenderFunction(CastFunction function, StringBuilder query)
+		{
+			Validator.ThrowIfArgumentIsNull(function, nameof(function));
+			Validator.ThrowIfArgumentIsNull(query, nameof(query));
+
+			function.Expression.RenderExpression(this, query);
+			query.Append("::");
+			query.Append(function.Type);
+		}
+
 		public void RenderFunction(CountFunction function, StringBuilder query) => RenderColumnFunction("count", function, query);
 		public void RenderFunction(SumFunction function, StringBuilder query) => RenderColumnFunction("sum", function, query);
 		public void RenderFunction(MaxFunction function, StringBuilder query) => RenderColumnFunction("max", function, query);

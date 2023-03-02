@@ -769,6 +769,16 @@ namespace YuraSoft.QueryBuilder
 
 		#region Functions methods
 
+		#region CastFunction factory methods
+
+		public ExpressionBuilder Cast(string column, string type) => Add(Factory.Cast(column, type));
+		public ExpressionBuilder Cast(string column, string table, string type) => Add(Factory.Cast(column, table, type));
+		public ExpressionBuilder Cast(string column, ISource source, string type) => Add(Factory.Cast(column, source, type));
+		public ExpressionBuilder Cast(Func<ExpressionFactory, IExpression> expressionFunction, string type) => Add(Factory.Cast(expressionFunction, type));
+		public ExpressionBuilder Cast(IExpression expression, string type) => Add(Factory.Cast(expression, type));
+
+		#endregion CastFunction factory methods
+
 		#region CoalesceFunction methods
 
 		public ExpressionBuilder Coalesce(string column, sbyte value) => Add(Factory.Coalesce(column, value));

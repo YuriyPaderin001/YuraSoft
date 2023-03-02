@@ -11,6 +11,8 @@ namespace QueryBuilderSandbox
 		{
 			IRenderer renderer = new PostgreSqlRenderer();
 
+			Console.WriteLine(new CastFunction(new SourceColumn("column"), "test_type").RenderFunction(renderer));
+
 			Console.WriteLine("Constructors");
 
 			Select selectWithColumnName = new Select("column");

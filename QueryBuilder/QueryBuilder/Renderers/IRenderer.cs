@@ -54,6 +54,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 		#region Function render methods
 
 		public void RenderFunction(Function function, StringBuilder query);
+		public void RenderFunction(CastFunction function, StringBuilder query);
 		public void RenderFunction(CountFunction function, StringBuilder query);
 		public void RenderFunction(SumFunction function, StringBuilder query);
 		public void RenderFunction(MaxFunction function, StringBuilder query);
