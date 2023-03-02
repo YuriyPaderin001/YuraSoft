@@ -11,14 +11,40 @@ namespace QueryBuilderSandbox
 		{
 			IRenderer renderer = new PostgreSqlRenderer();
 
+			Console.WriteLine("Constructors");
+
 			Select selectWithColumnName = new Select("column");
 			Select selectWithColumnNameAndSource = new Select("column", new Table("table"));
 			Select selectWithColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table"));
+			Insert insertWithColumnName = new Insert("table");
+			Insert insertWithColumnNameAndSchema = new Insert("table", "schema");
+			Insert insertWithColumnNameAndAliasAndSchema = new Insert("table", "alias", "schema");
+			InsertSelect insertSelectWithColumnName = new InsertSelect("table", new Select("column"));
+			InsertSelect insertSelectWithColumnNameAndSchema = new InsertSelect("table", "schema", new Select("column"));
+			InsertSelect insertSelectWithColumnNameAndAliasAndSchema = new InsertSelect("table", "alias", "schema", new Select("column"));
+			Update updateWithColumnName = new Update("table").SetNull("column");
+			Update updateWithColumnNameAndSchema = new Update("table", "schema").SetNull("column");
+			Update updateWithColumnNameAndAliasAndSchema = new Update("table", "alias", "schema").SetNull("column");
+			Delete deleteWithColumnName = new Delete("table");
+			Delete deleteWithColumnNameAndSchema = new Delete("table", "schema");
+			Delete deleteWithColumnNameAndAliasAndSchema = new Delete("table", "alias", "schema");
 
 			Console.WriteLine($"{nameof(selectWithColumnName)}: {selectWithColumnName.RenderQuery(renderer)}");
 			Console.WriteLine($"{nameof(selectWithColumnNameAndSource)}: {selectWithColumnNameAndSource.RenderQuery(renderer)}");
 			Console.WriteLine($"{nameof(selectWithColumnNameAndAliasAndSource)}: {selectWithColumnNameAndAliasAndSource.RenderQuery(renderer)}\n");
-
+			Console.WriteLine($"{nameof(insertWithColumnName)}: {insertWithColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(insertWithColumnNameAndSchema)}: {insertWithColumnNameAndSchema.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(insertWithColumnNameAndAliasAndSchema)}: {insertWithColumnNameAndAliasAndSchema.RenderQuery(renderer)}\n");
+			Console.WriteLine($"{nameof(insertSelectWithColumnName)}: {insertSelectWithColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(insertSelectWithColumnNameAndSchema)}: {insertSelectWithColumnNameAndSchema.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(insertSelectWithColumnNameAndAliasAndSchema)}: {insertSelectWithColumnNameAndAliasAndSchema.RenderQuery(renderer)}\n");
+			Console.WriteLine($"{nameof(updateWithColumnName)}: {updateWithColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(updateWithColumnNameAndSchema)}: {updateWithColumnNameAndSchema.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(updateWithColumnNameAndAliasAndSchema)}: {updateWithColumnNameAndAliasAndSchema.RenderQuery(renderer)}\n");
+			Console.WriteLine($"{nameof(deleteWithColumnName)}: {deleteWithColumnName.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(deleteWithColumnNameAndSchema)}: {deleteWithColumnNameAndSchema.RenderQuery(renderer)}");
+			Console.WriteLine($"{nameof(deleteWithColumnNameAndAliasAndSchema)}: {deleteWithColumnNameAndAliasAndSchema.RenderQuery(renderer)}\n");
+			
 			Select selectWithOrderByAscColumnName = new Select("column").OrderByAsc("column");
 			Select selectWithOrderByAscColumnNameAndSource = new Select("column", new Table("table")).OrderByAsc("column", new Table("table"));
 			Select selectWithOrderByAscColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table")).OrderByAsc("column", "alias", new Table("table"));

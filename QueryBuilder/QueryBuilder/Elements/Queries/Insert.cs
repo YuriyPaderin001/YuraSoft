@@ -22,7 +22,15 @@ namespace YuraSoft.QueryBuilder
 
 		#region Constructors
 
-		public Insert(string name, string? alias = null, string? schema = null)
+		public Insert(string name) : this(name, alias: null, schema: null)
+		{
+		}
+
+		public Insert(string name, string? schema) : this(name, alias: null, schema)
+		{
+		}
+
+		public Insert(string name, string? alias, string? schema)
 		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 

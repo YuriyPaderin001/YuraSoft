@@ -16,7 +16,15 @@ namespace YuraSoft.QueryBuilder
 		private List<Tuple<IColumn, IExpression>> _setCollection = new List<Tuple<IColumn, IExpression>>();
 		private ICondition? _condition;
 
-		public Update(string name, string? alias = null, string? schema = null)
+		public Update(string name) : this(name, alias: null, schema: null)
+		{
+		}
+
+		public Update(string name, string? schema) : this(name, alias: null, schema)
+		{
+		}
+
+		public Update(string name, string? alias, string? schema)
 		{
 			Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
 
