@@ -1,12 +1,8 @@
 ﻿using System.Text;
 
-using YuraSoft.QueryBuilder.Abstractions;
-using YuraSoft.QueryBuilder.Renderers;
-using YuraSoft.QueryBuilder.Validation;
+using YuraSoft.QueryBuilder.Common.Validation;
 
-#nullable enable
-
-namespace YuraSoft.QueryBuilder
+namespace YuraSoft.QueryBuilder.Common
 {
 	public class StringValue : Value<string>
 	{
@@ -18,6 +14,6 @@ namespace YuraSoft.QueryBuilder
 
 		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
 
-		protected override string Validate(string data, string parameterName) => Validator.ThrowIfArgumentIsNull(data, parameterName);
+		protected override string Validate(string data, string parameterName) => Guard.ThrowIfNull(data, parameterName);
 	}
 }

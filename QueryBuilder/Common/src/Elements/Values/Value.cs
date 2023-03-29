@@ -1,9 +1,6 @@
 ﻿using System.Text;
 
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
-
-namespace YuraSoft.QueryBuilder.Abstractions
+namespace YuraSoft.QueryBuilder.Common
 {
 	public abstract class Value<TValue> : IValue
 	{

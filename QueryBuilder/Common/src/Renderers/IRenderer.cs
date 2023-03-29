@@ -43,12 +43,12 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Expression render methods
 
-		public void RenderExpression(GeneralCaseExpression expression, StringBuilder query);
-		public void RenderExpression(SimpleCaseExpression expression, StringBuilder query);
-		public void RenderExpression(MinusExpression expression, StringBuilder query);
-		public void RenderExpression(PlusExpression expression, StringBuilder query);
-		public void RenderExpression(MultiplyExpression expression, StringBuilder query);
-		public void RenderExpression(DivideExpression expression, StringBuilder query);
+		public void RenderExpression(GeneralCaseExpression expression, StringBuilder sql);
+		public void RenderExpression(SimpleCaseExpression expression, StringBuilder sql);
+		public void RenderExpression(MinusExpression expression, StringBuilder sql);
+		public void RenderExpression(PlusExpression expression, StringBuilder sql);
+		public void RenderExpression(MultiplyExpression expression, StringBuilder sql);
+		public void RenderExpression(DivideExpression expression, StringBuilder sql);
 		// public void RenderExpression(Select select, StringBuilder query);
 
 		#endregion Expression render methods
@@ -117,21 +117,21 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderSource(View view, StringBuilder query);
 
 		#endregion Source render methods
+		*/
 
 		#region Value render methods
 
-		public void RenderValue(Int8Value value, StringBuilder query);
-		public void RenderValue(Int16Value value, StringBuilder query);
-		public void RenderValue(Int32Value value, StringBuilder query);
-		public void RenderValue(Int64Value value, StringBuilder query);
-		public void RenderValue(FloatValue value, StringBuilder query);
-		public void RenderValue(DoubleValue value, StringBuilder query);
-		public void RenderValue(DecimalValue value, StringBuilder query);
-		public void RenderValue(DateTimeValue value, StringBuilder query);
-		public void RenderValue(StringValue value, StringBuilder query);
-		public void RenderValue(NullValue value, StringBuilder query);
+		public void RenderValue(Int8Value value, StringBuilder sql);
+		public void RenderValue(Int16Value value, StringBuilder sql);
+		public void RenderValue(Int32Value value, StringBuilder sql);
+		public void RenderValue(Int64Value value, StringBuilder sql);
+		public void RenderValue(FloatValue value, StringBuilder sql);
+		public void RenderValue(DoubleValue value, StringBuilder sql);
+		public void RenderValue(DecimalValue value, StringBuilder sql);
+		public void RenderValue(DateTimeValue value, StringBuilder sql);
+		public void RenderValue(StringValue value, StringBuilder sql);
+		public void RenderValue(NullValue value, StringBuilder sql);
 
 		#endregion Value render methods
-		*/
 	}
 }

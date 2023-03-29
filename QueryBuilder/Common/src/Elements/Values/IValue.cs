@@ -1,13 +1,9 @@
 ﻿using System.Text;
 
-using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
-
-namespace YuraSoft.QueryBuilder.Interfaces
+namespace YuraSoft.QueryBuilder.Common
 {
 	public interface IValue : IExpression
 	{
-		public void RenderValue(IRenderer renderer, StringBuilder stringBuilder);
+		public void RenderValue(IRenderer renderer, StringBuilder sql);
 	}
 }

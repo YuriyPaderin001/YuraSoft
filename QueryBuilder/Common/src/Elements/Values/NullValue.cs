@@ -1,11 +1,6 @@
 ﻿using System.Text;
 
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Renderers;
-
-#nullable enable
-
-namespace YuraSoft.QueryBuilder
+namespace YuraSoft.QueryBuilder.Common
 {
 	public class NullValue : IValue
 	{
