@@ -20,6 +20,6 @@ namespace YuraSoft.QueryBuilder.Common
 			set => _format = string.IsNullOrEmpty(value) ? "o" : value;
 		}
 
-		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
+		public override void RenderValue(IRenderer renderer, StringBuilder sql) => renderer.RenderValue(this, sql);
 	}
 }

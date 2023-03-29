@@ -21,23 +21,23 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public string RenderValue(IRenderer renderer)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderValue(renderer, stringBuilder);
+			StringBuilder sql = new StringBuilder();
+			RenderValue(renderer, sql);
 
-			return stringBuilder.ToString();
+			return sql.ToString();
 		}
 
-		public abstract void RenderValue(IRenderer renderer, StringBuilder stringBuilder);
+		public abstract void RenderValue(IRenderer renderer, StringBuilder sql);
 
 		public string RenderExpression(IRenderer renderer)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderExpression(renderer, stringBuilder);
+			StringBuilder sql = new StringBuilder();
+			RenderExpression(renderer, sql);
 
-			return stringBuilder.ToString();
+			return sql.ToString();
 		}
 
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderValue(renderer, stringBuilder);
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder sql) => RenderValue(renderer, sql);
 
 		protected virtual TValue Validate(TValue value, string parameterName) => value;
 	}

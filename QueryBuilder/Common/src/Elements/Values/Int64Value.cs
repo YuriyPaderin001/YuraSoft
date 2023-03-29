@@ -10,6 +10,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public static implicit operator Int64Value(long value) => new Int64Value(value);
 
-		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
+		public override void RenderValue(IRenderer renderer, StringBuilder sql) => renderer.RenderValue(this, sql);
 	}
 }

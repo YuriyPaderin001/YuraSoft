@@ -12,7 +12,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public static implicit operator StringValue(string value) => new StringValue(value);
 
-		public override void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
+		public override void RenderValue(IRenderer renderer, StringBuilder sql) => renderer.RenderValue(this, sql);
 
 		protected override string Validate(string data, string parameterName) => Guard.ThrowIfNull(data, parameterName);
 	}

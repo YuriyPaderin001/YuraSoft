@@ -12,7 +12,7 @@ namespace YuraSoft.QueryBuilder.Common
 			return stringBuilder.ToString();
 		}
 
-		public virtual void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderValue(this, stringBuilder);
+		public virtual void RenderValue(IRenderer renderer, StringBuilder sql) => renderer.RenderValue(this, sql);
 
 		public string RenderExpression(IRenderer renderer)
 		{
@@ -22,6 +22,6 @@ namespace YuraSoft.QueryBuilder.Common
 			return stringBuilder.ToString();
 		}
 
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderValue(renderer, stringBuilder);
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder sql) => RenderValue(renderer, sql);
 	}
 }
