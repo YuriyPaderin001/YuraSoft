@@ -4,4 +4,8 @@
 /QueryBuilder.Tests/obj
 /QueryBuilderSandbox/bin
 /QueryBuilderSandbox/obj
+/Common/src/bin
+/Common/src/obj
+/Common/test/bin
+/Common/test/obj
 /.vs
