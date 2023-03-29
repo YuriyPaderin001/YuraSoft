@@ -6,7 +6,7 @@ using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 {
-	public class PlusExpressionTests : TestsBase
+	public class MinusExpressionTests : TestsBase
 	{
     [Theory]
     [InlineData(2)]
@@ -17,31 +17,31 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 			List<IExpression> expressions = NewExpressionList(length);
 
 			// Act
-			PlusExpression plusExpression = new PlusExpression(expressions);
+			MinusExpression minusExpression = new MinusExpression(expressions);
 
       // Assert
-      Assert.Equal(expressions, plusExpression.Expressions);
+      Assert.Equal(expressions, minusExpression.Expressions);
 		}
 
 		[Fact]
 		public void Constructor_OneExpression_ThrowsArgumentOutOfRangeException()
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => new PlusExpression(NewExpressionList(1)));
+			Assert.Throws<ArgumentOutOfRangeException>(() => new MinusExpression(NewExpressionList(1)));
 		}
 
 		[Fact]
 		public void Constructor_EmptyExpressionEnumerable_ThrowsArgumentOutOfRangeException()
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => new PlusExpression(NewEmptyExpressionList()));
+			Assert.Throws<ArgumentOutOfRangeException>(() => new MinusExpression(NewEmptyExpressionList()));
 		}
 
 		[Fact]
 		public void Constructor_NullEnumerable_ThrowsArgumentNullException()
 		{
       // Act & Assert
-      Assert.Throws<ArgumentNullException>(() => new PlusExpression(null!));
+      Assert.Throws<ArgumentNullException>(() => new MinusExpression(null!));
 		}
 
     [Theory]
@@ -50,58 +50,58 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
     public void SetExpressions_Expressions_Success(int length)
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(length));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(length));
       List<IExpression> expressions = NewExpressionList(length);
 
       // Act
-      plusExpression.Expressions = expressions;
+      minusExpression.Expressions = expressions;
 
       // Assert
-      Assert.Equal(expressions, plusExpression.Expressions);
+      Assert.Equal(expressions, minusExpression.Expressions);
     }
 
     [Fact]
     public void SetExpressions_OneExpression_ThrowsArgumentOutOfRangeException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewExpressionList(1));
+      Assert.Throws<ArgumentOutOfRangeException>(() => minusExpression.Expressions = NewExpressionList(1));
     }
 
     [Fact]
     public void SetExpressions_EmptyExpressionList_ThrowsArgumentOutOfRangeException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewEmptyExpressionList());
+      Assert.Throws<ArgumentOutOfRangeException>(() => minusExpression.Expressions = NewEmptyExpressionList());
     }
 
     [Fact]
     public void SetExpressions_NullList_ThrowsArgumentNullException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentNullException>(() => plusExpression.Expressions = null!);
+      Assert.Throws<ArgumentNullException>(() => minusExpression.Expressions = null!);
     }
 
     [Fact]
     public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(2));
 
       const string expectedSql = "test";
 
       Mock<IRenderer> rendererMock = new Mock<IRenderer>();
       rendererMock
-        .Setup(ca => ca.RenderExpression(It.IsAny<PlusExpression>(), It.IsAny<StringBuilder>()))
-        .Callback((PlusExpression expression, StringBuilder sql) =>
+        .Setup(ca => ca.RenderExpression(It.IsAny<MinusExpression>(), It.IsAny<StringBuilder>()))
+        .Callback((MinusExpression expression, StringBuilder sql) =>
         {
           sql.Append(expectedSql);
         });
@@ -110,7 +110,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
       StringBuilder sql = new StringBuilder();
 
       // Act
-      plusExpression.RenderExpression(renderer, sql);
+      minusExpression.RenderExpression(renderer, sql);
 
       // Assert
       Assert.NotNull(sql);
@@ -121,14 +121,14 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
     public void RenderExpression_Renderer_ReturnsSql()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MinusExpression minusExpression = new MinusExpression(NewExpressionList(2));
 
       const string expectedSql = "test";
 
       Mock<IRenderer> rendererMock = new Mock<IRenderer>();
       rendererMock
-        .Setup(ca => ca.RenderExpression(It.IsAny<PlusExpression>(), It.IsAny<StringBuilder>()))
-        .Callback((PlusExpression expression, StringBuilder sql) =>
+        .Setup(ca => ca.RenderExpression(It.IsAny<MinusExpression>(), It.IsAny<StringBuilder>()))
+        .Callback((MinusExpression expression, StringBuilder sql) =>
         {
           sql.Append(expectedSql);
         });
@@ -136,7 +136,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
       IRenderer renderer = rendererMock.Object;
 
       // Act
-      string sql = plusExpression.RenderExpression(renderer);
+      string sql = minusExpression.RenderExpression(renderer);
 
       // Assert
       Assert.Equal(expectedSql, sql);

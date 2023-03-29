@@ -6,7 +6,7 @@ using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 {
-	public class PlusExpressionTests : TestsBase
+	public class MultiplyExpressionTests : TestsBase
 	{
     [Theory]
     [InlineData(2)]
@@ -17,31 +17,31 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 			List<IExpression> expressions = NewExpressionList(length);
 
 			// Act
-			PlusExpression plusExpression = new PlusExpression(expressions);
+			MultiplyExpression multiplyExpression = new MultiplyExpression(expressions);
 
       // Assert
-      Assert.Equal(expressions, plusExpression.Expressions);
+      Assert.Equal(expressions, multiplyExpression.Expressions);
 		}
 
 		[Fact]
 		public void Constructor_OneExpression_ThrowsArgumentOutOfRangeException()
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => new PlusExpression(NewExpressionList(1)));
+			Assert.Throws<ArgumentOutOfRangeException>(() => new MultiplyExpression(NewExpressionList(1)));
 		}
 
 		[Fact]
 		public void Constructor_EmptyExpressionEnumerable_ThrowsArgumentOutOfRangeException()
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => new PlusExpression(NewEmptyExpressionList()));
+			Assert.Throws<ArgumentOutOfRangeException>(() => new MultiplyExpression(NewEmptyExpressionList()));
 		}
 
 		[Fact]
 		public void Constructor_NullEnumerable_ThrowsArgumentNullException()
 		{
       // Act & Assert
-      Assert.Throws<ArgumentNullException>(() => new PlusExpression(null!));
+      Assert.Throws<ArgumentNullException>(() => new MultiplyExpression(null!));
 		}
 
     [Theory]
@@ -50,58 +50,58 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
     public void SetExpressions_Expressions_Success(int length)
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(length));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(length));
       List<IExpression> expressions = NewExpressionList(length);
 
       // Act
-      plusExpression.Expressions = expressions;
+      multiplyExpression.Expressions = expressions;
 
       // Assert
-      Assert.Equal(expressions, plusExpression.Expressions);
+      Assert.Equal(expressions, multiplyExpression.Expressions);
     }
 
     [Fact]
     public void SetExpressions_OneExpression_ThrowsArgumentOutOfRangeException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewExpressionList(1));
+      Assert.Throws<ArgumentOutOfRangeException>(() => multiplyExpression.Expressions = NewExpressionList(1));
     }
 
     [Fact]
     public void SetExpressions_EmptyExpressionList_ThrowsArgumentOutOfRangeException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewEmptyExpressionList());
+      Assert.Throws<ArgumentOutOfRangeException>(() => multiplyExpression.Expressions = NewEmptyExpressionList());
     }
 
     [Fact]
     public void SetExpressions_NullList_ThrowsArgumentNullException()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
 
       // Act & Assert
-      Assert.Throws<ArgumentNullException>(() => plusExpression.Expressions = null!);
+      Assert.Throws<ArgumentNullException>(() => multiplyExpression.Expressions = null!);
     }
 
     [Fact]
     public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
 
       const string expectedSql = "test";
 
       Mock<IRenderer> rendererMock = new Mock<IRenderer>();
       rendererMock
-        .Setup(ca => ca.RenderExpression(It.IsAny<PlusExpression>(), It.IsAny<StringBuilder>()))
-        .Callback((PlusExpression expression, StringBuilder sql) =>
+        .Setup(ca => ca.RenderExpression(It.IsAny<MultiplyExpression>(), It.IsAny<StringBuilder>()))
+        .Callback((MultiplyExpression expression, StringBuilder sql) =>
         {
           sql.Append(expectedSql);
         });
@@ -110,7 +110,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
       StringBuilder sql = new StringBuilder();
 
       // Act
-      plusExpression.RenderExpression(renderer, sql);
+      multiplyExpression.RenderExpression(renderer, sql);
 
       // Assert
       Assert.NotNull(sql);
@@ -121,14 +121,14 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
     public void RenderExpression_Renderer_ReturnsSql()
     {
       // Arrange
-      PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
+      MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
 
       const string expectedSql = "test";
 
       Mock<IRenderer> rendererMock = new Mock<IRenderer>();
       rendererMock
-        .Setup(ca => ca.RenderExpression(It.IsAny<PlusExpression>(), It.IsAny<StringBuilder>()))
-        .Callback((PlusExpression expression, StringBuilder sql) =>
+        .Setup(ca => ca.RenderExpression(It.IsAny<MultiplyExpression>(), It.IsAny<StringBuilder>()))
+        .Callback((MultiplyExpression expression, StringBuilder sql) =>
         {
           sql.Append(expectedSql);
         });
@@ -136,7 +136,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
       IRenderer renderer = rendererMock.Object;
 
       // Act
-      string sql = plusExpression.RenderExpression(renderer);
+      string sql = multiplyExpression.RenderExpression(renderer);
 
       // Assert
       Assert.Equal(expectedSql, sql);

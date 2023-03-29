@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Elements\Expressions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\src\YuraSoft.QueryBuilder.Common.csproj" />
   </ItemGroup>
 
