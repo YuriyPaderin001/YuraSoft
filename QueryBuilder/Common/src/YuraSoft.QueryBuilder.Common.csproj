@@ -17,7 +17,6 @@
     <Compile Remove="Elements\Parameters-\**" />
     <Compile Remove="Elements\Queries-\**" />
     <Compile Remove="Elements\Sources\**" />
-    <Compile Remove="Elements\Values\**" />
     <EmbeddedResource Remove="Elements\Columns-\**" />
     <EmbeddedResource Remove="Elements\Conditions-\**" />
     <EmbeddedResource Remove="Elements\Distincts-\**" />
@@ -27,7 +26,6 @@
     <EmbeddedResource Remove="Elements\Parameters-\**" />
     <EmbeddedResource Remove="Elements\Queries-\**" />
     <EmbeddedResource Remove="Elements\Sources\**" />
-    <EmbeddedResource Remove="Elements\Values\**" />
     <None Remove="Elements\Columns-\**" />
     <None Remove="Elements\Conditions-\**" />
     <None Remove="Elements\Distincts-\**" />
@@ -37,7 +35,6 @@
     <None Remove="Elements\Parameters-\**" />
     <None Remove="Elements\Queries-\**" />
     <None Remove="Elements\Sources\**" />
-    <None Remove="Elements\Values\**" />
   </ItemGroup>
 
   <ItemGroup>
