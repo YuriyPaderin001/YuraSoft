@@ -10,7 +10,7 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
-		public override void RenderFunction(IRenderer renderer, StringBuilder query) => 
+		public override void RenderFunction(IRenderer renderer, StringBuilder query) =>
 			renderer.RenderFunction(this, query);
 	}
 }

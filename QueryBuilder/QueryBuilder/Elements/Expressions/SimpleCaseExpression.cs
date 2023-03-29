@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 #nullable enable
 

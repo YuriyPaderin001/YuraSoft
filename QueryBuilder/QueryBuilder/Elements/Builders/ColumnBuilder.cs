@@ -14,7 +14,7 @@ namespace YuraSoft.QueryBuilder
 		#region Column methods
 
 		public ColumnBuilder Column(IColumn column) => Add(column);
-		
+
 		public ColumnBuilder Column(IExpression expression, string? name = null) => Add(Factory.Column(expression, name));
 		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(expressionFunction, name));
 

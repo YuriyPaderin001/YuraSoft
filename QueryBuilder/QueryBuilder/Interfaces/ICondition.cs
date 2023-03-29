@@ -6,6 +6,6 @@ namespace YuraSoft.QueryBuilder.Interfaces
 {
 	public interface ICondition : IExpression
 	{
-		public void RenderCondition(IRenderer renderer, StringBuilder stringBuilder); 
+		public void RenderCondition(IRenderer renderer, StringBuilder stringBuilder);
 	}
 }

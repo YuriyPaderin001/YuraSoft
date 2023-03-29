@@ -27,7 +27,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 			return sql.ToString();
 		}
-		
+
 		public abstract void RenderExpression(IRenderer renderer, StringBuilder sql);
 	}
 }

@@ -116,7 +116,7 @@ namespace YuraSoft.QueryBuilder.Common.Validation
 		/// <param name="argumentName">Argument name</param>
 		/// <returns>Returns <paramref name="argument"/></returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public static T ThrowIfEmpty<T>(T argument, string argumentName) where T: IEnumerable
+		public static T ThrowIfEmpty<T>(T argument, string argumentName) where T : IEnumerable
 		{
 			if (argument != null && !argument.GetEnumerator().MoveNext())
 			{
@@ -153,7 +153,7 @@ namespace YuraSoft.QueryBuilder.Common.Validation
 		/// <returns>Returns <paramref name="argument"/></returns>
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public static T ThrowIfNullOrEmpty<T>([NotNull] T argument, string argumentName) where T: IEnumerable
+		public static T ThrowIfNullOrEmpty<T>([NotNull] T argument, string argumentName) where T : IEnumerable
 		{
 			ThrowIfNull(argument, argumentName);
 			ThrowIfEmpty(argument, argumentName);
@@ -184,7 +184,7 @@ namespace YuraSoft.QueryBuilder.Common.Validation
 		/// <param name="argument">String enumerable</param>
 		/// <param name="argumentName">Argument name</param>
 		/// <exception cref="ArgumentException"></exception>
-		private static void ThrowIfContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName) 
+		private static void ThrowIfContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName)
 		{
 			foreach (string? item in argument)
 			{

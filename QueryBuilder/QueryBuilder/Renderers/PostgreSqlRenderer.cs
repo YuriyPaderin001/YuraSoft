@@ -638,7 +638,7 @@ namespace YuraSoft.QueryBuilder.Renderers
 			if (insert.ColumnCollection != null && insert.ColumnCollection.Count > 0)
 			{
 				query.Append(" (");
-				
+
 				insert.ColumnCollection[0].RenderColumn(this, query);
 				for (int i = 1; i < insert.ColumnCollection.Count; i++)
 				{

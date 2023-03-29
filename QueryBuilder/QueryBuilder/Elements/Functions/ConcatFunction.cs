@@ -2,8 +2,8 @@
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -11,13 +11,13 @@ namespace YuraSoft.QueryBuilder
 	{
 		private List<IExpression> _values;
 
-		public ConcatFunction(IEnumerable<IExpression> values) 
+		public ConcatFunction(IEnumerable<IExpression> values)
 		{
 			_values = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrEmpty(values, nameof(values)));
 		}
 
-		public List<IExpression> Values 
-		{ 
+		public List<IExpression> Values
+		{
 			get => _values;
 			set => _values = new List<IExpression>(Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(Values)));
 		}

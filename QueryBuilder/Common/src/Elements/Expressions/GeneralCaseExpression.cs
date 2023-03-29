@@ -16,9 +16,9 @@ namespace YuraSoft.QueryBuilder.Common
 			Else = @else;
 		}
 
-		public List<Tuple<ICondition, IExpression>> WhenThens 
-		{ 
-			get => _whenThens; 
+		public List<Tuple<ICondition, IExpression>> WhenThens
+		{
+			get => _whenThens;
 			set => _whenThens = Guard.ThrowIfNullOrEmpty(value, nameof(WhenThens));
 		}
 
@@ -31,7 +31,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 			return sql.ToString();
 		}
-		
+
 		public void RenderExpression(IRenderer renderer, StringBuilder sql) => renderer.RenderExpression(this, sql);
 	}
 }

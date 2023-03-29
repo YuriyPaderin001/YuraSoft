@@ -46,7 +46,7 @@ namespace QueryBuilderSandbox
 			Console.WriteLine($"{nameof(deleteWithColumnName)}: {deleteWithColumnName.RenderQuery(renderer)}");
 			Console.WriteLine($"{nameof(deleteWithColumnNameAndSchema)}: {deleteWithColumnNameAndSchema.RenderQuery(renderer)}");
 			Console.WriteLine($"{nameof(deleteWithColumnNameAndAliasAndSchema)}: {deleteWithColumnNameAndAliasAndSchema.RenderQuery(renderer)}\n");
-			
+
 			Select selectWithOrderByAscColumnName = new Select("column").OrderByAsc("column");
 			Select selectWithOrderByAscColumnNameAndSource = new Select("column", new Table("table")).OrderByAsc("column", new Table("table"));
 			Select selectWithOrderByAscColumnNameAndAliasAndSource = new Select("column", "alias", new Table("table")).OrderByAsc("column", "alias", new Table("table"));

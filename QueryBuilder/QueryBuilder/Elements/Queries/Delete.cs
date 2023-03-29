@@ -2,8 +2,8 @@
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -41,9 +41,9 @@ namespace YuraSoft.QueryBuilder
 
 		#region Properties
 
-		public ISource Source 
-		{ 
-			get => _source; 
+		public ISource Source
+		{
+			get => _source;
 			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
 		}
 

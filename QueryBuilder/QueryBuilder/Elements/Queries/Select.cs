@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -159,7 +159,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Select LeftJoin(string table, ICondition condition) => AddJoin(new LeftJoin(new Table(table), condition));
 		public virtual Select LeftJoin(string table, Action<ConditionBuilder> buildConditionMethod) => LeftJoin(new Table(table), buildConditionMethod);
 		public virtual Select LeftJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => LeftJoin(new Table(leftTable), new Table(rightTable), buildConditionMethod);
-	
+
 		public virtual Select LeftJoin(ISource source, ICondition condition) => AddJoin(new LeftJoin(source, condition));
 		public virtual Select LeftJoin(ISource source, Action<ConditionBuilder> buildConditionMethod) => AddJoin(new LeftJoin(source, _factory.Condition(buildConditionMethod)));
 		public virtual Select LeftJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> buildConditionMethod) => AddJoin(new LeftJoin(rightSource, _factory.Condition(leftSource, rightSource, buildConditionMethod)));
@@ -208,7 +208,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Select OrderByDesc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
 		public virtual Select OrderByDesc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
 		public virtual Select OrderByDesc(Action<ColumnBuilder> action) => OrderByDesc(_factory.Columns(action));
-		
+
 		public virtual Select OrderBy(params IOrderBy[] columns) => OrderBy((IEnumerable<IOrderBy>)columns);
 		public virtual Select OrderBy(IEnumerable<IOrderBy> columns)
 		{

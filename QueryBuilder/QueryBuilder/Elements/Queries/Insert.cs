@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -46,9 +46,9 @@ namespace YuraSoft.QueryBuilder
 
 		#region Properties
 
-		public ISource Source 
-		{ 
-			get => _source; 
+		public ISource Source
+		{
+			get => _source;
 			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
 		}
 
@@ -78,7 +78,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Insert Columns(IEnumerable<string> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullOrEmptyElements(columns, nameof(columns));
-			
+
 			_sourceColumns.AddRange(columns.Select(c => new SourceColumn(c)));
 
 			return this;
@@ -88,7 +88,7 @@ namespace YuraSoft.QueryBuilder
 		public virtual Insert Columns(IEnumerable<IColumn> columns)
 		{
 			Validator.ThrowIfArgumentIsNullOrContainsNullElements(columns, nameof(columns));
-			
+
 			_sourceColumns.AddRange(columns);
 
 			return this;

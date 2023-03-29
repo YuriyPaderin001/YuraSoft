@@ -38,7 +38,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public virtual void RenderSource(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderSource(this, stringBuilder);
-		
+
 		public string RenderIdentificator(IRenderer renderer)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -46,7 +46,7 @@ namespace YuraSoft.QueryBuilder
 
 			return stringBuilder.ToString();
 		}
-		
+
 		public virtual void RenderIdentificator(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderIdentificator(this, stringBuilder);
 	}
 }

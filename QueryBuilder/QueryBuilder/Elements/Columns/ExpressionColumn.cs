@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -17,8 +17,8 @@ namespace YuraSoft.QueryBuilder
 			_name = name == string.Empty ? null : name;
 		}
 
-		public IExpression Expression 
-		{ 
+		public IExpression Expression
+		{
 			get => _expression;
 			set => _expression = Validator.ThrowIfArgumentIsNull(value, nameof(Expression));
 		}
@@ -42,7 +42,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public void RenderIdentificator(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderIdentificator(this, stringBuilder);
-		
+
 		public string RenderColumn(IRenderer renderer)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -50,7 +50,7 @@ namespace YuraSoft.QueryBuilder
 
 			return stringBuilder.ToString();
 		}
-		
+
 		public void RenderColumn(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderColumn(this, stringBuilder);
 	}
 }

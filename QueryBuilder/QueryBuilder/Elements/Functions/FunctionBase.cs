@@ -16,7 +16,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => RenderFunction(renderer, query);
-		
+
 		public string RenderFunction(IRenderer renderer)
 		{
 			StringBuilder query = new StringBuilder();
