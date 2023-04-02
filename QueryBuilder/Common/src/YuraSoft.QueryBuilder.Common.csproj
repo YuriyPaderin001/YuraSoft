@@ -14,21 +14,22 @@
     <Compile Remove="Elements\Joins-\**" />
     <Compile Remove="Elements\Orders-\**" />
     <Compile Remove="Elements\Queries-\**" />
-    <Compile Remove="Elements\Sources\**" />
     <EmbeddedResource Remove="Elements\Columns-\**" />
     <EmbeddedResource Remove="Elements\Conditions-\**" />
     <EmbeddedResource Remove="Elements\Distincts-\**" />
     <EmbeddedResource Remove="Elements\Joins-\**" />
     <EmbeddedResource Remove="Elements\Orders-\**" />
     <EmbeddedResource Remove="Elements\Queries-\**" />
-    <EmbeddedResource Remove="Elements\Sources\**" />
     <None Remove="Elements\Columns-\**" />
     <None Remove="Elements\Conditions-\**" />
     <None Remove="Elements\Distincts-\**" />
     <None Remove="Elements\Joins-\**" />
     <None Remove="Elements\Orders-\**" />
     <None Remove="Elements\Queries-\**" />
-    <None Remove="Elements\Sources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Elements\Sources\Subquery.cs" />
   </ItemGroup>
 
   <ItemGroup>

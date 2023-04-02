@@ -67,17 +67,17 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Function render methods
 
-		/*
 		#region Identificator render methods
 
-		public void RenderIdentificator(SourceColumn column, StringBuilder query);
-		public void RenderIdentificator(ExpressionColumn column, StringBuilder query);
-		public void RenderIdentificator(Table table, StringBuilder query);
-		public void RenderIdentificator(Subquery subquery, StringBuilder query);
-		public void RenderIdentificator(View view, StringBuilder query);
+		// public void RenderIdentificator(SourceColumn column, StringBuilder sql);
+		// public void RenderIdentificator(ExpressionColumn column, StringBuilder sql);
+		public void RenderIdentificator(Table table, StringBuilder sql);
+		// public void RenderIdentificator(Subquery subquery, StringBuilder sql);
+		public void RenderIdentificator(View view, StringBuilder sql);
 
 		#endregion Identificator render methods
 
+		/*
 		#region Join render methods
 
 		public void RenderJoin(LeftJoin join, StringBuilder query);
@@ -110,16 +110,15 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderQuery(Delete delete, StringBuilder query);
 
 		#endregion Query render methods
+		*/
 
 		#region Source render methods
 
-		public void RenderSource(Table table, StringBuilder query);
-		public void RenderSource(Subquery subquery, StringBuilder query);
-
-		public void RenderSource(View view, StringBuilder query);
+		public void RenderSource(Table table, StringBuilder sql);
+		public void RenderSource(View view, StringBuilder sql);
+		// public void RenderSource(Subquery subquery, StringBuilder sql);
 
 		#endregion Source render methods
-		*/
 
 		#region Value render methods
 
