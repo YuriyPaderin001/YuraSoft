@@ -31,6 +31,9 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 			}
 		}
 
+		public void RenderColumn(SourceColumn column, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderColumn(ExpressionColumn column, StringBuilder sql) => sql.Append(_expectedSql);
+
 		public void RenderCondition(EqualCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(NotEqualCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(InCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
@@ -66,7 +69,17 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 
 		public void RenderIdentificator(Table table, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderIdentificator(View view, StringBuilder sql) => sql.Append(_expectedSql);
-		
+
+		public void RenderIdentificator(SourceColumn column, StringBuilder sql)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void RenderParameter(Parameter parameter, StringBuilder sql) => sql.Append(_expectedSql);
 
 		public void RenderSource(Table table, StringBuilder sql) => sql.Append(_expectedSql);

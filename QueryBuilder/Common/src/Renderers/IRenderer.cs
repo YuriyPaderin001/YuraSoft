@@ -4,14 +4,12 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public interface IRenderer
 	{
-		/*
 		#region Column render methods
 
-		public void RenderColumn(SourceColumn column, StringBuilder query);
-		public void RenderColumn(ExpressionColumn column, StringBuilder query);
+		public void RenderColumn(SourceColumn column, StringBuilder sql);
+		public void RenderColumn(ExpressionColumn column, StringBuilder sql);
 
 		#endregion Column render methods
-		*/
 
 		#region Condition render methods
 
@@ -71,11 +69,11 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Identificator render methods
 
-		// public void RenderIdentificator(SourceColumn column, StringBuilder sql);
-		// public void RenderIdentificator(ExpressionColumn column, StringBuilder sql);
+		public void RenderIdentificator(SourceColumn column, StringBuilder sql);
+		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql);
 		public void RenderIdentificator(Table table, StringBuilder sql);
-		// public void RenderIdentificator(Subquery subquery, StringBuilder sql);
 		public void RenderIdentificator(View view, StringBuilder sql);
+		// public void RenderIdentificator(Subquery subquery, StringBuilder sql);
 
 		#endregion Identificator render methods
 

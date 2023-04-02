@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public interface ISource
+	public interface ISource : IIdentificator
 	{
 		public void RenderSource(IRenderer renderer, StringBuilder sql);
 	}

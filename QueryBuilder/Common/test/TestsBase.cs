@@ -61,5 +61,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		}
 
 		protected IExpression NewExpression() => new Mock<IExpression>().Object;
+
+		protected ISource NewSource() => new Mock<ISource>().Object;
 	}
 }
