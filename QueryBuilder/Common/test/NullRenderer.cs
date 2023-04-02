@@ -49,7 +49,9 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		public void RenderCondition(NotLikeCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(OrCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(AndCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
-		
+
+		public void RenderDistinct(Distinct distinct, StringBuilder sql) => sql.Append(_expectedSql);
+
 		public void RenderExpression(GeneralCaseExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderExpression(SimpleCaseExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderExpression(MinusExpression expression, StringBuilder sql) => sql.Append(_expectedSql);

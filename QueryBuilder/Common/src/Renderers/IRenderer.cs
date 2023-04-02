@@ -33,13 +33,11 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Condition render methods
 
-		/*
 		#region Distinct render methods
 
-		public void RenderDistinct(Distinct distinct, StringBuilder query);
+		public void RenderDistinct(Distinct distinct, StringBuilder sql);
 
 		#endregion Distinct render methods
-		*/
 
 		#region Expression render methods
 

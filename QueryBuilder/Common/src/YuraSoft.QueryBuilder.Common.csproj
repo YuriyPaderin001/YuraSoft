@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Elements\Distincts-\**" />
     <Compile Remove="Elements\Queries-\**" />
-    <EmbeddedResource Remove="Elements\Distincts-\**" />
     <EmbeddedResource Remove="Elements\Queries-\**" />
-    <None Remove="Elements\Distincts-\**" />
     <None Remove="Elements\Queries-\**" />
   </ItemGroup>
 
