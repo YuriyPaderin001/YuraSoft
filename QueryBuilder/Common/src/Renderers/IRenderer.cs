@@ -55,15 +55,15 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Function render methods
 
-		public void RenderFunction(Function function, StringBuilder query);
-		public void RenderFunction(CastFunction function, StringBuilder query);
-		public void RenderFunction(CountFunction function, StringBuilder query);
-		public void RenderFunction(SumFunction function, StringBuilder query);
-		public void RenderFunction(MaxFunction function, StringBuilder query);
-		public void RenderFunction(MinFunction function, StringBuilder query);
-		public void RenderFunction(NowFunction function, StringBuilder query);
-		public void RenderFunction(ConcatFunction function, StringBuilder query);
-		public void RenderFunction(CoalesceFunction function, StringBuilder query);
+		public void RenderFunction(Function function, StringBuilder sql);
+		public void RenderFunction(CastFunction function, StringBuilder sql);
+		public void RenderFunction(CountFunction function, StringBuilder sql);
+		public void RenderFunction(SumFunction function, StringBuilder sql);
+		public void RenderFunction(MaxFunction function, StringBuilder sql);
+		public void RenderFunction(MinFunction function, StringBuilder sql);
+		public void RenderFunction(NowFunction function, StringBuilder sql);
+		public void RenderFunction(ConcatFunction function, StringBuilder sql);
+		public void RenderFunction(CoalesceFunction function, StringBuilder sql);
 
 		#endregion Function render methods
 
@@ -92,13 +92,15 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderOrderBy(OrderBy join, StringBuilder query);
 
 		#endregion OrderBy render methods
+		*/
 
 		#region Parameter render methods
 
-		public void RenderParameter(Parameter parameter, StringBuilder query);
+		public void RenderParameter(Parameter parameter, StringBuilder sql);
 
 		#endregion Parameter render methods
 
+		/*
 		#region Query render methods
 
 		public void RenderQuery(Select select, StringBuilder query);
