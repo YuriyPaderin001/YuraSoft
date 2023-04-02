@@ -11,29 +11,31 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderColumn(ExpressionColumn column, StringBuilder query);
 
 		#endregion Column render methods
+		*/
 
 		#region Condition render methods
 
-		public void RenderCondition(EqualCondition condition, StringBuilder query);
-		public void RenderCondition(NotEqualCondition condition, StringBuilder query);
-		public void RenderCondition(InCondition condition, StringBuilder query);
-		public void RenderCondition(NotInCondition condition, StringBuilder query);
-		public void RenderCondition(IsNullCondition condition, StringBuilder query);
-		public void RenderCondition(IsNotNullCondition condition, StringBuilder query);
-		public void RenderCondition(LessCondition condition, StringBuilder query);
-		public void RenderCondition(LessOrEqualCondition condition, StringBuilder query);
-		public void RenderCondition(GreaterCondition condition, StringBuilder query);
-		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder query);
-		public void RenderCondition(BetweenCondition condition, StringBuilder query);
-		public void RenderCondition(LikeCondition condition, StringBuilder query);
-		public void RenderCondition(NotLikeCondition condition, StringBuilder query);
-		public void RenderCondition(OrCondition condition, StringBuilder query);
-		public void RenderCondition(AndCondition condition, StringBuilder query);
-		public void RenderCondition(ExistsCondition condition, StringBuilder query);
-		public void RenderCondition(NotExistsCondition condition, StringBuilder query);
+		public void RenderCondition(EqualCondition condition, StringBuilder sql);
+		public void RenderCondition(NotEqualCondition condition, StringBuilder sql);
+		public void RenderCondition(InCondition condition, StringBuilder sql);
+		public void RenderCondition(NotInCondition condition, StringBuilder sql);
+		public void RenderCondition(IsNullCondition condition, StringBuilder sql);
+		public void RenderCondition(IsNotNullCondition condition, StringBuilder sql);
+		public void RenderCondition(LessCondition condition, StringBuilder sql);
+		public void RenderCondition(LessOrEqualCondition condition, StringBuilder sql);
+		public void RenderCondition(GreaterCondition condition, StringBuilder sql);
+		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder sql);
+		public void RenderCondition(BetweenCondition condition, StringBuilder sql);
+		public void RenderCondition(LikeCondition condition, StringBuilder sql);
+		public void RenderCondition(NotLikeCondition condition, StringBuilder sql);
+		public void RenderCondition(OrCondition condition, StringBuilder sql);
+		public void RenderCondition(AndCondition condition, StringBuilder sql);
+		// public void RenderCondition(ExistsCondition condition, StringBuilder sql);
+		// public void RenderCondition(NotExistsCondition condition, StringBuilder sql);
 
 		#endregion Condition render methods
 
+		/*
 		#region Distinct render methods
 
 		public void RenderDistinct(Distinct distinct, StringBuilder query);
