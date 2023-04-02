@@ -1,6 +1,4 @@
-﻿using YuraSoft.QueryBuilder.Interfaces;
-
-namespace YuraSoft.QueryBuilder
+﻿namespace YuraSoft.QueryBuilder.Common
 {
 	public class OrderByDesc : OrderBy
 	{
@@ -8,6 +6,6 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
-		public new readonly OrderDirection Direction; 
+		public new readonly OrderDirection Direction = OrderDirection.Desc; 
 	}
 }

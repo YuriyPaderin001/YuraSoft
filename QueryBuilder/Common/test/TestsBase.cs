@@ -6,6 +6,8 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 {
 	public class TestsBase
 	{
+		protected IColumn NewColumn() => new Mock<IColumn>().Object;
+
 		protected List<Tuple<ICondition, IExpression>> NewGeneralEmptyWhenThenList() => new List<Tuple<ICondition, IExpression>>();
 		protected List<Tuple<ICondition, IExpression>> NewGeneralWhenThenList(int length)
 		{

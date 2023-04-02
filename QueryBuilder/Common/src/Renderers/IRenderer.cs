@@ -82,17 +82,16 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderJoin(LeftJoin join, StringBuilder sql);
 		public void RenderJoin(RightJoin join, StringBuilder sql);
 		public void RenderJoin(InnerJoin join, StringBuilder sql);
+		public void RenderJoin(FullJoin join, StringBuilder sql);
 		public void RenderJoin(CrossJoin join, StringBuilder sql);
 
 		#endregion Join render methods
 
-		/*
 		#region OrderBy render methods
 
-		public void RenderOrderBy(OrderBy join, StringBuilder query);
+		public void RenderOrderBy(OrderBy orderBy, StringBuilder sql);
 
 		#endregion OrderBy render methods
-		*/
 
 		#region Parameter render methods
 

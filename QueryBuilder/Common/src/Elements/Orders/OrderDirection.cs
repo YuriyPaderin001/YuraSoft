@@ -1,4 +1,4 @@
-﻿namespace YuraSoft.QueryBuilder
+﻿namespace YuraSoft.QueryBuilder.Common
 {
 	public enum OrderDirection
 	{
