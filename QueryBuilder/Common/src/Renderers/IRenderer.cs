@@ -77,16 +77,16 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Identificator render methods
 
-		/*
 		#region Join render methods
 
-		public void RenderJoin(LeftJoin join, StringBuilder query);
-		public void RenderJoin(RightJoin join, StringBuilder query);
-		public void RenderJoin(InnerJoin join, StringBuilder query);
-		public void RenderJoin(CrossJoin join, StringBuilder query);
+		public void RenderJoin(LeftJoin join, StringBuilder sql);
+		public void RenderJoin(RightJoin join, StringBuilder sql);
+		public void RenderJoin(InnerJoin join, StringBuilder sql);
+		public void RenderJoin(CrossJoin join, StringBuilder sql);
 
 		#endregion Join render methods
 
+		/*
 		#region OrderBy render methods
 
 		public void RenderOrderBy(OrderBy join, StringBuilder query);

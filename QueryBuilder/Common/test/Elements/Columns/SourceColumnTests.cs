@@ -5,7 +5,7 @@ using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 {
-	public class SourceColumnTests : TestsBase
+	public class CrossJoinTests : TestsBase
 	{
 		[Fact]
 		public void Constructor_String_Success()

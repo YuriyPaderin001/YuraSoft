@@ -9,15 +9,12 @@
 
   <ItemGroup>
     <Compile Remove="Elements\Distincts-\**" />
-    <Compile Remove="Elements\Joins-\**" />
     <Compile Remove="Elements\Orders-\**" />
     <Compile Remove="Elements\Queries-\**" />
     <EmbeddedResource Remove="Elements\Distincts-\**" />
-    <EmbeddedResource Remove="Elements\Joins-\**" />
     <EmbeddedResource Remove="Elements\Orders-\**" />
     <EmbeddedResource Remove="Elements\Queries-\**" />
     <None Remove="Elements\Distincts-\**" />
-    <None Remove="Elements\Joins-\**" />
     <None Remove="Elements\Orders-\**" />
     <None Remove="Elements\Queries-\**" />
   </ItemGroup>

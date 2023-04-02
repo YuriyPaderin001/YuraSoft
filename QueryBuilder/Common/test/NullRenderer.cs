@@ -69,16 +69,13 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 
 		public void RenderIdentificator(Table table, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderIdentificator(View view, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderIdentificator(SourceColumn column, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql) => sql.Append(_expectedSql);
 
-		public void RenderIdentificator(SourceColumn column, StringBuilder sql)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql)
-		{
-			throw new NotImplementedException();
-		}
+		public void RenderJoin(LeftJoin join, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderJoin(RightJoin join, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderJoin(InnerJoin join, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderJoin(CrossJoin join, StringBuilder sql) => sql.Append(_expectedSql);
 
 		public void RenderParameter(Parameter parameter, StringBuilder sql) => sql.Append(_expectedSql);
 
