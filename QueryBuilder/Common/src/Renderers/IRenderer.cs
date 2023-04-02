@@ -53,7 +53,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Expression render methods
 
-		/*
 		#region Function render methods
 
 		public void RenderFunction(Function function, StringBuilder query);
@@ -68,6 +67,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Function render methods
 
+		/*
 		#region Identificator render methods
 
 		public void RenderIdentificator(SourceColumn column, StringBuilder query);

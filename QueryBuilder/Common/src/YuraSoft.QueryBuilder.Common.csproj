@@ -11,7 +11,6 @@
     <Compile Remove="Elements\Columns-\**" />
     <Compile Remove="Elements\Conditions-\**" />
     <Compile Remove="Elements\Distincts-\**" />
-    <Compile Remove="Elements\Functions-\**" />
     <Compile Remove="Elements\Joins-\**" />
     <Compile Remove="Elements\Orders-\**" />
     <Compile Remove="Elements\Parameters-\**" />
@@ -20,7 +19,6 @@
     <EmbeddedResource Remove="Elements\Columns-\**" />
     <EmbeddedResource Remove="Elements\Conditions-\**" />
     <EmbeddedResource Remove="Elements\Distincts-\**" />
-    <EmbeddedResource Remove="Elements\Functions-\**" />
     <EmbeddedResource Remove="Elements\Joins-\**" />
     <EmbeddedResource Remove="Elements\Orders-\**" />
     <EmbeddedResource Remove="Elements\Parameters-\**" />
@@ -29,7 +27,6 @@
     <None Remove="Elements\Columns-\**" />
     <None Remove="Elements\Conditions-\**" />
     <None Remove="Elements\Distincts-\**" />
-    <None Remove="Elements\Functions-\**" />
     <None Remove="Elements\Joins-\**" />
     <None Remove="Elements\Orders-\**" />
     <None Remove="Elements\Parameters-\**" />
