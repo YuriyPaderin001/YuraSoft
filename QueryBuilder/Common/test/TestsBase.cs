@@ -6,7 +6,20 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 {
 	public class TestsBase
 	{
+		protected List<IColumn> NewColumns(int length)
+		{
+			List<IColumn> columns = new List<IColumn>(length);
+			for (int i = 0; i < length; i++)
+			{
+				columns.Add(NewColumn());
+			}
+
+			return columns;
+		}
+
 		protected IColumn NewColumn() => new Mock<IColumn>().Object;
+
+		protected IDistinct NewDistinct() => new Mock<IDistinct>().Object;
 
 		protected List<Tuple<ICondition, IExpression>> NewGeneralEmptyWhenThenList() => new List<Tuple<ICondition, IExpression>>();
 		protected List<Tuple<ICondition, IExpression>> NewGeneralWhenThenList(int length)
@@ -36,6 +49,19 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 
 		protected Tuple<IExpression, IExpression> NewSimpleWhenThen() => Tuple.Create(NewExpression(), NewExpression());
 
+		protected List<IJoin> NewJoins(int length)
+		{
+			List<IJoin> joins = new List<IJoin>(length);
+			for (int i = 0; i < length; i++)
+			{
+				joins.Add(NewJoin());
+			}
+
+			return joins;
+		}
+
+		protected IJoin NewJoin() => new Mock<IJoin>().Object;
+
 		protected List<ICondition> NewEmptyConditionList() => new List<ICondition>();
 		protected List<ICondition> NewConditionList(int length)
 		{
@@ -63,6 +89,30 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		}
 
 		protected IExpression NewExpression() => new Mock<IExpression>().Object;
+
+		protected List<IOrderBy> NewOrderBies(int length)
+		{
+			List<IOrderBy> orderBies = new List<IOrderBy>(length);
+			for (int i = 0; i < length; i++)
+			{
+				orderBies.Add(NewOrderBy());
+			}
+
+			return orderBies;
+		}
+
+		protected IOrderBy NewOrderBy() => new Mock<IOrderBy>().Object;
+
+		protected List<ISource> NewSources(int length)
+		{
+			List<ISource> sources = new List<ISource>(length);
+			for (int i = 0; i < length; i++)
+			{
+				sources.Add(NewSource());
+			}
+
+			return sources;
+		}
 
 		protected ISource NewSource() => new Mock<ISource>().Object;
 	}

@@ -4,7 +4,7 @@ using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class View : ISource
+	public class View : Source
 	{
 		private string _name;
 		private string? _alias;
@@ -34,25 +34,11 @@ namespace YuraSoft.QueryBuilder.Common
 			get => _schema;
 			set => _schema = value == string.Empty ? null : value;
 		}
-
-		public string RenderSource(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderSource(renderer, sql);
-
-			return sql.ToString();
-		}
-
-		public virtual void RenderSource(IRenderer renderer, StringBuilder sql) => renderer.RenderSource(this, sql);
 		
-		public string RenderIdentificator(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderIdentificator(renderer, sql);
+		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
+			renderer.RenderIdentificator(this, sql);
 
-			return sql.ToString();
-		}
-		
-		public virtual void RenderIdentificator(IRenderer renderer, StringBuilder sql) => renderer.RenderIdentificator(this, sql);
-	}
+        public override void RenderSource(IRenderer renderer, StringBuilder sql) => 
+			renderer.RenderSource(this, sql);
+    }
 }

@@ -18,5 +18,8 @@ namespace YuraSoft.QueryBuilder.Common
             get => _select;
             set => _select = Guard.ThrowIfNull(value, nameof(Select));
         }
+
+        public override void RenderCondition(IRenderer renderer, StringBuilder sql) =>
+            renderer.RenderCondition(this, sql);
     }
 }

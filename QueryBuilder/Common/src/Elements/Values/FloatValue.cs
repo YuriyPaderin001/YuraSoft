@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class FloatValue : Value<float>
+	public class FloatValue : DataValue<float>
 	{
 		public FloatValue(float value) : base(value)
 		{

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public abstract class ArithmeticExpression : IExpression
+	public abstract class ArithmeticExpression : Expression
 	{
 		private List<IExpression> _expressions;
 
@@ -19,15 +18,5 @@ namespace YuraSoft.QueryBuilder.Common
 			get => _expressions;
 			set => _expressions = Guard.ThrowIfNullOrSizeLessThan(value, 2, nameof(Expressions));
 		}
-
-		public string RenderExpression(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderExpression(renderer, sql);
-
-			return sql.ToString();
-		}
-
-		public abstract void RenderExpression(IRenderer renderer, StringBuilder sql);
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Int8Value : Value<sbyte>
+	public class Int8Value : DataValue<sbyte>
 	{
 		public Int8Value(sbyte value) : base(value)
 		{

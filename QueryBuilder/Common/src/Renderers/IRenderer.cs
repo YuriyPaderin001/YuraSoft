@@ -28,8 +28,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderCondition(NotLikeCondition condition, StringBuilder sql);
 		public void RenderCondition(OrCondition condition, StringBuilder sql);
 		public void RenderCondition(AndCondition condition, StringBuilder sql);
-		// public void RenderCondition(ExistsCondition condition, StringBuilder sql);
-		// public void RenderCondition(NotExistsCondition condition, StringBuilder sql);
+		public void RenderCondition(ExistsCondition condition, StringBuilder sql);
+		public void RenderCondition(NotExistsCondition condition, StringBuilder sql);
 
 		#endregion Condition render methods
 
@@ -47,13 +47,13 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderExpression(PlusExpression expression, StringBuilder sql);
 		public void RenderExpression(MultiplyExpression expression, StringBuilder sql);
 		public void RenderExpression(DivideExpression expression, StringBuilder sql);
-		// public void RenderExpression(Select select, StringBuilder query);
+		public void RenderExpression(Select select, StringBuilder sql);
 
 		#endregion Expression render methods
 
 		#region Function render methods
 
-		public void RenderFunction(Function function, StringBuilder sql);
+		public void RenderFunction(NativeFunction function, StringBuilder sql);
 		public void RenderFunction(CastFunction function, StringBuilder sql);
 		public void RenderFunction(CountFunction function, StringBuilder sql);
 		public void RenderFunction(SumFunction function, StringBuilder sql);
@@ -71,7 +71,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql);
 		public void RenderIdentificator(Table table, StringBuilder sql);
 		public void RenderIdentificator(View view, StringBuilder sql);
-		// public void RenderIdentificator(Subquery subquery, StringBuilder sql);
+		public void RenderIdentificator(Subquery subquery, StringBuilder sql);
 
 		#endregion Identificator render methods
 
@@ -97,23 +97,21 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion Parameter render methods
 
-		/*
 		#region Query render methods
 
-		public void RenderQuery(Select select, StringBuilder query);
-		public void RenderQuery(Insert insert, StringBuilder query);
-		public void RenderQuery(InsertSelect insertSelect, StringBuilder query);
-		public void RenderQuery(Update update, StringBuilder query);
-		public void RenderQuery(Delete delete, StringBuilder query);
+		public void RenderQuery(Select select, StringBuilder sql);
+		public void RenderQuery(Insert insert, StringBuilder sql);
+		public void RenderQuery(InsertSelect insertSelect, StringBuilder sql);
+		public void RenderQuery(Update update, StringBuilder sql);
+		public void RenderQuery(Delete delete, StringBuilder sql);
 
 		#endregion Query render methods
-		*/
 
 		#region Source render methods
 
 		public void RenderSource(Table table, StringBuilder sql);
 		public void RenderSource(View view, StringBuilder sql);
-		// public void RenderSource(Subquery subquery, StringBuilder sql);
+		public void RenderSource(Subquery subquery, StringBuilder sql);
 
 		#endregion Source render methods
 

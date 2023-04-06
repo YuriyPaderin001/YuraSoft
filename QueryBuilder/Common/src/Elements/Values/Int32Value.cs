@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Int32Value : Value<int>
+	public class Int32Value : DataValue<int>
 	{
 		public Int32Value(int value) : base(value)
 		{

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class DateTimeValue : Value<DateTime>
+	public class DateTimeValue : DataValue<DateTime>
 	{
 		private string _format;
 

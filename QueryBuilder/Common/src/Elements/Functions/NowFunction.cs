@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class NowFunction : FunctionBase
+	public class NowFunction : Function
 	{
 		public NowFunction()
 		{

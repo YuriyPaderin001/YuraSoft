@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public abstract class ExpressionFunction : FunctionBase
+	public abstract class ExpressionFunction : Function
 	{
 		private IExpression _expression;
 

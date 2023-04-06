@@ -5,7 +5,7 @@ using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class ConcatFunction : FunctionBase
+	public class ConcatFunction : Function
 	{
 		private List<IExpression> _values;
 

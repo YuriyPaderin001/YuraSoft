@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
-using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Common.Validation;
 
-namespace YuraSoft.QueryBuilder
+namespace YuraSoft.QueryBuilder.Common
 {
-	public class Update : IQuery
+	public class Update : Query
 	{
-		private static ExpressionFactory _factory = ExpressionFactory.Instance;
+		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
 		private ISource _source;
 		private List<Tuple<IColumn, IExpression>> _setCollection = new List<Tuple<IColumn, IExpression>>();
@@ -26,26 +24,26 @@ namespace YuraSoft.QueryBuilder
 
 		public Update(string name, string? alias, string? schema)
 		{
-			Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(name, nameof(name));
 
 			_source = new Table(name, alias, schema);
 		}
 
 		public Update(Table table)
 		{
-			_source = Validator.ThrowIfArgumentIsNull(table, nameof(table));
+			_source = Guard.ThrowIfNull(table, nameof(table));
 		}
 
 		public ISource Source 
 		{ 
 			get => _source; 
-			set => _source = Validator.ThrowIfArgumentIsNull(value, nameof(Source));
+			set => _source = Guard.ThrowIfNull(value, nameof(Source));
 		}
 
 		public List<Tuple<IColumn, IExpression>> SetCollection
 		{
 			get => _setCollection;
-			set => _setCollection = Validator.ThrowIfArgumentIsNullOrEmptyOrContainsNullElements(value, nameof(SetCollection));
+			set => _setCollection = Guard.ThrowIfNullOrEmptyOrContainsNullElements(value, nameof(SetCollection));
 		}
 
 		public ICondition? Condition
@@ -116,7 +114,9 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
-		public virtual Update Where(Action<ConditionBuilder> buildConditionMethod) => Where(_factory.Condition(buildConditionMethod));
+		public Update Where(Action<ConditionBuilder> action) => 
+			Where(_factory.Condition(action));
+
 		public virtual Update Where(ICondition? condition)
 		{
 			Condition = condition;
@@ -124,14 +124,7 @@ namespace YuraSoft.QueryBuilder
 			return this;
 		}
 
-		public string RenderQuery(IRenderer renderer)
-		{
-			StringBuilder stringBuilder = new StringBuilder();
-			RenderQuery(renderer, stringBuilder);
-
-			return stringBuilder.ToString();
-		}
-
-		public virtual void RenderQuery(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderQuery(this, stringBuilder);
+		public override void RenderQuery(IRenderer renderer, StringBuilder sql) => 
+			renderer.RenderQuery(this, sql);
 	}
 }

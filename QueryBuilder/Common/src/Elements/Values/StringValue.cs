@@ -4,7 +4,7 @@ using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class StringValue : Value<string>
+	public class StringValue : DataValue<string>
 	{
 		public StringValue(string value) : base(value)
 		{

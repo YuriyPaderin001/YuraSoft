@@ -1,28 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-using YuraSoft.QueryBuilder.Common.Validation;
+﻿using System.Text;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Function : FunctionBase
+	public abstract class Function : Expression, IFunction
 	{
-		private string _name;
-
-		public Function(string name, IEnumerable<IExpression>? parameters = null)
+		public override void RenderExpression(IRenderer renderer, StringBuilder sql) => 
+			RenderFunction(renderer, sql);
+		
+		public string RenderFunction(IRenderer renderer)
 		{
-			_name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
-			Parameters = parameters != null ? new List<IExpression>(parameters) : null;
+			StringBuilder sql = new StringBuilder();
+			RenderFunction(renderer, sql);
+
+			return sql.ToString();
 		}
 
-		public string Name
-		{
-			get => _name;
-			set => _name = Guard.ThrowIfNullOrEmpty(value, nameof(Name));
-		}
-
-		public List<IExpression>? Parameters { get; set; }
-
-		public override void RenderFunction(IRenderer renderer, StringBuilder sql) => renderer.RenderFunction(this, sql);
+		public abstract void RenderFunction(IRenderer renderer, StringBuilder sql);
 	}
 }

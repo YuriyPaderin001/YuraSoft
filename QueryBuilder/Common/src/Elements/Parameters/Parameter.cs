@@ -4,7 +4,7 @@ using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Parameter : IParameter
+	public class Parameter : Value, IParameter
 	{
 		private string _name;
 
@@ -19,25 +19,11 @@ namespace YuraSoft.QueryBuilder.Common
 			set => _name = Guard.ThrowIfNullOrEmpty(value, nameof(Name));
 		}
 
-		public string RenderValue(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderValue(renderer, sql);
+		public override void RenderValue(IRenderer renderer, StringBuilder sql) => 
+			RenderParameter(renderer, sql);
 
-			return sql.ToString();
-		}
-
-		public virtual void RenderValue(IRenderer renderer, StringBuilder sql) => RenderParameter(renderer, sql);
-		
-		public string RenderExpression(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderExpression(renderer, sql);
-
-			return sql.ToString();
-		}
-		
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder sql) => RenderParameter(renderer, sql);
+        public override void RenderExpression(IRenderer renderer, StringBuilder sql) => 
+			RenderParameter(renderer, sql);
 		
 		public string RenderParameter(IRenderer renderer)
 		{
@@ -47,6 +33,7 @@ namespace YuraSoft.QueryBuilder.Common
 			return sql.ToString();
 		}
 
-		public virtual void RenderParameter(IRenderer renderer, StringBuilder sql) => renderer.RenderParameter(this, sql);
+		public virtual void RenderParameter(IRenderer renderer, StringBuilder sql) => 
+			renderer.RenderParameter(this, sql);
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class DecimalValue : Value<decimal>
+	public class DecimalValue : DataValue<decimal>
 	{
 		public DecimalValue(decimal value) : base(value)
 		{

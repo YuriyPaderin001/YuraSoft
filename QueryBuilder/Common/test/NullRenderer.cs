@@ -49,8 +49,10 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		public void RenderCondition(NotLikeCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(OrCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderCondition(AndCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderCondition(ExistsCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderCondition(NotExistsCondition condition, StringBuilder sql) => sql.Append(_expectedSql);
 
-		public void RenderDistinct(Distinct distinct, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderDistinct(Distinct distinct, StringBuilder sql) => sql.Append(_expectedSql);
 
 		public void RenderExpression(GeneralCaseExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderExpression(SimpleCaseExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
@@ -58,8 +60,9 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		public void RenderExpression(PlusExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderExpression(MultiplyExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderExpression(DivideExpression expression, StringBuilder sql) => sql.Append(_expectedSql);
-		
-		public void RenderFunction(Function function, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderExpression(Select select, StringBuilder sql) => sql.Append(_expectedSql);
+
+        public void RenderFunction(NativeFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderFunction(CastFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderFunction(CountFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderFunction(SumFunction function, StringBuilder sql) => sql.Append(_expectedSql);
@@ -73,8 +76,9 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		public void RenderIdentificator(View view, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderIdentificator(SourceColumn column, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderIdentificator(ExpressionColumn column, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderIdentificator(Subquery subquery, StringBuilder sql) => sql.Append(_expectedSql);
 
-		public void RenderJoin(LeftJoin join, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderJoin(LeftJoin join, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderJoin(RightJoin join, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderJoin(InnerJoin join, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderJoin(FullJoin join, StringBuilder sql) => sql.Append(_expectedSql);
@@ -84,10 +88,17 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 
 		public void RenderParameter(Parameter parameter, StringBuilder sql) => sql.Append(_expectedSql);
 
-		public void RenderSource(Table table, StringBuilder sql) => sql.Append(_expectedSql);
-		public void RenderSource(View view, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderQuery(Select select, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderQuery(Insert insert, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderQuery(InsertSelect insertSelect, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderQuery(Update update, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderQuery(Delete delete, StringBuilder sql) => sql.Append(_expectedSql);
 
-		public void RenderValue(Int8Value value, StringBuilder sql) => sql.Append(_expectedSql); 
+        public void RenderSource(Table table, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderSource(View view, StringBuilder sql) => sql.Append(_expectedSql);
+        public void RenderSource(Subquery subquery, StringBuilder sql) => sql.Append(_expectedSql);
+
+        public void RenderValue(Int8Value value, StringBuilder sql) => sql.Append(_expectedSql); 
 		public void RenderValue(Int16Value value, StringBuilder sql) => sql.Append(_expectedSql); 
 		public void RenderValue(Int32Value value, StringBuilder sql) => sql.Append(_expectedSql); 
 		public void RenderValue(Int64Value value, StringBuilder sql) => sql.Append(_expectedSql); 

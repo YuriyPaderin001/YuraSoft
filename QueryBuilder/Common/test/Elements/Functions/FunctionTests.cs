@@ -15,7 +15,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 			string name = "test_function";
 
 			// Act
-			Function function = new Function(name);
+			NativeFunction function = new NativeFunction(name);
 
 			// Assert
 			Assert.Equal(name, function.Name);
@@ -45,14 +45,14 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void Constructor_NullOrEmptyNameAndNullParameters_ThrowsArgumentException(string? name)
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentException>(() => new Function(name!, parameters: null));
+			Assert.Throws<ArgumentException>(() => new NativeFunction(name!, parameters: null));
 		}
 
 		[Fact]
 		public void SetName_String_Success()
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 			const string name = "new_test_name";
 
 			// Act
@@ -68,7 +68,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void SetName_NullOrEmptyString_ThrowsArgumentException(string? name)
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 
 			// Act & Assert
 			Assert.Throws<ArgumentException>(() => function.Name = name!);
@@ -89,12 +89,12 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 
 			const string expectedSql = "test";
 
 			Mock<IRenderer> rendererMock = new Mock<IRenderer>();
-			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<Function>(), It.IsAny<StringBuilder>())).Callback((Function value, StringBuilder sql) =>
+			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<NativeFunction>(), It.IsAny<StringBuilder>())).Callback((NativeFunction value, StringBuilder sql) =>
 			{
 				sql.Append(expectedSql);
 			});
@@ -113,12 +113,12 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void RenderFunction_Renderer_ReturnsSql()
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 
 			const string expectedSql = "test";
 
 			Mock<IRenderer> rendererMock = new Mock<IRenderer>();
-			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<Function>(), It.IsAny<StringBuilder>())).Callback((Function value, StringBuilder sql) => sql.Append(expectedSql));
+			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<NativeFunction>(), It.IsAny<StringBuilder>())).Callback((NativeFunction value, StringBuilder sql) => sql.Append(expectedSql));
 			IRenderer renderer = rendererMock.Object;
 
 			// Act
@@ -132,12 +132,12 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 
 			const string expectedSql = "test";
 
 			Mock<IRenderer> rendererMock = new Mock<IRenderer>();
-			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<Function>(), It.IsAny<StringBuilder>())).Callback((Function value, StringBuilder sql) => sql.Append(expectedSql));
+			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<NativeFunction>(), It.IsAny<StringBuilder>())).Callback((NativeFunction value, StringBuilder sql) => sql.Append(expectedSql));
 
 			IRenderer renderer = rendererMock.Object;
 			StringBuilder sql = new StringBuilder();
@@ -153,12 +153,12 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void RenderExpression_Renderer_ReturnsSql()
 		{
 			// Arrange
-			Function function = NewFunction();
+			NativeFunction function = NewFunction();
 
 			const string expectedSql = "test";
 
 			Mock<IRenderer> rendererMock = new Mock<IRenderer>();
-			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<Function>(), It.IsAny<StringBuilder>())).Callback((Function value, StringBuilder sql) => sql.Append(expectedSql));
+			rendererMock.Setup(ca => ca.RenderFunction(It.IsAny<NativeFunction>(), It.IsAny<StringBuilder>())).Callback((NativeFunction value, StringBuilder sql) => sql.Append(expectedSql));
 
 			IRenderer renderer = rendererMock.Object;
 
@@ -172,7 +172,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		private void Constructor_NameAndParameters_Success_Base(string name, List<IExpression>? parameters)
 		{
 			// Act
-			Function function = new Function(name, parameters);
+			NativeFunction function = new NativeFunction(name, parameters);
 
 			// Assert
 			Assert.Equal(name, function.Name);
@@ -190,13 +190,13 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		private void Constructor_NameAndParameters_ThrowsException<TException>(string? name, int length) where TException : Exception
 		{
 			// Act & Assert
-			Assert.Throws<TException>(() => new Function(name!, NewExpressionList(length)));
+			Assert.Throws<TException>(() => new NativeFunction(name!, NewExpressionList(length)));
 		}
 
 		private void SetParameters_IExpressionList_Success_Base(List<IExpression>? parameters)
 		{
 			// Arrange
-			Function function = NewFunction(parameters: NewExpressionList(3));
+			NativeFunction function = NewFunction(parameters: NewExpressionList(3));
 
 			// Act
 			function.Parameters = parameters;
@@ -212,7 +212,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 			}
 		}
 
-		private Function NewFunction(string name = "test_function", List<IExpression>? parameters = null) => 
-			new Function(name, parameters ?? NewExpressionList(3));
+		private NativeFunction NewFunction(string name = "test_function", List<IExpression>? parameters = null) => 
+			new NativeFunction(name, parameters ?? NewExpressionList(3));
 	}
 }

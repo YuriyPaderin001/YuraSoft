@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class DoubleValue : Value<double>
+	public class DoubleValue : DataValue<double>
 	{
 		public DoubleValue(double value) : base(value)
 		{

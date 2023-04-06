@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Int64Value : Value<long>
+	public class Int64Value : DataValue<long>
 	{
 		public Int64Value(long value) : base(value)
 		{

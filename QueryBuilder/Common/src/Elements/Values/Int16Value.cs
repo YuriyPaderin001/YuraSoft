@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Int16Value : Value<short>
+	public class Int16Value : DataValue<short>
 	{
 		public Int16Value(short value) : base(value)
 		{

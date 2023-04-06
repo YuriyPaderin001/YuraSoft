@@ -8,18 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Elements\Queries-\**" />
-    <EmbeddedResource Remove="Elements\Queries-\**" />
-    <None Remove="Elements\Queries-\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Elements\Conditions\ExistsCondition.cs" />
-    <Compile Remove="Elements\Conditions\NotExistsCondition.cs" />
-    <Compile Remove="Elements\Sources\Subquery.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Validation\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>

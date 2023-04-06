@@ -2,17 +2,10 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public abstract class Condition : ICondition
+	public abstract class Condition : Expression, ICondition
 	{
-		public string RenderExpression(IRenderer renderer)
-		{
-			StringBuilder sql = new StringBuilder();
-			RenderExpression(renderer, sql);
-
-			return sql.ToString();
-		}
-
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder sql) => RenderCondition(renderer, sql);
+		public override void RenderExpression(IRenderer renderer, StringBuilder sql) => 
+			RenderCondition(renderer, sql);
 
 		public string RenderCondition(IRenderer renderer)
 		{
