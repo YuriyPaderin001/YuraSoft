@@ -1,3 +1,4 @@
+/.vs
 /QueryBuilder/bin
 /QueryBuilder/obj
 /QueryBuilder.Tests/bin
@@ -8,4 +9,5 @@
 /Common/src/obj
 /Common/test/bin
 /Common/test/obj
-/.vs
+/PostgreSql/src/bin
+/PostgreSql/src/obj
