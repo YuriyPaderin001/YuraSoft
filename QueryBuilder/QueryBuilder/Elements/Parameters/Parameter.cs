@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -30,7 +30,7 @@ namespace YuraSoft.QueryBuilder
 		}
 
 		public virtual void RenderValue(IRenderer renderer, StringBuilder stringBuilder) => RenderParameter(renderer, stringBuilder);
-		
+
 		public string RenderExpression(IRenderer renderer)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -38,9 +38,9 @@ namespace YuraSoft.QueryBuilder
 
 			return stringBuilder.ToString();
 		}
-		
+
 		public virtual void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => RenderParameter(renderer, stringBuilder);
-		
+
 		public string RenderParameter(IRenderer renderer)
 		{
 			StringBuilder stringBuilder = new StringBuilder();

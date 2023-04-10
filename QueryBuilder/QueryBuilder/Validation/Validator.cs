@@ -58,7 +58,7 @@ namespace YuraSoft.QueryBuilder.Validation
 			return argument;
 		}
 
-		public static T ThrowIfArgumentIsEmpty<T>(T argument, string argumentName) where T: IEnumerable
+		public static T ThrowIfArgumentIsEmpty<T>(T argument, string argumentName) where T : IEnumerable
 		{
 			if (!argument.GetEnumerator().MoveNext())
 			{
@@ -78,7 +78,7 @@ namespace YuraSoft.QueryBuilder.Validation
 			return argument;
 		}
 
-		public static T ThrowIfArgumentIsNullOrEmpty<T>(T argument, string argumentName) where T: IEnumerable
+		public static T ThrowIfArgumentIsNullOrEmpty<T>(T argument, string argumentName) where T : IEnumerable
 		{
 			if (argument == null || !argument.GetEnumerator().MoveNext())
 			{
@@ -111,7 +111,7 @@ namespace YuraSoft.QueryBuilder.Validation
 		/// <param name="argument">String enumerable</param>
 		/// <param name="argumentName">Argument name</param>
 		/// <exception cref="ArgumentException"></exception>
-		private static void ThrowIfArgumentContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName) 
+		private static void ThrowIfArgumentContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName)
 		{
 			foreach (string? item in argument)
 			{

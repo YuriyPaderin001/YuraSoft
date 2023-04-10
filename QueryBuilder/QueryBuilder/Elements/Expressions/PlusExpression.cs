@@ -9,10 +9,10 @@ namespace YuraSoft.QueryBuilder
 	public class PlusExpression : ArithmeticExpression
 	{
 		public PlusExpression(IEnumerable<IExpression> expressions) : base(expressions)
-		{ 
+		{
 		}
 
-		public override void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => 
+		public override void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) =>
 			renderer.RenderExpression(this, stringBuilder);
 	}
 }

@@ -172,13 +172,13 @@ namespace YuraSoft.QueryBuilder
 		#region ExistsCondition methods
 
 		public ExpressionBuilder Exists(Select select) => Add(Factory.Exists(select));
-		
+
 		#endregion ExistsCondition methods
 
 		#region NotExistsCondition methods
 
 		public ExpressionBuilder NotExists(Select select) => Add(Factory.NotExists(select));
-		
+
 		#endregion NotExistsCondition methods
 
 		#region GreaterCondition methods
@@ -456,7 +456,7 @@ namespace YuraSoft.QueryBuilder
 		public ExpressionBuilder In(IExpression expression, IEnumerable<DateTime> values, string? format = null) => Add(Factory.In(expression, values, format));
 		public ExpressionBuilder In(IExpression expression, IEnumerable<string> values) => Add(Factory.In(expression, values));
 		public ExpressionBuilder In(IExpression expression, IEnumerable<IExpression> values) => Add(Factory.In(expression, values));
-		public ExpressionBuilder In(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) =>  Add(Factory.In(expression, buildExpressionMethod));
+		public ExpressionBuilder In(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.In(expression, buildExpressionMethod));
 		public ExpressionBuilder In(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> buildExpressionMethod) => Add(Factory.In(expressionFunction, buildExpressionMethod));
 
 		public ExpressionBuilder In(string column, params sbyte[] values) => Add(Factory.In(column, values));

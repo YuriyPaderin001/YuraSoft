@@ -1,15 +1,15 @@
 ﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
 	public class SourceColumn : IColumn
 	{
 		private string _name;
-		
+
 		public SourceColumn(string name)
 		{
 			_name = Validator.ThrowIfArgumentIsNullOrEmpty(name, nameof(name));

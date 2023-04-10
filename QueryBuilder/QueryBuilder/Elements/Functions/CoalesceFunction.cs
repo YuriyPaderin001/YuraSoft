@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -15,8 +15,8 @@ namespace YuraSoft.QueryBuilder
 			_defaultValue = Validator.ThrowIfArgumentIsNull(defaultValue, nameof(defaultValue));
 		}
 
-		public IExpression DefaultValue 
-		{ 
+		public IExpression DefaultValue
+		{
 			get => _defaultValue;
 			set => _defaultValue = Validator.ThrowIfArgumentIsNull(value, nameof(DefaultValue));
 		}

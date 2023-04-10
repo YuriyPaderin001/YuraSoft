@@ -30,7 +30,7 @@ namespace YuraSoft.QueryBuilder
 		public GeneralCaseBuilder WhenThen(Action<ConditionBuilder> conditionBuildMethod, string column, ISource source) => WhenThen(conditionBuildMethod, new SourceColumn(column, source));
 		public GeneralCaseBuilder WhenThen(Action<ConditionBuilder> conditionBuildMethod, IExpression expression) => WhenThen(Factory.Condition(conditionBuildMethod), expression);
 		public GeneralCaseBuilder WhenThen(Action<ConditionBuilder> conditionBuildMethod, Func<ExpressionFactory, IExpression> expressionFunction) => WhenThen(Factory.Condition(conditionBuildMethod), Factory.Expression(expressionFunction));
-		
+
 		public GeneralCaseBuilder WhenThen(Tuple<ICondition, IExpression> whenThen)
 		{
 			_whenThens.Add(whenThen);

@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -16,9 +16,9 @@ namespace YuraSoft.QueryBuilder
 			Direction = direction;
 		}
 
-		public IColumn Column 
-		{ 
-			get => _column; 
+		public IColumn Column
+		{
+			get => _column;
 			set => _column = Validator.ThrowIfArgumentIsNull(value, nameof(Column));
 		}
 

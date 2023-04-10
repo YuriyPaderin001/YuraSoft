@@ -1,7 +1,13 @@
+/.vs
 /QueryBuilder/bin
 /QueryBuilder/obj
 /QueryBuilder.Tests/bin
 /QueryBuilder.Tests/obj
 /QueryBuilderSandbox/bin
 /QueryBuilderSandbox/obj
-/.vs
+/Common/src/bin
+/Common/src/obj
+/Common/test/bin
+/Common/test/obj
+/PostgreSql/src/bin
+/PostgreSql/src/obj

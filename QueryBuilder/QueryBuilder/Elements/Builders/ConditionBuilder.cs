@@ -168,15 +168,15 @@ namespace YuraSoft.QueryBuilder
 		#endregion NotEqual methods
 
 		#region Exists methods
-		
+
 		public ConditionBuilder Exists(Select select) => Add(Factory.Exists(select));
-		
+
 		#endregion Exists methods
 
 		#region NotExists methods
 
 		public ConditionBuilder NotExists(Select select) => Add(Factory.NotExists(select));
-		
+
 		#endregion NotExists methods
 
 		#region Greater methods
@@ -446,7 +446,7 @@ namespace YuraSoft.QueryBuilder
 		public ConditionBuilder LessOrEqual(string column, ISource source, DateTime value, string? format = null) => Add(Factory.LessOrEqual(column, source, value, format));
 		public ConditionBuilder LessOrEqual(string column, ISource source, string value) => Add(Factory.LessOrEqual(column, source, value));
 		public ConditionBuilder LessOrEqual(string column, ISource source, IExpression expression) => Add(Factory.LessOrEqual(column, source, expression));
-		public ConditionBuilder LessOrEqual(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) =>  Add(Factory.LessOrEqual(column, source, expressionFunction));
+		public ConditionBuilder LessOrEqual(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.LessOrEqual(column, source, expressionFunction));
 
 		public ConditionBuilder LessOrEqual(string column1, string table1, string column2, string table2) => Add(Factory.LessOrEqual(column1, table1, column2, table2));
 		public ConditionBuilder LessOrEqual(string column1, string table1, string column2, ISource source2) => Add(Factory.LessOrEqual(column1, table1, column2, source2));

@@ -8,6 +8,6 @@ namespace YuraSoft.QueryBuilder
 		{
 		}
 
-		public new readonly OrderDirection Direction; 
+		public new readonly OrderDirection Direction;
 	}
 }

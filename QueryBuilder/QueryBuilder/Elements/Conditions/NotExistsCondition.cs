@@ -31,7 +31,7 @@ namespace YuraSoft.QueryBuilder
 			return query.ToString();
 		}
 
-		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => 
+		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) =>
 			RenderCondition(renderer, query);
 
 		public string RenderCondition(IRenderer renderer)
@@ -42,7 +42,7 @@ namespace YuraSoft.QueryBuilder
 			return query.ToString();
 		}
 
-		public virtual void RenderCondition(IRenderer renderer, StringBuilder stringBuilder) => 
+		public virtual void RenderCondition(IRenderer renderer, StringBuilder stringBuilder) =>
 			renderer.RenderCondition(this, stringBuilder);
 
 		#endregion Rendering methods

@@ -2,12 +2,12 @@
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
-	public abstract class LogicalCondition : ICondition 
+	public abstract class LogicalCondition : ICondition
 	{
 		private List<ICondition> _conditions;
 
@@ -34,7 +34,7 @@ namespace YuraSoft.QueryBuilder
 
 		public virtual void RenderExpression(IRenderer renderer, StringBuilder query) => RenderCondition(renderer, query);
 
-    public string RenderCondition(IRenderer renderer)
+		public string RenderCondition(IRenderer renderer)
 		{
 			StringBuilder query = new StringBuilder();
 			RenderCondition(renderer, query);
@@ -44,6 +44,6 @@ namespace YuraSoft.QueryBuilder
 
 		public abstract void RenderCondition(IRenderer renderer, StringBuilder query);
 
-    #endregion Rendering methods
-  }
+		#endregion Rendering methods
+	}
 }

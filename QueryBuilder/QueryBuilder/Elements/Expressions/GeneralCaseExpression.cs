@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using YuraSoft.QueryBuilder.Interfaces;
-using YuraSoft.QueryBuilder.Validation;
 using YuraSoft.QueryBuilder.Renderers;
+using YuraSoft.QueryBuilder.Validation;
 
 namespace YuraSoft.QueryBuilder
 {
@@ -18,9 +18,9 @@ namespace YuraSoft.QueryBuilder
 			Else = @else;
 		}
 
-		public List<Tuple<ICondition, IExpression>> WhenThens 
-		{ 
-			get => _whenThens; 
+		public List<Tuple<ICondition, IExpression>> WhenThens
+		{
+			get => _whenThens;
 			set => _whenThens = Validator.ThrowIfArgumentIsNullOrEmpty(value, nameof(WhenThens));
 		}
 
@@ -33,7 +33,7 @@ namespace YuraSoft.QueryBuilder
 
 			return stringBuilder.ToString();
 		}
-		
+
 		public void RenderExpression(IRenderer renderer, StringBuilder stringBuilder) => renderer.RenderExpression(this, stringBuilder);
 	}
 }

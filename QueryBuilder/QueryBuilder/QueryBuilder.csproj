@@ -15,6 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Elements\Distincts-\**" />
+    <EmbeddedResource Remove="Elements\Distincts-\**" />
+    <None Remove="Elements\Distincts-\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
