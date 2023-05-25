@@ -5,6 +5,12 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Authors>YuraSoft</Authors>
+    <Version>1.0.1</Version>
+    <Description>Simple fluent api sql query builder</Description>
+    <PackageProjectUrl>https://github.com/YuriyPaderin001/YuraSoft/tree/dev/QueryBuilder/Common</PackageProjectUrl>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
