@@ -2,7 +2,7 @@
 
 namespace YuraSoft.QueryBuilder.Common
 {
-    public abstract class Query
+    public abstract class Query : IQuery
     {
         public string RenderQuery(IRenderer renderer)
         {
