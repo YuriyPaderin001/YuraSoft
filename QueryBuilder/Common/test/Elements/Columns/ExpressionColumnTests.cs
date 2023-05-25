@@ -18,7 +18,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 
 			// Assert
 			Assert.Equal(expression, expressionColumn.Expression);
-			Assert.Null(expressionColumn.Name);
+			Assert.Null(expressionColumn.Alias);
 		}
 
 		[Theory]
@@ -38,11 +38,11 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 
 			if (string.IsNullOrEmpty(name))
 			{
-				Assert.Null(expressionColumn.Name);
+				Assert.Null(expressionColumn.Alias);
 			}
 			else
 			{
-				Assert.Equal(name, expressionColumn.Name);
+				Assert.Equal(name, expressionColumn.Alias);
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 
 			// Assert
 			Assert.Equal(expression, expressionColumn.Expression);
-			Assert.Equal(name, expressionColumn.Name);
+			Assert.Equal(name, expressionColumn.Alias);
 		}
 
 		[Fact]
@@ -100,18 +100,18 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 			ExpressionColumn expressionColumn = new ExpressionColumn(expression, "test_name");
 
 			// Act
-			expressionColumn.Name = name;
+			expressionColumn.Alias = name;
 
 			// Assert
 			Assert.Equal(expression, expressionColumn.Expression);
 
 			if (string.IsNullOrEmpty(name))
 			{
-				Assert.Null(expressionColumn.Name);
+				Assert.Null(expressionColumn.Alias);
 			}
 			else
 			{
-				Assert.Equal(name, expressionColumn.Name);
+				Assert.Equal(name, expressionColumn.Alias);
 			}
 		}
 

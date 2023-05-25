@@ -5,7 +5,7 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class ColumnBuilder
 	{
-		public static ExpressionFactory Factory = ExpressionFactory.Instance;
+		public readonly ExpressionFactory Factory = ExpressionFactory.Instance;
 
 		public readonly List<IColumn> Columns = new List<IColumn>();
 
@@ -13,8 +13,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public ColumnBuilder Column(IColumn column) => Add(column);
 
-		public ColumnBuilder Column(IExpression expression, string? name = null) => Add(Factory.Column(expression, name));
-		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(expressionFunction, name));
+		public ColumnBuilder Column(IExpression expression, string? alias = null) => Add(Factory.Column(expression, alias));
+		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(expressionFunction, alias));
 
 		public ColumnBuilder Column(string name) => Add(Factory.Column(name));
 		public ColumnBuilder Column(string name, string? alias) => Add(Factory.Column(name, alias));

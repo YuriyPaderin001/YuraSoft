@@ -7,12 +7,12 @@ namespace YuraSoft.QueryBuilder.Common
 	public class ExpressionColumn : Column
 	{
 		private IExpression _expression;
-		private string? _name;
+		private string? _alias;
 
-		public ExpressionColumn(IExpression expression, string? name = null)
+		public ExpressionColumn(IExpression expression, string? alias = null)
 		{
 			_expression = Guard.ThrowIfNull(expression, nameof(expression));
-			_name = name == string.Empty ? null : name;
+			_alias = alias == string.Empty ? null : alias;
 		}
 
 		public IExpression Expression 
@@ -21,10 +21,10 @@ namespace YuraSoft.QueryBuilder.Common
 			set => _expression = Guard.ThrowIfNull(value, nameof(Expression));
 		}
 
-		public string? Name
+		public string? Alias
 		{
-			get => _name;
-			set => _name = value == string.Empty ? null : value;
+			get => _alias;
+			set => _alias = value == string.Empty ? null : value;
 		}
 
 		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
