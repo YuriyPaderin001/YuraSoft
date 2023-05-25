@@ -46,10 +46,10 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 
 			column.Expression.RenderExpression(this, sql);
 
-			if (!string.IsNullOrEmpty(column.Name))
+			if (!string.IsNullOrEmpty(column.Alias))
 			{
 				sql.Append(" AS ");
-				RenderIdentificator(column.Name, sql);
+				RenderIdentificator(column.Alias, sql);
 			}
 		}
 
@@ -402,9 +402,9 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			Guard.ThrowIfNull(column, nameof(column));
 			Guard.ThrowIfNull(sql, nameof(sql));
 
-			if (!string.IsNullOrEmpty(column.Name))
+			if (!string.IsNullOrEmpty(column.Alias))
 			{
-				RenderIdentificator(column.Name, sql);
+				RenderIdentificator(column.Alias, sql);
 
 				return;
 			}
@@ -853,8 +853,12 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 		public void RenderValue(DateTimeValue value, StringBuilder sql) => RenderValue(value, $"'{value?.Data.ToString(value.Format)}'", sql);
 		public void RenderValue(StringValue value, StringBuilder sql) => RenderValue(value, $"'{value?.Data}'", sql);
 		public void RenderValue(NullValue value, StringBuilder sql) => RenderValue(value, "null", sql);
+		public void RenderValue(BoolValue value, StringBuilder sql) => RenderValue(value, value?.Data == true ? "TRUE" : "FALSE", sql);
 
-		private void RenderValue(IValue value, object? data, StringBuilder sql)
+		private void RenderValue(IValue value, object? data, StringBuilder sql) =>
+			RenderValue(value, data?.ToString(), sql);
+
+		private void RenderValue(IValue value, string? data, StringBuilder sql)
 		{
 			Guard.ThrowIfNull(value, nameof(value));
 			Guard.ThrowIfNull(sql, nameof(sql));
