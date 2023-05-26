@@ -28,30 +28,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		}
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			MaxFunction maxFunction = NewMaxFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			maxFunction.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, maxFunction.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			MaxFunction maxFunction = NewMaxFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => maxFunction.Expression = null!);
-		}
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

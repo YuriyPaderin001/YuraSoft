@@ -10,10 +10,6 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		private ISource _source;
-		private List<Tuple<IColumn, IExpression>> _setCollection = new List<Tuple<IColumn, IExpression>>();
-		private ICondition? _condition;
-
 		public Update(string name) : this(name, alias: null, schema: null)
 		{
 		}
@@ -26,31 +22,17 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrEmpty(name, nameof(name));
 
-			_source = new Table(name, alias, schema);
+			Source = new Table(name, alias, schema);
 		}
 
 		public Update(Table table)
 		{
-			_source = Guard.ThrowIfNull(table, nameof(table));
+			Source = Guard.ThrowIfNull(table, nameof(table));
 		}
 
-		public ISource Source 
-		{ 
-			get => _source; 
-			set => _source = Guard.ThrowIfNull(value, nameof(Source));
-		}
-
-		public List<Tuple<IColumn, IExpression>> SetCollection
-		{
-			get => _setCollection;
-			set => _setCollection = Guard.ThrowIfNullOrEmptyOrContainsNullElements(value, nameof(SetCollection));
-		}
-
-		public ICondition? Condition
-		{
-			get => _condition;
-			set => _condition = value;
-		}
+		public readonly ISource Source;
+		public readonly List<Tuple<IColumn, IExpression>> SetCollection = new List<Tuple<IColumn, IExpression>>();
+		public ICondition? Condition { get; protected set; }
 
 		public virtual Update Set(string columnName, sbyte value) => Set(new SourceColumn(columnName), new Int8Value(value));
 		public virtual Update Set(string columnName, short value) => Set(new SourceColumn(columnName), new Int16Value(value));
@@ -99,7 +81,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(IColumn column, string value) => Set(column, new StringValue(value));
 		public virtual Update Set(IColumn column, IExpression value)
 		{
-			_setCollection.Add(Tuple.Create(column, value));
+			SetCollection.Add(Tuple.Create(column, value));
 
 			return this;
 		}
@@ -109,7 +91,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public virtual Update Set(IEnumerable<Tuple<IColumn, IExpression>> values)
 		{
-			_setCollection.AddRange(values);
+			SetCollection.AddRange(values);
 
 			return this;
 		}

@@ -10,11 +10,6 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		private ISource _source;
-		private List<IColumn> _sourceColumns = new List<IColumn>();
-		private Select _select;
-		private List<IColumn> _returningColumns = new List<IColumn>();
-
 		public InsertSelect(string name, Select select) : this(name, alias: null, schema: null, select)
 		{
 		}
@@ -28,39 +23,20 @@ namespace YuraSoft.QueryBuilder.Common
 			Guard.ThrowIfNullOrEmpty(name, nameof(name));
 			Guard.ThrowIfNull(select, nameof(select));
 
-			_source = new Table(name, alias, schema);
-			_select = select;
+			Source = new Table(name, alias, schema);
+            SelectQuery = select;
 		}
 
 		public InsertSelect(Table table, Select select)
 		{
-			_source = Guard.ThrowIfNull(table, nameof(table));
-			_select = Guard.ThrowIfNull(select, nameof(select));
+			Source = Guard.ThrowIfNull(table, nameof(table));
+            SelectQuery = Guard.ThrowIfNull(select, nameof(select));
 		}
 
-		public ISource Source
-		{
-			get => _source;
-			set => _source = Guard.ThrowIfNull(value, nameof(Source));
-		}
-
-		public List<IColumn> ColumnCollection
-		{
-			get => _sourceColumns;
-			set => _sourceColumns = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ColumnCollection));
-		}
-
-		public Select SelectQuery
-		{
-			get => _select;
-			set => _select = Guard.ThrowIfNull(value, nameof(Select));
-		}
-
-		public List<IColumn> ReturningColumnCollection
-		{
-			get => _returningColumns;
-			set => _returningColumns = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ReturningColumnCollection));
-		}
+		public readonly ISource Source;
+		public readonly List<IColumn> ColumnCollection = new List<IColumn>();
+		public readonly Select SelectQuery;
+		public readonly List<IColumn> ReturningColumnCollection = new List<IColumn>();
 
 		public InsertSelect Columns(Action<ColumnBuilder> action) =>
 			Columns(_factory.Columns(action));
@@ -78,7 +54,7 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
 
-			_sourceColumns.AddRange(columns);
+            ColumnCollection.AddRange(columns);
 
 			return this;
 		}
@@ -99,7 +75,7 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
 
-			_returningColumns.AddRange(columns);
+            ReturningColumnCollection.AddRange(columns);
 
 			return this;
 		}

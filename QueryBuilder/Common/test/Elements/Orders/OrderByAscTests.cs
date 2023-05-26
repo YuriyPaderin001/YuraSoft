@@ -29,21 +29,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Orders
 		}
 
 		[Fact]
-		public void SetColumn_IColumn_Success()
-		{
-			// Arrange
-			OrderByAsc orderByAsc = new OrderByAsc(NewColumn());
-			IColumn column = NewColumn();
-
-			// Act
-			orderByAsc.Column = column;
-
-			// Assert
-			Assert.Equal(column, orderByAsc.Column);
-			Assert.Equal(OrderDirection.Asc, orderByAsc.Direction);
-		}
-
-		[Fact]
 		public void RenderOrderByAsc_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

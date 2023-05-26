@@ -45,31 +45,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Throws<ArgumentNullException>(() => { StringValue stringValue = (string)null!; });
 		}
 
-		[Theory]
-		[InlineData("")]
-		[InlineData("test")]
-		public void SetData_String_Success(string value)
-		{
-			// Arrange
-			StringValue stringValue = new StringValue("string_value");
-
-			// Act
-			stringValue.Data = value;
-
-			// Assert
-			Assert.Equal(value, stringValue.Data);
-		}
-
-		[Fact]
-		public void SetData_NullString_ThrowsArgumentNullException()
-		{
-			// Arrange
-			StringValue stringValue = new StringValue("");
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => stringValue.Data = null!);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

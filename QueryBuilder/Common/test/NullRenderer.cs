@@ -71,6 +71,8 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		public void RenderFunction(NowFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderFunction(ConcatFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderFunction(CoalesceFunction function, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderFunction(ExtractFunction function, StringBuilder sql) => sql.Append(_expectedSql);
+		public void RenderFunction(RoundFunction function, StringBuilder sql) => sql.Append(_expectedSql);
 
 		public void RenderIdentificator(Table table, StringBuilder sql) => sql.Append(_expectedSql);
 		public void RenderIdentificator(View view, StringBuilder sql) => sql.Append(_expectedSql);

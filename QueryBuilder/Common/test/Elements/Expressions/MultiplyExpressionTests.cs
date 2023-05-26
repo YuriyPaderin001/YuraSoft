@@ -44,52 +44,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 			Assert.Throws<ArgumentNullException>(() => new MultiplyExpression(null!));
 		}
 
-		[Theory]
-		[InlineData(2)]
-		[InlineData(3)]
-		public void SetExpressions_Expressions_Success(int length)
-		{
-			// Arrange
-			MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(length));
-			List<IExpression> expressions = NewExpressionList(length);
-
-			// Act
-			multiplyExpression.Expressions = expressions;
-
-			// Assert
-			Assert.Equal(expressions, multiplyExpression.Expressions);
-		}
-
-		[Fact]
-		public void SetExpressions_OneExpression_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => multiplyExpression.Expressions = NewExpressionList(1));
-		}
-
-		[Fact]
-		public void SetExpressions_EmptyExpressionList_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => multiplyExpression.Expressions = NewEmptyExpressionList());
-		}
-
-		[Fact]
-		public void SetExpressions_NullList_ThrowsArgumentNullException()
-		{
-			// Arrange
-			MultiplyExpression multiplyExpression = new MultiplyExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => multiplyExpression.Expressions = null!);
-		}
-
 		[Fact]
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

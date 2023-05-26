@@ -39,56 +39,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 			Constructor_ExpressionAndType_ThrowsException<ArgumentNullException>(expression: null, type);
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			CastFunction castFunction = NewCastFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			castFunction.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, castFunction.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			CastFunction castFunction = NewCastFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => castFunction.Expression = null!);
-		}
-
-		[Fact]
-		public void SetType_String_Success()
-		{
-			// Arrange
-			CastFunction castFunction = NewCastFunction();
-			string type = "integer";
-
-			// Act
-			castFunction.Type = type;
-
-			// Assert
-			Assert.Equal(type, castFunction.Type);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void SetType_NullOrEmptyString_ThrowsArgumentException(string type)
-		{
-			// Arrange
-			CastFunction castFunction = NewCastFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentException>(() => castFunction.Type = type);
-		}
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

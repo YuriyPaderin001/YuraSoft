@@ -34,58 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Constructor_LeftExpressionAndRightExpression_ThrowsArgumentNullException_Base(leftExpression: null, rightExpression: null);
 
 		[Fact]
-		public void SetLeftExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression rightExpression = NewExpression();
-			EqualCondition equalCondition = new EqualCondition(NewExpression(), rightExpression);
-			IExpression leftExpression = NewExpression();
-
-			// Act
-			equalCondition.LeftExpression = leftExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, equalCondition.LeftExpression);
-			Assert.Equal(rightExpression, equalCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetLeftExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			EqualCondition equalCondition = new EqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => equalCondition.LeftExpression = null!);
-		}
-
-		[Fact]
-		public void SetRightExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression leftExpression = NewExpression();
-			EqualCondition equalCondition = new EqualCondition(leftExpression, NewExpression());
-			IExpression rightExpression = NewExpression();
-
-			// Act
-			equalCondition.RightExpression = rightExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, equalCondition.LeftExpression);
-			Assert.Equal(rightExpression, equalCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetRightExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			EqualCondition equalCondition = new EqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => equalCondition.RightExpression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

@@ -43,60 +43,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void Constructor_ExpressionAndNullIExpressionList_ThrowsArgumentNullException() =>
 			Constructor_ExpressionAndIExpressionList_ThrowsException<ArgumentNullException>(NewExpression(), values: null);
 
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetExpression_IExpression_Success(int length)
-		{
-			// Arrange
-			List<IExpression> values = NewExpressionList(length);
-			NotInCondition notInCondition = new NotInCondition(NewExpression(), values);
-			IExpression expression = NewExpression();
-
-			// Act
-			notInCondition.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, notInCondition.Expression);
-			Assert.Equal(values, notInCondition.Values);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			NotInCondition notInCondition = new NotInCondition(NewExpression(), NewExpressionList(3));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => notInCondition.Expression = null!);
-		}
-
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetValues_IExpressionList_Success(int length)
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			NotInCondition notInCondition = new NotInCondition(expression, NewExpressionList(3));
-			List<IExpression> values = NewExpressionList(length);
-
-			// Act
-			notInCondition.Values = values;
-
-			// Assert
-			Assert.Equal(expression, notInCondition.Expression);
-			Assert.Equal(values, notInCondition.Values);
-		}
-
-		[Fact]
-		public void SetValues_EmptyIExpressionList_ThrowsArgumentOutOfLengthException() =>
-			SetValues_IExpressionList_ThrowsException<ArgumentOutOfRangeException>(NewEmptyExpressionList());
-
-		[Fact]
-		public void SetValues_NullIExpressionList_ThrowsArgumentNullException() =>
-			SetValues_IExpressionList_ThrowsException<ArgumentNullException>(values: null);
-
 		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
@@ -167,15 +113,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new NotInCondition(expression!, values!));
-		}
-
-		private void SetValues_IExpressionList_ThrowsException<TException>(List<IExpression>? values) where TException: Exception
-		{
-			// Arrange
-			NotInCondition notInCondition = new NotInCondition(NewExpression(), NewExpressionList(3));
-
-			// Act & Assert
-			Assert.Throws<TException>(() => notInCondition.Values = values!);
 		}
 	}
 }

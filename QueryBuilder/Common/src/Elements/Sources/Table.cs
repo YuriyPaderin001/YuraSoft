@@ -6,34 +6,16 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class Table : Source
 	{
-		private string _name;
-		private string? _alias;
-		private string? _schema;
-
 		public Table(string name, string? alias = null, string? schema = null)
 		{
-			_name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
-			_alias = alias == string.Empty ? null : alias;
-			_schema = schema == string.Empty ? null : schema;
+			Name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Alias = alias == string.Empty ? null : alias;
+			Schema = schema == string.Empty ? null : schema;
 		}
 
-		public string Name
-		{
-			get => _name;
-			set => _name = Guard.ThrowIfNullOrEmpty(value, nameof(Name));
-		}
-
-		public string? Alias
-		{
-			get => _alias;
-			set => _alias = value == string.Empty ? null : value;
-		}
-
-		public string? Schema
-		{
-			get => _schema;
-			set => _schema = value == string.Empty ? null : value;
-		}
+		public readonly string Name;
+		public readonly string? Alias;
+		public readonly string? Schema;
 
 		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
 			renderer.RenderIdentificator(this, sql);

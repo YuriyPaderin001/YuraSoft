@@ -32,22 +32,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Equal(value, int64Value.Data);
 		}
 
-		[Theory]
-		[InlineData(-3)]
-		[InlineData(0)]
-		[InlineData(1)]
-		public void SetData_Long_Success(long value)
-		{
-			// Arrange
-			Int64Value int64Value = new Int64Value(-9);
-
-			// Act
-			int64Value.Data = value;
-
-			// Assert
-			Assert.Equal(value, int64Value.Data);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

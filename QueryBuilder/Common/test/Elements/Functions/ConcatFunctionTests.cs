@@ -31,30 +31,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		public void Constructor_NullValues_ThrowsArgumentNullException() =>
 			Constructor_Values_ThrowsException<ArgumentNullException>(values: null);
 
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetValues_ExpressionList_Success(int length)
-		{
-			// Arrange
-			ConcatFunction concatFunction = NewConcatFunction();
-			List<IExpression> expressions = NewExpressionList(length);
-
-			// Act
-			concatFunction.Values = expressions;
-
-			// Assert
-			Assert.Equal(expressions, concatFunction.Values);
-		}
-
-		[Fact]
-		public void SetValues_EmptyExpressionList_ThrowsArgumentOutOfRangeException() =>
-			SetValues_ExpressionList_ThrowsException<ArgumentOutOfRangeException>(values: NewEmptyExpressionList());
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException() =>
-			SetValues_ExpressionList_ThrowsException<ArgumentNullException>(values: null);
-
 		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
@@ -143,15 +119,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new ConcatFunction(values!));
-		}
-
-		private void SetValues_ExpressionList_ThrowsException<TException>(List<IExpression>? values) where TException: Exception
-		{
-			// Arrange
-			ConcatFunction concatFunction = NewConcatFunction();
-
-			// Act & Assert
-			Assert.Throws<TException>(() => concatFunction.Values = values!);
 		}
 
 		private ConcatFunction NewConcatFunction(List<IExpression>? values = null) => 

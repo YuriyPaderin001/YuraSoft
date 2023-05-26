@@ -66,50 +66,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 		}
 
 		[Fact]
-		public void SetData_DateTime_Success()
-		{
-			// Arrange
-			DateTimeValue dateTimeValue = new DateTimeValue(new DateTime(2022, 1, 1));
-			DateTime value = new DateTime(2023, 11, 3);
-
-			// Act
-			dateTimeValue.Data = value;
-
-			// Assert
-			Assert.Equal(value, dateTimeValue.Data);
-			Assert.Equal("o", dateTimeValue.Format);
-		}
-
-		[Theory]
-		[InlineData("o")]
-		[InlineData("F")]
-		[InlineData("G")]
-		public void SetFormat_String_Success(string format)
-		{
-			// Arrange
-			DateTimeValue dateTimeValue = new DateTimeValue(new DateTime(2022, 1, 1));
-
-			// Act
-			dateTimeValue.Format = format;
-
-			// Assert
-			Assert.Equal(format, dateTimeValue.Format);
-		}
-
-		[Fact]
-		public void SetFormat_Null_SetDefaultFormat()
-		{
-			// Arrange
-			DateTimeValue dateTimeValue = new DateTimeValue(new DateTime(2022, 1, 1), format: "F");
-
-			// Act
-			dateTimeValue.Format = null!;
-
-			// Assert
-			Assert.Equal("o", dateTimeValue.Format);
-		}
-
-		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

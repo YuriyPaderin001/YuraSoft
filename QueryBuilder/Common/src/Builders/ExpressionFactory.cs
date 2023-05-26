@@ -1134,11 +1134,31 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion SumFunction factory methods
 
-		#endregion Functions factory methods
+		#region ExtractFunction factory methods
 
-		#region Parameter factory methods
+		public ExtractFunction Extract(string part, string column) => Extract(part, Column(column));
+		public ExtractFunction Extract(string part, string column, string table) => Extract(part, Column(column, table));
+		public ExtractFunction Extract(string part, string column, ISource source) => Extract(part, Column(column, source));
+		public ExtractFunction Extract(string part, Func<ExpressionFactory, IExpression> expressionFunction) => Extract(part, Expression(expressionFunction));
+		public ExtractFunction Extract(string part, IExpression expression) => new ExtractFunction(part, expression);
 
-		public Parameter Parameter(string name) => new Parameter(name);
+        #endregion ExtractFunction factory methods
+
+        #region RoundFunction factory methods
+
+        public RoundFunction Round(string column, int? precision = null) => Round(Column(column), precision);
+        public RoundFunction Round(string column, string table, int? precision = null) => Round(Column(column, table), precision);
+        public RoundFunction Round(string column, ISource source, int? precision = null) => Round(Column(column, source), precision);
+        public RoundFunction Round(Func<ExpressionFactory, IExpression> expressionFunction, int? precision = null) => Round(Expression(expressionFunction), precision);
+        public RoundFunction Round(IExpression expression, int? precision = null) => new RoundFunction(expression, precision);
+
+        #endregion RoundFunction factory methods
+
+        #endregion Functions factory methods
+
+        #region Parameter factory methods
+
+        public Parameter Parameter(string name) => new Parameter(name);
 
 		#endregion Parameter factory methods
 

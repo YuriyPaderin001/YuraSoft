@@ -11,14 +11,6 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		private List<IColumn> _columnCollection = new List<IColumn>();
-		private List<ISource> _sourceCollection = new List<ISource>();
-		private List<IJoin> _joinCollection = new List<IJoin>();
-		private List<IOrderBy> _orderByCollection = new List<IOrderBy>();
-		private List<IColumn> _groupByCollection = new List<IColumn>();
-		private int? _offset;
-		private int? _limit;
-
 		public Select(string columnName, ISource? columnSource) : this(columnName, columnAlias: null, columnSource)
 		{
 		}
@@ -27,7 +19,7 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrEmpty(columnName, nameof(columnName));
 
-			_columnCollection.Add(new SourceColumn(columnName, columnAlias, columnSource));
+            ColumnCollection.Add(new SourceColumn(columnName, columnAlias, columnSource));
 		}
 
         public Select(Action<ColumnBuilder> action) : this(_factory.Columns(action))
@@ -50,56 +42,19 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
 
-			_columnCollection.AddRange(columns);
+            ColumnCollection.AddRange(columns);
 		}
 
-		public IDistinct? DistinctValue { get; set; }
-
-		public List<IColumn> ColumnCollection
-		{
-			get => _columnCollection;
-			set => _columnCollection = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ColumnCollection));
-		}
-
-		public List<ISource> SourceCollection
-		{
-			get => _sourceCollection;
-			set => _sourceCollection = Guard.ThrowIfNullOrContainsNullElements(value, nameof(SourceCollection));
-		}
-
-		public ICondition? WhereCondition { get; set; }
-
-		public List<IJoin> JoinCollection
-		{
-			get => _joinCollection;
-			set => _joinCollection = Guard.ThrowIfNullOrContainsNullElements(value, nameof(JoinCollection));
-		}
-
-		public ICondition? HavingCondition { get; set; }
-
-		public List<IOrderBy> OrderByCollection
-		{
-			get => _orderByCollection;
-			set => _orderByCollection = Guard.ThrowIfNullOrContainsNullElements(value, nameof(OrderByCollection));
-		}
-
-		public List<IColumn> GroupByCollection
-		{
-			get => _groupByCollection;
-			set => _groupByCollection = Guard.ThrowIfNullOrContainsNullElements(value, nameof(GroupByCollection));
-		}
-
-		public int? OffsetValue
-		{
-			get => _offset;
-			set => _offset = value.HasValue ? Guard.ThrowIfNegative(value.Value, nameof(OffsetValue)) : value;
-		}
-
-		public int? LimitValue
-		{
-			get => _limit;
-			set => _limit = value.HasValue ? Guard.ThrowIfNegative(value.Value, nameof(OffsetValue)) : value;
-		}
+		public IDistinct? DistinctValue { get; protected set; }
+		public readonly List<IColumn> ColumnCollection = new List<IColumn>();
+		public readonly List<ISource> SourceCollection = new List<ISource>();
+		public ICondition? WhereCondition { get; protected set; }
+		public readonly List<IJoin> JoinCollection = new List<IJoin>();
+		public ICondition? HavingCondition { get; protected set; }
+		public readonly List<IOrderBy> OrderByCollection = new List<IOrderBy>();
+		public readonly List<IColumn> GroupByCollection = new List<IColumn>();
+		public int? OffsetValue { get; protected set; }
+		public int? LimitValue { get; protected set; }
 
 		public virtual Select Distinct() => Distinct(new Distinct());
 
@@ -232,14 +187,14 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public virtual Select Offset(int? offset)
 		{
-			_offset = offset.HasValue ? Guard.ThrowIfNegative(offset.Value, nameof(offset)) : offset;
+			OffsetValue = offset.HasValue ? Guard.ThrowIfNegative(offset.Value, nameof(offset)) : offset;
 
 			return this;
 		}
 
 		public virtual Select Limit(int? limit)
 		{
-			_limit = limit.HasValue ? Guard.ThrowIfNegative(limit.Value, nameof(limit)) : limit;
+			LimitValue = limit.HasValue ? Guard.ThrowIfNegative(limit.Value, nameof(limit)) : limit;
 
 			return this;
 		}

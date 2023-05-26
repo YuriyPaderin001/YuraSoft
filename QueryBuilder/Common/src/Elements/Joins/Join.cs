@@ -6,18 +6,10 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public abstract class Join : IJoin
 	{
-		private ISource _source;
+		public Join(ISource source) =>
+			Source = Guard.ThrowIfNull(source, nameof(source));
 
-		public Join(ISource source)
-		{
-			_source = Guard.ThrowIfNull(source, nameof(source));
-		}
-
-		public ISource Source
-		{
-			get => _source;
-			set => _source = Guard.ThrowIfNull(value, nameof(Source));
-		}
+		public readonly ISource Source;
 
 		public string RenderJoin(IRenderer renderer)
 		{

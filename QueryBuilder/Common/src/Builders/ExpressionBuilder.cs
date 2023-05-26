@@ -781,6 +781,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Coalesce(string column, string value) => Add(Factory.Coalesce(column, value));
 		public ExpressionBuilder Coalesce(string column, Func<ExpressionFactory, IExpression> function) => Add(Factory.Coalesce(column, function));
 		public ExpressionBuilder Coalesce(string column, IExpression defaultValue) => Add(Factory.Coalesce(column, defaultValue));
+		public ExpressionBuilder Coalesce(string column1, string column2, ISource column2Source) => Add(Factory.Coalesce(column1, column2, column2Source));
 
 		public ExpressionBuilder Coalesce(string column, string table, sbyte value) => Add(Factory.Coalesce(column, table, value));
 		public ExpressionBuilder Coalesce(string column, string table, short value) => Add(Factory.Coalesce(column, table, value));
@@ -792,6 +793,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Coalesce(string column, string table, string value) => Add(Factory.Coalesce(column, table, value));
 		public ExpressionBuilder Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function) => Add(Factory.Coalesce(column, table, function));
 		public ExpressionBuilder Coalesce(string column, string table, IExpression defaultValue) => Add(Factory.Coalesce(column, table, defaultValue));
+		public ExpressionBuilder Coalesce(string column1, string column1Table, string column2, ISource column2Source) => Add(Factory.Coalesce(column1, column1Table, column2, column2Source));
 
 		public ExpressionBuilder Coalesce(string column, ISource source, sbyte value) => Add(Factory.Coalesce(column, source, value));
 		public ExpressionBuilder Coalesce(string column, ISource source, short value) => Add(Factory.Coalesce(column, source, value));
@@ -803,6 +805,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Coalesce(string column, ISource source, string value) => Add(Factory.Coalesce(column, source, value));
 		public ExpressionBuilder Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function) => Add(Factory.Coalesce(column, source, function));
 		public ExpressionBuilder Coalesce(string column, ISource source, IExpression defaultValue) => Add(Factory.Coalesce(column, source, defaultValue));
+		public ExpressionBuilder Coalesce(string column1, ISource column1Source, string column2, ISource column2Source) => Add(Factory.Coalesce(column1, column1Source, column2, column2Source));
 
 		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => Add(Factory.Coalesce(expressionFunction, value));
 		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, short value) => Add(Factory.Coalesce(expressionFunction, value));
@@ -814,6 +817,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string value) => Add(Factory.Coalesce(expressionFunction, value));
 		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> function) => Add(Factory.Coalesce(expressionFunction, function));
 		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression defaultValue) => Add(Factory.Coalesce(expressionFunction, defaultValue));
+		public ExpressionBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource column2Source) => Add(Factory.Coalesce(expressionFunction, column2, column2Source));
 
 		public ExpressionBuilder Coalesce(IExpression expression, sbyte value) => Add(Factory.Coalesce(expression, value));
 		public ExpressionBuilder Coalesce(IExpression expression, short value) => Add(Factory.Coalesce(expression, value));
@@ -825,6 +829,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Coalesce(IExpression expression, string value) => Add(Factory.Coalesce(expression, value));
 		public ExpressionBuilder Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> function) => Add(Factory.Coalesce(expression, function));
 		public ExpressionBuilder Coalesce(IExpression expression, IExpression defaultValue) => Add(Factory.Coalesce(expression, defaultValue));
+		public ExpressionBuilder Coalesce(IExpression expression, string column2, ISource column2Source) => Add(Factory.Coalesce(expression, column2, column2Source));
 
 		#endregion CoalesceFunction methods
 
@@ -844,11 +849,11 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Count(Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Count(expressionFunction));
 		public ExpressionBuilder Count(IExpression expression) => Add(Factory.Count(expression));
 
-		#endregion CountFunction methods
+        #endregion CountFunction methods
 
-		#region Function methods
+        #region Function methods
 
-		public ExpressionBuilder Function(string name) => Add(Factory.Function(name));
+        public ExpressionBuilder Function(string name) => Add(Factory.Function(name));
 		public ExpressionBuilder Function(string name, params IExpression[] parameters) => Add(Factory.Function(name, parameters));
 		public ExpressionBuilder Function(string name, IEnumerable<IExpression>? parameters) => Add(Factory.Function(name, parameters));
 		public ExpressionBuilder Function(string name, Action<ExpressionBuilder> action) => Add(Factory.Function(name, action));
@@ -889,13 +894,33 @@ namespace YuraSoft.QueryBuilder.Common
 		public ExpressionBuilder Sum(Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Sum(expressionFunction));
 		public ExpressionBuilder Sum(IExpression expression) => Add(Factory.Sum(expression));
 
-		#endregion SumFunction methods
+        #endregion SumFunction methods
 
-		#endregion Functions methods
+        #region ExtractFunction methods
 
-		#region Parameter methods
+        public ExpressionBuilder Extract(string part, string column) => Add(Factory.Extract(part, column));
+        public ExpressionBuilder Extract(string part, string column, string table) => Add(Factory.Extract(part, column, table));
+        public ExpressionBuilder Extract(string part, string column, ISource source) => Add(Factory.Extract(part, column, source));
+        public ExpressionBuilder Extract(string part, Func<ExpressionFactory, IExpression> expressionFunction) => Add(Factory.Extract(part, expressionFunction));
+        public ExpressionBuilder Extract(string part, IExpression expression) => Add(Factory.Extract(part, expression));
 
-		public ExpressionBuilder Parameter(string name) => Add(Factory.Parameter(name));
+        #endregion ExtractFunction methods
+
+        #region RoundFunction methods
+
+        public ExpressionBuilder Round(string column, int? precision = null) => Add(Factory.Round(column, precision));
+        public ExpressionBuilder Round(string column, string table, int? precision = null) => Add(Factory.Round(column, table, precision));
+        public ExpressionBuilder Round(string column, ISource source, int? precision = null) => Add(Factory.Round(column, source, precision));
+        public ExpressionBuilder Round(Func<ExpressionFactory, IExpression> expressionFunction, int? precision = null) => Add(Factory.Round(expressionFunction, precision));
+        public ExpressionBuilder Round(IExpression expression, int? precision = null) => Add(Factory.Round(expression, precision));
+
+        #endregion RoundFunction methods
+
+        #endregion Functions methods
+
+        #region Parameter methods
+
+        public ExpressionBuilder Parameter(string name) => Add(Factory.Parameter(name));
 
 		#endregion Parameter methods
 

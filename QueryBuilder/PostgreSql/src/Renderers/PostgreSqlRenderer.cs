@@ -10,6 +10,8 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 {
 	public class PostgreSqlRenderer : IRenderer
 	{
+		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
+
 		#region Column rendering methods
 
 		public void RenderColumn(SourceColumn column, StringBuilder sql)
@@ -337,8 +339,39 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 		public void RenderFunction(NowFunction function, StringBuilder sql) => sql.Append("CURRENT_TIMESTAMP");
 		public void RenderFunction(ConcatFunction function, StringBuilder sql) => RenderFunction("concat", function, function.Values, sql);
 		public void RenderFunction(CoalesceFunction function, StringBuilder sql) => RenderFunction("coalesce", function, sql, function.Expression, function.DefaultExpression);
+		public void RenderFunction(ExtractFunction function, StringBuilder sql)
+		{
+            Guard.ThrowIfNull(function, nameof(function));
+            Guard.ThrowIfNull(sql, nameof(sql));
 
-		private void RenderColumnFunction(string name, ExpressionFunction function, StringBuilder sql) => RenderFunction(name, function, sql, function.Expression);
+            sql.Append("extract(");
+            sql.Append(function.Part);
+            sql.Append(" FROM ");
+
+            function.Expression.RenderExpression(this, sql);
+
+            sql.Append(')');
+        }
+
+        public void RenderFunction(RoundFunction function, StringBuilder sql)
+		{
+			Guard.ThrowIfNull(function, nameof(function));
+			Guard.ThrowIfNull(sql, nameof(sql));
+
+			sql.Append("round(");
+
+			function.Expression.RenderExpression(this, sql);
+
+			if (function.Precision.HasValue)
+			{
+				sql.Append(", ");
+				sql.Append(function.Precision.Value);
+			}
+
+			sql.Append(")");
+		}
+
+        private void RenderColumnFunction(string name, ExpressionFunction function, StringBuilder sql) => RenderFunction(name, function, sql, function.Expression);
 		private void RenderFunction(string name, IFunction function, StringBuilder sql, params IExpression[] parameters) => RenderFunction(name, function, parameters, sql);
 
 		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder sql)
@@ -438,7 +471,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			Guard.ThrowIfNull(subquery, nameof(subquery));
 			Guard.ThrowIfNull(sql, nameof(sql));
 
-			RenderIdentificator(subquery.Name, sql);
+			RenderIdentificator(subquery.Alias, sql);
 		}
 
 		public void RenderIdentificator(View view, StringBuilder sql)
@@ -816,7 +849,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 
 			sql.Append(") AS ");
 
-			RenderIdentificator(subquery.Name, sql);
+			RenderIdentificator(subquery.Alias, sql);
 		}
 
 		public void RenderSource(View view, StringBuilder sql)

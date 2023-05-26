@@ -6,26 +6,14 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class Subquery : Source
 	{
-		private Select _select;
-		private string _name;
-
 		public Subquery(Select select, string name)
 		{
-			_select = Guard.ThrowIfNull(select, nameof(select));
-			_name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Select = Guard.ThrowIfNull(select, nameof(select));
+			Alias = Guard.ThrowIfNullOrEmpty(name, nameof(name));
 		}
 
-		public Select Select
-		{
-			get => _select;
-			set => _select = Guard.ThrowIfNull(value, nameof(Select));
-		}
-
-		public string Name
-		{
-			get => _name;
-			set => _name = Guard.ThrowIfNullOrEmpty(value, nameof(Name));
-		}
+		public readonly Select Select;
+		public readonly string Alias;
 
 		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
 			renderer.RenderIdentificator(this, sql);

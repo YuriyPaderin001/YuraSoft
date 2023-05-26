@@ -5,7 +5,5 @@
 		public OrderByDesc(IColumn column) : base(column, OrderDirection.Desc)
 		{
 		}
-
-		public new readonly OrderDirection Direction = OrderDirection.Desc; 
 	}
 }

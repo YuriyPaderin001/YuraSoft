@@ -64,58 +64,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 		}
 
 		[Fact]
-		public void SetExpression_IExpression_Success()
-		{
-			// Arrange
-			const string name = "test_name";
-			ExpressionColumn expressionColumn = new ExpressionColumn(NewExpression(), name);
-			IExpression expression = NewExpression();
-
-			// Act
-			expressionColumn.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, expressionColumn.Expression);
-			Assert.Equal(name, expressionColumn.Alias);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			ExpressionColumn expressionColumn = new ExpressionColumn(NewExpression(), "test_name");
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => expressionColumn.Expression = null!);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData("test_new_name")]
-		public void SetName_String_Success(string? name)
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			ExpressionColumn expressionColumn = new ExpressionColumn(expression, "test_name");
-
-			// Act
-			expressionColumn.Alias = name;
-
-			// Assert
-			Assert.Equal(expression, expressionColumn.Expression);
-
-			if (string.IsNullOrEmpty(name))
-			{
-				Assert.Null(expressionColumn.Alias);
-			}
-			else
-			{
-				Assert.Equal(name, expressionColumn.Alias);
-			}
-		}
-
-		[Fact]
 		public void RenderColumn_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
