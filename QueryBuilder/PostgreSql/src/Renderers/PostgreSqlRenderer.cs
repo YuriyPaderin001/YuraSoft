@@ -100,15 +100,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append(conditionType);
 			sql.Append(" (");
 
-			if (condition.Values.Count > 0)
-			{
-				condition.Values[0].RenderExpression(this, sql);
-				for (int i = 1; i < condition.Values.Count; i++)
-				{
-					sql.Append(", ");
-					condition.Values[i].RenderExpression(this, sql);
-				}
-			}
+			RenderExpressionCollection(condition.Values, sql);
 
 			sql.Append(')');
 		}
@@ -119,16 +111,9 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			Guard.ThrowIfNullOrEmpty(conditionType, nameof(conditionType));
 			Guard.ThrowIfNull(sql, nameof(sql));
 
-			string conditionOperator = $" {conditionType} ";
-
 			sql.Append('(');
 
-			condition.Conditions[0].RenderCondition(this, sql);
-			for (int i = 1; i < condition.Conditions.Count; i++)
-			{
-				sql.Append(conditionOperator);
-				condition.Conditions[i].RenderCondition(this, sql);
-			}
+			RenderConditionCollection(condition.Conditions, sql, delimiter: $" {conditionType} ");
 
 			sql.Append(')');
 		}
@@ -332,10 +317,10 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append(function.Type);
 		}
 
-		public void RenderFunction(CountFunction function, StringBuilder sql) => RenderColumnFunction("count", function, sql);
-		public void RenderFunction(SumFunction function, StringBuilder sql) => RenderColumnFunction("sum", function, sql);
-		public void RenderFunction(MaxFunction function, StringBuilder sql) => RenderColumnFunction("max", function, sql);
-		public void RenderFunction(MinFunction function, StringBuilder sql) => RenderColumnFunction("min", function, sql);
+		public void RenderFunction(CountFunction function, StringBuilder sql) => RenderExpressionFunction("count", function, sql);
+		public void RenderFunction(SumFunction function, StringBuilder sql) => RenderExpressionFunction("sum", function, sql);
+		public void RenderFunction(MaxFunction function, StringBuilder sql) => RenderExpressionFunction("max", function, sql);
+		public void RenderFunction(MinFunction function, StringBuilder sql) => RenderExpressionFunction("min", function, sql);
 		public void RenderFunction(NowFunction function, StringBuilder sql) => sql.Append("CURRENT_TIMESTAMP");
 		public void RenderFunction(ConcatFunction function, StringBuilder sql) => RenderFunction("concat", function, function.Values, sql);
 		public void RenderFunction(CoalesceFunction function, StringBuilder sql) => RenderFunction("coalesce", function, sql, function.Expression, function.DefaultExpression);
@@ -368,35 +353,77 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 				sql.Append(function.Precision.Value);
 			}
 
-			sql.Append(")");
+			sql.Append(')');
 		}
 
-        private void RenderColumnFunction(string name, ExpressionFunction function, StringBuilder sql) => RenderFunction(name, function, sql, function.Expression);
-		private void RenderFunction(string name, IFunction function, StringBuilder sql, params IExpression[] parameters) => RenderFunction(name, function, parameters, sql);
+		public void RenderFunction(CountWindowFunction function, StringBuilder sql) => RenderExpressionWindowFunction("count", function, sql);
+		public void RenderFunction(MaxWindowFunction function, StringBuilder sql) => RenderExpressionWindowFunction("max", function, sql);
+		public void RenderFunction(MinWindowFunction function, StringBuilder sql) => RenderExpressionWindowFunction("min", function, sql);
+		public void RenderFunction(SumWindowFunction function, StringBuilder sql) => RenderExpressionWindowFunction("sum", function, sql);
 
-		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder sql)
+		private void RenderExpressionWindowFunction(string name, ExpressionWindowFunction function, StringBuilder sql)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
-			Guard.ThrowIfNull(function, nameof(function));
-			Guard.ThrowIfNull(sql, nameof(sql));
+            Guard.ThrowIfNull(function, nameof(function));
+            Guard.ThrowIfNull(sql, nameof(sql));
 
-			sql.Append(name);
-			sql.Append('(');
+            RenderFunction(name, function, sql, function.Expression);
+            RenderWindowFunctionFilterAndOver(function, sql);
+        }
 
-			if (parameters != null && parameters.Any())
+		private void RenderWindowFunctionFilterAndOver(WindowFunction function, StringBuilder sql)
+		{
+			if (function.Filter != null)
 			{
-				IEnumerator<IExpression> enumerator = parameters.GetEnumerator();
-				enumerator.MoveNext();
-				enumerator.Current.RenderExpression(this, sql);
-				while (enumerator.MoveNext())
+				sql.Append(" FILTER (WHERE ");
+
+				function.Filter.RenderCondition(this, sql);
+
+				sql.Append(')');
+			}
+
+			sql.Append(" OVER (");
+
+			bool hasPartitionBy = function.PartitionBy != null && function.PartitionBy.Count > 0;
+            if (hasPartitionBy)
+			{
+				sql.Append("PARTITION BY ");
+
+                RenderIdentificatorCollection(function.PartitionBy!, sql);
+            }
+
+			if (function.OrderBy != null && function.OrderBy.Count > 0)
+			{
+				if (hasPartitionBy)
 				{
-					sql.Append(", ");
-					enumerator.Current.RenderExpression(this, sql);
+					sql.Append(' ');
 				}
+
+				sql.Append("ORDER BY ");
+
+				RenderOrderByCollection(function.OrderBy, sql);
 			}
 
 			sql.Append(')');
 		}
+
+        private void RenderExpressionFunction(string name, ExpressionFunction function, StringBuilder sql) => RenderFunction(name, function, sql, function.Expression);
+		private void RenderFunction(string name, IFunction function, StringBuilder sql, params IExpression[] parameters) => RenderFunction(name, function, parameters, sql);
+
+		private void RenderFunction(string name, IFunction function, IEnumerable<IExpression>? parameters, StringBuilder sql)
+		{
+			Guard.ThrowIfNull(function, nameof(function));
+			Guard.ThrowIfNull(sql, nameof(sql));
+
+            sql.Append(name);
+            sql.Append('(');
+
+            if (parameters != null)
+            {
+                RenderExpressionCollection(parameters, sql);
+            }
+
+            sql.Append(')');
+        }
 
 		#endregion Function rendering methods
 
@@ -489,6 +516,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			if (!string.IsNullOrEmpty(view.Schema))
 			{
 				RenderIdentificator(view.Schema, sql);
+
 				sql.Append('.');
 			}
 
@@ -575,6 +603,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			if (select.DistinctValue != null)
 			{
 				sql.Append(' ');
+
 				select.DistinctValue.RenderDistinct(this, sql);
 			}
 
@@ -582,25 +611,14 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(' ');
 
-				select.ColumnCollection[0].RenderColumn(this, sql);
-				for (int i = 1; i < select.ColumnCollection.Count; i++)
-				{
-					sql.Append(", ");
-					select.ColumnCollection[i].RenderColumn(this, sql);
-				}
+				RenderColumnCollection(select.ColumnCollection, sql);
 			}
 
 			if (select.SourceCollection.Count > 0)
 			{
 				sql.Append(" FROM ");
 
-				select.SourceCollection[0].RenderSource(this, sql);
-				for (int i = 1; i < select.SourceCollection.Count; i++)
-				{
-					sql.Append(", ");
-
-					select.SourceCollection[i].RenderSource(this, sql);
-				}
+				RenderSourceCollection(select.SourceCollection, sql);
 			}
 
 			foreach (IJoin join in select.JoinCollection)
@@ -612,6 +630,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			if (select.WhereCondition != null)
 			{
 				sql.Append(" WHERE ");
+
 				select.WhereCondition.RenderCondition(this, sql);
 			}
 
@@ -619,17 +638,13 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(" GROUP BY ");
 
-				select.GroupByCollection[0].RenderIdentificator(this, sql);
-				for (int i = 1; i < select.GroupByCollection.Count; i++)
-				{
-					sql.Append(", ");
-					select.GroupByCollection[i].RenderIdentificator(this, sql);
-				}
+				RenderIdentificatorCollection(select.GroupByCollection, sql);
 			}
 
 			if (select.HavingCondition != null)
 			{
 				sql.Append(" HAVING ");
+
 				select.HavingCondition.RenderCondition(this, sql);
 			}
 
@@ -637,23 +652,20 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(" ORDER BY ");
 
-				select.OrderByCollection[0].RenderOrderBy(this, sql);
-				for (int i = 1; i < select.OrderByCollection.Count; i++)
-				{
-					sql.Append(", ");
-					select.OrderByCollection[i].RenderOrderBy(this, sql);
-				}
+				RenderOrderByCollection(select.OrderByCollection, sql);
 			}
 
 			if (select.OffsetValue.HasValue)
 			{
 				sql.Append(" OFFSET ");
+
 				sql.Append(select.OffsetValue.Value);
 			}
 
 			if (select.LimitValue.HasValue)
 			{
 				sql.Append(" LIMIT ");
+
 				sql.Append(select.LimitValue.Value);
 			}
 		}
@@ -672,12 +684,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(" (");
 
-				insert.ColumnCollection[0].RenderColumn(this, sql);
-				for (int i = 1; i < insert.ColumnCollection.Count; i++)
-				{
-					sql.Append(", ");
-					insert.ColumnCollection[i].RenderColumn(this, sql);
-				}
+				RenderColumnCollection(insert.ColumnCollection, sql);
 
 				sql.Append(')');
 
@@ -717,12 +724,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(" RETURNING ");
 
-				insert.ReturningColumnCollection[0].RenderColumn(this, sql);
-				for (int i = 1; i < insert.ReturningColumnCollection.Count; i++)
-				{
-					sql.Append(", ");
-					insert.ReturningColumnCollection[i].RenderColumn(this, sql);
-				}
+				RenderColumnCollection(insert.ReturningColumnCollection, sql);
 			}
 		}
 
@@ -741,13 +743,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append('(');
 
-				insertSelect.ColumnCollection[0].RenderColumn(this, sql);
-				for (int i = 1; i < insertSelect.ColumnCollection.Count; i++)
-				{
-					sql.Append(", ");
-
-					insertSelect.ColumnCollection[i].RenderColumn(this, sql);
-				}
+				RenderColumnCollection(insertSelect.ColumnCollection, sql);
 
 				sql.Append(") ");
 			}
@@ -758,13 +754,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			{
 				sql.Append(" RETURNING ");
 
-				insertSelect.ReturningColumnCollection[0].RenderColumn(this, sql);
-				for (int i = 1; i < insertSelect.ReturningColumnCollection.Count; i++)
-				{
-					sql.Append(", ");
-
-					insertSelect.ReturningColumnCollection[i].RenderColumn(this, sql);
-				}
+				RenderColumnCollection(insertSelect.ReturningColumnCollection, sql);
 			}
 		}
 
@@ -780,20 +770,26 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append(" SET ");
 
 			update.SetCollection[0].Item1.RenderIdentificator(this, sql);
+
 			sql.Append(" = ");
+
 			update.SetCollection[0].Item2.RenderExpression(this, sql);
 
 			for (int i = 1; i < update.SetCollection.Count; i++)
 			{
 				sql.Append(", ");
+
 				update.SetCollection[i].Item1.RenderIdentificator(this, sql);
+				
 				sql.Append(" = ");
+				
 				update.SetCollection[i].Item2.RenderExpression(this, sql);
 			}
 
 			if (update.Condition != null)
 			{
 				sql.Append(" WHERE ");
+				
 				update.Condition.RenderCondition(this, sql);
 			}
 		}
@@ -810,6 +806,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			if (delete.Condition != null)
 			{
 				sql.Append(" WHERE ");
+				
 				delete.Condition.RenderCondition(this, sql);
 			}
 		}
@@ -868,6 +865,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			if (!string.IsNullOrEmpty(view.Alias))
 			{
 				sql.Append(" AS ");
+				
 				RenderIdentificator(view.Alias, sql);
 			}
 		}
@@ -900,5 +898,40 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 		}
 
 		#endregion Value rendering methods
+
+		private void RenderColumnCollection<T>(IEnumerable<T> columns, StringBuilder sql, string delimiter = ", ") where T : IColumn =>
+			RenderCollection(columns, sql, (T i, StringBuilder s) => i.RenderColumn(this, sql), delimiter);
+
+		private void RenderSourceCollection<T>(IEnumerable<T> sources, StringBuilder sql, string delimiter = ", ") where T : ISource =>
+			RenderCollection(sources, sql, (T i, StringBuilder s) => i.RenderSource(this, sql), delimiter);
+
+		private void RenderExpressionCollection<T>(IEnumerable<T> expressions, StringBuilder sql, string delimiter = ", ") where T : IExpression =>
+			RenderCollection(expressions, sql, (T o, StringBuilder s) => o.RenderExpression(this, sql), delimiter);
+
+		private void RenderConditionCollection<T>(IEnumerable<T> conditions, StringBuilder sql, string delimiter = ", ") where T : ICondition =>
+			RenderCollection(conditions, sql, (T i, StringBuilder s) => i.RenderCondition(this, sql), delimiter);
+
+		private void RenderIdentificatorCollection<T>(IEnumerable<T> identificators, StringBuilder sql, string delimiter = ", ") where T : IIdentificator =>
+			RenderCollection(identificators, sql, (T o, StringBuilder s) => o.RenderIdentificator(this, s), delimiter);
+
+		private void RenderOrderByCollection<T>(IEnumerable<T> orderBy, StringBuilder sql, string delimiter = ", ") where T : IOrderBy =>
+			RenderCollection(orderBy, sql, (T o, StringBuilder s) => o.RenderOrderBy(this, s), delimiter);
+
+        private void RenderCollection<T>(IEnumerable<T> collection, StringBuilder sql, Action<T, StringBuilder> renderAction, string delimiter)
+		{
+			IEnumerator<T> enumerator = collection!.GetEnumerator();
+			if (!enumerator.MoveNext())
+			{
+				return;
+			}
+
+			renderAction.Invoke(enumerator.Current, sql);
+			while (enumerator.MoveNext())
+			{
+				sql.Append(delimiter);
+
+				renderAction.Invoke(enumerator.Current, sql);
+			}
+		}
 	}
 }

@@ -179,35 +179,43 @@ namespace YuraSoft.QueryBuilder.Common.Validation
 		}
 
 		/// <summary>
-		/// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains <see langword="null"/> or empty string elements
+		/// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains <see langword="null"/> elements
 		/// </summary>
-		/// <param name="argument">String enumerable</param>
+		/// <param name="argument">Enumerable</param>
 		/// <param name="argumentName">Argument name</param>
 		/// <exception cref="ArgumentException"></exception>
-		private static void ThrowIfContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName)
+		[return: NotNullIfNotNull("argument")]
+        public static T ThrowIfContainsNullElements<T>(T argument, string argumentName) where T : IEnumerable
+        {
+			if (argument == null)
+			{
+				return default!;
+			}
+
+            foreach (object? item in argument)
+            {
+                if (item == null)
+                {
+                    throw new ArgumentException(argumentName, ErrorMessages.ArgumentShouldNotContainsNullElements);
+                }
+            }
+
+			return argument;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains <see langword="null"/> or empty string elements
+        /// </summary>
+        /// <param name="argument">String enumerable</param>
+        /// <param name="argumentName">Argument name</param>
+        /// <exception cref="ArgumentException"></exception>
+        private static void ThrowIfContainsNullOrEmptyElements(IEnumerable<string> argument, string argumentName)
 		{
 			foreach (string? item in argument)
 			{
 				if (string.IsNullOrEmpty(item))
 				{
 					throw new ArgumentException(argumentName, ErrorMessages.ArgumentShouldNotContainsNullOrEmptyElements);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Throws <see cref="ArgumentException"/> if <paramref name="argument"/> contains <see langword="null"/> elements
-		/// </summary>
-		/// <param name="argument">Enumerable</param>
-		/// <param name="argumentName">Argument name</param>
-		/// <exception cref="ArgumentException"></exception>
-		private static void ThrowIfContainsNullElements(IEnumerable argument, string argumentName)
-		{
-			foreach (object? item in argument)
-			{
-				if (item == null)
-				{
-					throw new ArgumentException(argumentName, ErrorMessages.ArgumentShouldNotContainsNullElements);
 				}
 			}
 		}

@@ -65,7 +65,21 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-		public virtual Select From(params string[] tables) => 
+		public Select From(string table) => From(new Table(name: table));
+		public Select From(string table, string schema) => From(new Table(name: table, schema: schema));
+		public Select From(Select select, string alias) => From(new Subquery(select, alias));
+
+        public virtual Select From(ISource source)
+		{
+			Guard.ThrowIfNull(source, nameof(source));
+
+			SourceCollection.Add(source);
+
+			return this;
+		}
+
+
+        public virtual Select From(params string[] tables) => 
 			From((IEnumerable<string>)tables);
 
 		public virtual Select From(IEnumerable<string> tables)
@@ -198,6 +212,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 			return this;
 		}
+
+		public virtual Subquery ToSubquery(string alias) => new Subquery(this, alias);
 
 		private Select AddJoin(IJoin join)
 		{

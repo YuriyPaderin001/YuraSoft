@@ -6,10 +6,10 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class Subquery : Source
 	{
-		public Subquery(Select select, string name)
+		public Subquery(Select select, string alias)
 		{
 			Select = Guard.ThrowIfNull(select, nameof(select));
-			Alias = Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Alias = Guard.ThrowIfNullOrEmpty(alias, nameof(alias));
 		}
 
 		public readonly Select Select;
