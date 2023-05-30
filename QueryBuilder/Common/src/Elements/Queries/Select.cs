@@ -22,7 +22,7 @@ namespace YuraSoft.QueryBuilder.Common
             ColumnCollection.Add(new SourceColumn(columnName, columnAlias, columnSource));
 		}
 
-        public Select(Action<ColumnBuilder> action) : this(_factory.Columns(action))
+        public Select(Action<ColumnBuilder> columnAction) : this(_factory.Columns(columnAction))
         {
         }
 

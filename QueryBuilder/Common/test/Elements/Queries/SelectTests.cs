@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Moq;
 using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
@@ -94,7 +96,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
 		public void Constructor_NullColumnBuilderAction_ThrowsArgumentNullException()
 		{
 			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => new Select(action: null!));
+			Assert.Throws<ArgumentNullException>(() => new Select(columnAction: null!));
 		}
 
 		[Fact]
@@ -428,6 +430,92 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             {
                 Assert.Equal(distinct, select.DistinctValue);
             }
+        }
+
+        [Fact]
+        public void RenderQuery_RendererAndSql_WritesSqlToSql()
+        {
+            // Arrange
+            Select query = new Select("test_name");
+
+            const string expectedSql = "test_sql";
+
+            Mock<IRenderer> rendererMock = new Mock<IRenderer>();
+            rendererMock.Setup(ca => ca.RenderQuery(It.IsAny<Select>(), It.IsAny<StringBuilder>()))
+                .Callback((Select query, StringBuilder sql) => sql.Append(expectedSql));
+
+            IRenderer renderer = rendererMock.Object;
+            StringBuilder sql = new StringBuilder();
+
+            // Act
+            query.RenderQuery(renderer, sql);
+
+            // Assert
+            Assert.Equal(expectedSql, sql.ToString());
+        }
+
+        [Fact]
+        public void RenderQuery_Renderer_ReturnsSql()
+        {
+            // Arrange
+            Select query = new Select("test_name");
+
+            const string expectedSql = "test_sql";
+
+            Mock<IRenderer> rendererMock = new Mock<IRenderer>();
+            rendererMock.Setup(ca => ca.RenderQuery(It.IsAny<Select>(), It.IsAny<StringBuilder>()))
+                .Callback((Select query, StringBuilder sql) => sql.Append(expectedSql));
+
+            IRenderer renderer = rendererMock.Object;
+
+            // Act
+            string sql = query.RenderQuery(renderer);
+
+            // Assert
+            Assert.Equal(expectedSql, sql.ToString());
+        }
+
+        [Fact]
+        public void RenderExpression_RendererAndSql_WritesSqlToSql()
+        {
+            // Arrange
+            Select query = new Select("test_name");
+
+            const string expectedSql = "test_sql";
+
+            Mock<IRenderer> rendererMock = new Mock<IRenderer>();
+            rendererMock.Setup(ca => ca.RenderExpression(It.IsAny<Select>(), It.IsAny<StringBuilder>()))
+                .Callback((Select query, StringBuilder sql) => sql.Append(expectedSql));
+
+            IRenderer renderer = rendererMock.Object;
+            StringBuilder sql = new StringBuilder();
+
+            // Act
+            query.RenderExpression(renderer, sql);
+
+            // Assert
+            Assert.Equal(expectedSql, sql.ToString());
+        }
+
+        [Fact]
+        public void RenderExpression_Renderer_ReturnsSql()
+        {
+            // Arrange
+            Select query = new Select("test_name");
+
+            const string expectedSql = "test_sql";
+
+            Mock<IRenderer> rendererMock = new Mock<IRenderer>();
+            rendererMock.Setup(ca => ca.RenderExpression(It.IsAny<Select>(), It.IsAny<StringBuilder>()))
+                .Callback((Select query, StringBuilder sql) => sql.Append(expectedSql));
+
+            IRenderer renderer = rendererMock.Object;
+
+            // Act
+            string sql = query.RenderExpression(renderer);
+
+            // Assert
+            Assert.Equal(expectedSql, sql.ToString());
         }
     }
 }

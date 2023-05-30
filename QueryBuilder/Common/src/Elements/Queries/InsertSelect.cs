@@ -10,20 +10,20 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		public InsertSelect(string name, Select select) : this(name, alias: null, schema: null, select)
+		public InsertSelect(string tableName, Select select) : this(tableName, tableAlias: null, tableSchema: null, select)
 		{
 		}
 
-		public InsertSelect(string name, string? schema, Select select) : this(name, alias: null, schema, select)
+		public InsertSelect(string tableName, string? tableSchema, Select select) : this(tableName, tableAlias: null, tableSchema, select)
 		{
 		}
 
-		public InsertSelect(string name, string? alias, string? schema, Select select)
+		public InsertSelect(string tableName, string? tableAlias, string? tableSchema, Select select)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(tableName, nameof(tableName));
 			Guard.ThrowIfNull(select, nameof(select));
 
-			Source = new Table(name, alias, schema);
+			Source = new Table(tableName, tableAlias, tableSchema);
             SelectQuery = select;
 		}
 
@@ -38,8 +38,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public readonly Select SelectQuery;
 		public readonly List<IColumn> ReturningColumnCollection = new List<IColumn>();
 
-		public InsertSelect Columns(Action<ColumnBuilder> action) =>
-			Columns(_factory.Columns(action));
+		public InsertSelect Columns(Action<ColumnBuilder> columnAction) =>
+			Columns(_factory.Columns(columnAction));
     
         public InsertSelect Columns(params string[] columns) => 
 			Columns((IEnumerable<string>)columns);
@@ -59,8 +59,8 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-		public InsertSelect Returning(Action<ColumnBuilder> action) =>
-			Returning(_factory.Columns(action));
+		public InsertSelect Returning(Action<ColumnBuilder> columnAction) =>
+			Returning(_factory.Columns(columnAction));
 
         public InsertSelect Returning(params string[] columns) =>
             Returning((IEnumerable<string>)columns);

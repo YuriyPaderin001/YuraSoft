@@ -21,7 +21,7 @@ namespace YuraSoft.QueryBuilder.Common
         public OrderByBuilder Desc(IColumn column) => OrderBy(column, OrderDirection.Desc);
 
         public OrderByBuilder OrderBy(string column, OrderDirection direction) => OrderBy(Factory.Column(column), direction);
-        public OrderByBuilder OrderBy(string column, string columnSource, OrderDirection direction) => OrderBy(Factory.Column(column, columnSource), direction);
+        public OrderByBuilder OrderBy(string column, string columnSource, OrderDirection direction) => OrderBy(Factory.Column(column, alias: null, columnSource), direction);
         public OrderByBuilder OrderBy(string column, ISource columnSource, OrderDirection direction) => OrderBy(Factory.Column(column, columnSource), direction);
         public OrderByBuilder OrderBy(IColumn column, OrderDirection direction) => OrderBy(new OrderBy(column, direction));
 

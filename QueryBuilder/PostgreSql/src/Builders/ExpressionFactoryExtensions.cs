@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using YuraSoft.QueryBuilder.Common;
 
@@ -6,7 +7,21 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 {
     public static class ExpressionFactoryExtensions
     {
-		public static EqualCondition True(this ExpressionFactory factory, IExpression expression) =>
+        #region Functions factory methods
+
+        #region CountWindowFunction factory methods
+
+        public static CountWindowFunction Count(this ExpressionFactory factory, IExpression expression, ICondition? filter, IEnumerable<IColumn>? partitionBy, Action<OrderByBuilder> orderByAction) =>
+            new CountWindowFunction(expression, filter, partitionBy, factory.OrderBy(orderByAction));
+
+        public static CountWindowFunction Count(this ExpressionFactory _, IExpression expression, ICondition? filter, IEnumerable<IColumn>? partitionBy, IEnumerable<IOrderBy>? orderBy) =>
+            new CountWindowFunction(expression, filter, partitionBy, orderBy);
+
+        #endregion CountWindowFunction factory methods
+
+        #endregion Functions factory methods
+
+        public static EqualCondition True(this ExpressionFactory factory, IExpression expression) =>
 			Equal(factory, expression, value: true);
 
 		public static EqualCondition True(this ExpressionFactory factory, Func<ExpressionFactory, IExpression> expressionFunction) =>
@@ -70,7 +85,7 @@ namespace YuraSoft.QueryBuilder.PostgreSql
             factory.Coalesce(factory.Column(column), Bool(factory, value));
 
         public static CoalesceFunction Coalesce(this ExpressionFactory factory, string column, string table, bool value) =>
-            factory.Coalesce(factory.Column(column, table), Bool(factory, value));
+            factory.Coalesce(factory.Column(column, alias: null, table), Bool(factory, value));
 
         public static CoalesceFunction Coalesce(this ExpressionFactory factory, string column, ISource source, bool value) =>
             factory.Coalesce(factory.Column(column, source), Bool(factory, value));
