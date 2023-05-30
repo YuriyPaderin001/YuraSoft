@@ -66,7 +66,7 @@ namespace YuraSoft.QueryBuilder.Common
 		}
 
 		public Select From(string table) => From(new Table(name: table));
-		public Select From(string table, string schema) => From(new Table(name: table, schema: schema));
+		public Select From(string table, string? schema) => From(new Table(name: table, schema: schema));
 		public Select From(Select select, string alias) => From(new Subquery(select, alias));
 
         public virtual Select From(ISource source)
@@ -77,7 +77,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 			return this;
 		}
-
 
         public virtual Select From(params string[] tables) => 
 			From((IEnumerable<string>)tables);
@@ -101,8 +100,8 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-		public virtual Select Where(Action<ConditionBuilder> buildConditionMethod) => 
-			Where(_factory.Condition(buildConditionMethod));
+		public virtual Select Where(Action<ConditionBuilder> conditionAction) => 
+			Where(_factory.Condition(conditionAction));
 		
 		public virtual Select Where(ICondition? condition)
 		{
@@ -111,36 +110,36 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-        public Select LeftJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> action) => LeftJoin(new Table(leftTable), new Table(rightTable), action);
-		public Select LeftJoin(string table, Action<ConditionBuilder> action) => LeftJoin(table, _factory.Condition(action));
+        public Select LeftJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> joinAction) => LeftJoin(new Table(leftTable), new Table(rightTable), joinAction);
+		public Select LeftJoin(string table, Action<ConditionBuilder> joinAction) => LeftJoin(table, _factory.Condition(joinAction));
         public Select LeftJoin(string table, ICondition condition) => LeftJoin(new Table(table), condition);
 
-        public Select LeftJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action) => LeftJoin(rightSource, _factory.Condition(leftSource, rightSource, action));
-        public Select LeftJoin(ISource source, Action<ConditionBuilder> action) => LeftJoin(source, _factory.Condition(action));
+        public Select LeftJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> joinAction) => LeftJoin(rightSource, _factory.Condition(leftSource, rightSource, joinAction));
+        public Select LeftJoin(ISource source, Action<ConditionBuilder> joinAction) => LeftJoin(source, _factory.Condition(joinAction));
         public virtual Select LeftJoin(ISource source, ICondition condition) => AddJoin(new LeftJoin(source, condition));
 
-        public Select RightJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> action) => RightJoin(new Table(leftTable), new Table(rightTable), action);
-        public Select RightJoin(string table, Action<ConditionBuilder> action) => RightJoin(table, _factory.Condition(action));
+        public Select RightJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> joinAction) => RightJoin(new Table(leftTable), new Table(rightTable), joinAction);
+        public Select RightJoin(string table, Action<ConditionBuilder> joinAction) => RightJoin(table, _factory.Condition(joinAction));
         public Select RightJoin(string table, ICondition condition) => RightJoin(new Table(table), condition);
 
-        public Select RightJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action) => RightJoin(rightSource, _factory.Condition(leftSource, rightSource, action));
-        public Select RightJoin(ISource source, Action<ConditionBuilder> action) => RightJoin(source, _factory.Condition(action));
+        public Select RightJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> joinAction) => RightJoin(rightSource, _factory.Condition(leftSource, rightSource, joinAction));
+        public Select RightJoin(ISource source, Action<ConditionBuilder> joinAction) => RightJoin(source, _factory.Condition(joinAction));
         public virtual Select RightJoin(ISource source, ICondition condition) => AddJoin(new RightJoin(source, condition));
 
-        public Select InnerJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> action) => InnerJoin(new Table(leftTable), new Table(rightTable), action);
-        public Select InnerJoin(string table, Action<ConditionBuilder> action) => InnerJoin(table, _factory.Condition(action));
+        public Select InnerJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> joinAction) => InnerJoin(new Table(leftTable), new Table(rightTable), joinAction);
+        public Select InnerJoin(string table, Action<ConditionBuilder> joinAction) => InnerJoin(table, _factory.Condition(joinAction));
         public Select InnerJoin(string table, ICondition condition) => InnerJoin(new Table(table), condition);
 
-        public Select InnerJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action) => InnerJoin(rightSource, _factory.Condition(leftSource, rightSource, action));
-        public Select InnerJoin(ISource source, Action<ConditionBuilder> action) => InnerJoin(source, _factory.Condition(action));
+        public Select InnerJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> joinAction) => InnerJoin(rightSource, _factory.Condition(leftSource, rightSource, joinAction));
+        public Select InnerJoin(ISource source, Action<ConditionBuilder> joinAction) => InnerJoin(source, _factory.Condition(joinAction));
         public virtual Select InnerJoin(ISource source, ICondition condition) => AddJoin(new InnerJoin(source, condition));
 
-        public Select FullJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> action) => FullJoin(new Table(leftTable), new Table(rightTable), action);
-        public Select FullJoin(string table, Action<ConditionBuilder> action) => FullJoin(table, _factory.Condition(action));
+        public Select FullJoin(string leftTable, string rightTable, Action<ConditionBuilder, ISource, ISource> joinAction) => FullJoin(new Table(leftTable), new Table(rightTable), joinAction);
+        public Select FullJoin(string table, Action<ConditionBuilder> joinAction) => FullJoin(table, _factory.Condition(joinAction));
         public Select FullJoin(string table, ICondition condition) => FullJoin(new Table(table), condition);
 
-        public Select FullJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action) => FullJoin(rightSource, _factory.Condition(leftSource, rightSource, action));
-        public Select FullJoin(ISource source, Action<ConditionBuilder> action) => FullJoin(source, _factory.Condition(action));
+        public Select FullJoin(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> joinAction) => FullJoin(rightSource, _factory.Condition(leftSource, rightSource, joinAction));
+        public Select FullJoin(ISource source, Action<ConditionBuilder> joinAction) => FullJoin(source, _factory.Condition(joinAction));
         public virtual Select FullJoin(ISource source, ICondition condition) => AddJoin(new FullJoin(source, condition));
 
         public Select CrossJoin(string table) => CrossJoin(new Table(table));
@@ -148,8 +147,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public virtual Select Join(IJoin join) => AddJoin(join);
 
-		public virtual Select Having(Action<ConditionBuilder> buildConditionMethod) => 
-			Having(_factory.Condition(buildConditionMethod));
+		public virtual Select Having(Action<ConditionBuilder> conditionAction) => 
+			Having(_factory.Condition(conditionAction));
 
 		public virtual Select Having(ICondition? condition)
 		{

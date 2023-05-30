@@ -331,6 +331,544 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
         public void Distinct_NullIDistinct_SetDistinctValue() =>
             Distinct_IDistinct_SetDistinctValue_Base(distinct: null);
 
+        [Fact]
+        public void From_Table_SetSourceCollection()
+        {
+            // Arrange
+            const string tableName = "test_table";
+
+            Select select = new Select(Array.Empty<IColumn>());
+
+            // Act
+            select.From(tableName);
+
+            // Assert
+            Assert.Empty(select.ColumnCollection);
+            Assert.Null(select.DistinctValue);
+            Assert.Single(select.SourceCollection);
+
+            Table table = Assert.IsType<Table>(select.SourceCollection[0]);
+            Assert.Equal(tableName, table.Name);
+
+            Assert.Null(select.WhereCondition);
+            Assert.Empty(select.JoinCollection);
+            Assert.Null(select.HavingCondition);
+            Assert.Empty(select.OrderByCollection);
+            Assert.Empty(select.GroupByCollection);
+            Assert.False(select.OffsetValue.HasValue);
+            Assert.False(select.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("test_schema")]
+        public void From_TableAndSchema_SetSourceCollection(string? tableSchema)
+        {
+            // Arrange
+            const string tableName = "test_table";
+
+            Select query = new Select(Array.Empty<IColumn>());
+
+            // Act
+            query.From(tableName, tableSchema);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Single(query.SourceCollection);
+
+            Table table = Assert.IsType<Table>(query.SourceCollection[0]);
+            Assert.Equal(tableName, table.Name);
+            Assert.Equal(tableSchema, table.Schema);
+
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void From_SelectAndAlias_SetSourceCollection()
+        {
+            // Arrange
+            Select subquery = new Select("test_column");
+            const string alias = "test_subquery";
+
+            Select query = new Select(Array.Empty<IColumn>());
+
+            // Act
+            query.From(subquery, alias);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Single(query.SourceCollection);
+
+            Subquery source = Assert.IsType<Subquery>(query.SourceCollection[0]);
+            Assert.Equal(subquery, source.Select);
+            Assert.Equal(alias, source.Alias);
+
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(3)]
+        public void From_TablesAsParams_SetSourceCollection(int tablesCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            string[] tables = new string[tablesCount];
+            for (int i = 0; i < tablesCount; i++)
+            {
+                tables[i] = $"table_{i + 1}_name";
+            }
+
+            // Act
+            query.From(tables);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+
+            Assert.Equal(tablesCount, query.SourceCollection.Count);
+
+            for (int i = 0; i < tablesCount; i++)
+            {
+                Table table = Assert.IsType<Table>(query.SourceCollection[i]);
+
+                Assert.Equal(tables[i], table.Name);
+            }
+
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public void From_TablesAsEnumerable_SetSourceCollection(int tablesCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            
+            string[] tables = new string[tablesCount];
+            for (int i = 0; i < tablesCount; i++)
+            {
+                tables[i] = $"table_{i + 1}_name";
+            }
+
+            // Act
+            query.From((IEnumerable<string>)tables);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+
+            Assert.Equal(tablesCount, query.SourceCollection.Count);
+
+            for (int i = 0; i < tablesCount; i++)
+            {
+                Table table = Assert.IsType<Table>(query.SourceCollection[i]);
+
+                Assert.Equal(tables[i], table.Name);
+            }
+
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public void From_SourcesAsParams_SetSourceCollection(int sourcesCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            List<ISource> sources = NewSources(sourcesCount);
+
+            // Act
+            query.From(sources.ToArray());
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Equal(sources, query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public void From_SourcesAsEnumerable_SetSourceCollection(int sourcesCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            List<ISource> sources = NewSources(sourcesCount);
+
+            // Act
+            query.From(sources);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Equal(sources, query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void From_NullOrEmptyTable_ThrowsArgumentException(string? table) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(table!));
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(null, "")]
+        [InlineData("", null)]
+        [InlineData("", "")]
+        public void From_NullOrEmptyTableAndSchema_ThrowsArgumentException(string? table, string? schema) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(table!, schema));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("test_alias")]
+        public void From_NullSelectAndAlias_ThrowsArgumentNullException(string? alias) =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From(select: null!, alias!));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void From_SelectAndNullOrEmptyAlias_ThrowsArgumentException(string? alias) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new Select(Array.Empty<IColumn>()), alias!));
+
+        [Fact]
+        public void From_NullSource_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From(source: null!));
+
+        [Fact]
+        public void From_NullTableNamesAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From((string[])null!));
+
+        [Fact]
+        public void From_NullTableNamesAsEnumerable_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From((IEnumerable<string>)null!));
+
+        [Fact]
+        public void From_NullTablesAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From((ISource[])null!));
+
+        [Fact]
+        public void From_NullTablesAsEnumerable_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From((IEnumerable<ISource>)null!));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void From_TableNamesAsParamsWithNullOrEmptyItems_ThrowsArgumentException(string? invalidTableName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new string[] { "test_table_1", "test_table_2", invalidTableName! }));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void From_TableNamesAsEnumerableWithNullOrEmptyItems_ThrowsArgumentException(string? invalidTableName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new List<string> { "test_table_1", invalidTableName!, "test_table_3" }));
+
+        [Fact]
+        public void From_TablesAsParamsWithNullItems_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From(new ISource[] { NewSource(), NewSource(), null! }));
+
+        [Fact]
+        public void From_TablesAsEnumerableWithNullItems_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new List<ISource> { NewSource(), NewSource(), null! }));
+
+        [Fact]
+        public void Where_Condition_SetWhereCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            ICondition condition = new Mock<ICondition>().Object;
+
+            // Act
+            query.Where(condition);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Equal(condition, query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Where_NullCondition_SetWhereCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>()).Where(new Mock<ICondition>().Object);
+
+            // Act
+            query.Where(condition: null);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Where_ConditionAction_SetWhereCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            ICondition condition = new Mock<ICondition>().Object;
+            Action<ConditionBuilder> conditionAction = (cb) => cb.Condition(condition);
+
+            // Act
+            query.Where(conditionAction);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Equal(condition, query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Where_NullConditionAction_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).Where(conditionAction: null!));
+
+        [Fact]
+        public void LeftJoin_LeftTableAndRightTableAndJoinAction_AddToJoinCollection()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string leftTableName = "left_test_table";
+            const string rightTableName = "right_test_table";
+            Action<ConditionBuilder, ISource, ISource> action = (c, l, r) => c.Equal("test_column1", l, "test_column2", r);
+
+            // Act
+            query.LeftJoin(leftTableName, rightTableName, action);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+
+            Assert.Single(query.JoinCollection);
+            LeftJoin join = Assert.IsType<LeftJoin>(query.JoinCollection[0]);
+            Table table = Assert.IsType<Table>(join.Source);
+
+            Assert.Equal(rightTableName, table.Name);
+
+            EqualCondition condition = Assert.IsType<EqualCondition>(join.Condition);
+            Table leftTable = Assert.IsType<Table>(condition.LeftExpression);
+            Table rightTable = Assert.IsType<Table>(condition.RightExpression);
+
+            Assert.Equal(leftTableName, leftTable.Name);
+            Assert.Equal(rightTableName, rightTable.Name);
+
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void LeftJoin_TableAndJoinAction_AddToJoinCollection()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string tableName = "right_test_table";
+            Action<ConditionBuilder> joinAction = (cb) => cb.Equal("test_column1", "test_column2");
+
+            // Act
+            query.LeftJoin(tableName, joinAction);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+
+            Assert.Single(query.JoinCollection);
+            LeftJoin join = Assert.IsType<LeftJoin>(query.JoinCollection[0]);
+            Table table = Assert.IsType<Table>(join.Source);
+
+            Assert.Equal(tableName, table.Name);
+
+            EqualCondition condition = Assert.IsType<EqualCondition>(join.Condition);
+            
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void LeftJoin_TableAndCondition_AddToJoinCollection()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string tableName = "right_test_table";
+            ICondition condition = new Mock<ICondition>().Object;
+
+            // Act
+            query.LeftJoin(tableName, condition);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+
+            Assert.Single(query.JoinCollection);
+            LeftJoin join = Assert.IsType<LeftJoin>(query.JoinCollection[0]);
+            Table table = Assert.IsType<Table>(join.Source);
+
+            Assert.Equal(tableName, table.Name);
+            Assert.Equal(condition, join.Condition);
+
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Having_Condition_SetHavingCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            ICondition condition = new Mock<ICondition>().Object;
+
+            // Act
+            query.Having(condition);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Equal(condition, query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Having_NullCondition_SetHavingCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>()).Having(new Mock<ICondition>().Object);
+
+            // Act
+            query.Having(condition: null);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Null(query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Having_ConditionAction_SetHavingCondition()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+            ICondition condition = new Mock<ICondition>().Object;
+            Action<ConditionBuilder> conditionAction = (cb) => cb.Condition(condition);
+
+            // Act
+            query.Having(conditionAction);
+
+            // Assert
+            Assert.Empty(query.ColumnCollection);
+            Assert.Null(query.DistinctValue);
+            Assert.Empty(query.SourceCollection);
+            Assert.Null(query.WhereCondition);
+            Assert.Empty(query.JoinCollection);
+            Assert.Equal(condition, query.HavingCondition);
+            Assert.Empty(query.OrderByCollection);
+            Assert.Empty(query.GroupByCollection);
+            Assert.False(query.OffsetValue.HasValue);
+            Assert.False(query.LimitValue.HasValue);
+        }
+
+        [Fact]
+        public void Having_NullConditionAction_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).Having(conditionAction: null!));
+
         private void Constructor_StringAndISource_Success_Base(string name, ISource? source)
         {
             // Act
