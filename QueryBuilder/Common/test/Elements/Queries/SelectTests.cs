@@ -380,7 +380,16 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
 
             Table table = Assert.IsType<Table>(query.SourceCollection[0]);
             Assert.Equal(tableName, table.Name);
-            Assert.Equal(tableSchema, table.Schema);
+            Assert.Null(table.Alias);
+
+            if (string.IsNullOrEmpty(tableSchema))
+            {
+                Assert.Null(table.Schema);
+            }
+            else
+            {
+                Assert.Equal(tableSchema, table.Schema);
+            }
 
             Assert.Null(query.WhereCondition);
             Assert.Empty(query.JoinCollection);
@@ -612,8 +621,8 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new List<string> { "test_table_1", invalidTableName!, "test_table_3" }));
 
         [Fact]
-        public void From_TablesAsParamsWithNullItems_ThrowsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).From(new ISource[] { NewSource(), NewSource(), null! }));
+        public void From_TablesAsParamsWithNullItems_ThrowsArgumentException() =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).From(new ISource[] { NewSource(), NewSource(), null! }));
 
         [Fact]
         public void From_TablesAsEnumerableWithNullItems_ThrowsArgumentNullException() =>
@@ -700,7 +709,11 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
 
             const string leftTableName = "left_test_table";
             const string rightTableName = "right_test_table";
-            Action<ConditionBuilder, ISource, ISource> action = (c, l, r) => c.Equal("test_column1", l, "test_column2", r);
+
+            const string leftColumnName = "left_test_column";
+            const string rightColumnName = "right_test_column";
+
+            Action<ConditionBuilder, ISource, ISource> action = (c, l, r) => c.Equal(leftColumnName, l, rightColumnName, r);
 
             // Act
             query.LeftJoin(leftTableName, rightTableName, action);
@@ -716,13 +729,28 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             Table table = Assert.IsType<Table>(join.Source);
 
             Assert.Equal(rightTableName, table.Name);
+            Assert.Null(table.Alias);
+            Assert.Null(table.Schema);
 
             EqualCondition condition = Assert.IsType<EqualCondition>(join.Condition);
-            Table leftTable = Assert.IsType<Table>(condition.LeftExpression);
-            Table rightTable = Assert.IsType<Table>(condition.RightExpression);
+            
+            SourceColumn leftColumn = Assert.IsType<SourceColumn>(condition.LeftExpression);
+            Assert.Equal(leftColumnName, leftColumn.Name);
+            Assert.Null(leftColumn.Alias);
 
-            Assert.Equal(leftTableName, leftTable.Name);
-            Assert.Equal(rightTableName, rightTable.Name);
+            Table leftColumnTable = Assert.IsType<Table>(leftColumn.Source);
+            Assert.Equal(leftTableName, leftColumnTable.Name);
+            Assert.Null(leftColumnTable.Alias);
+            Assert.Null(leftColumnTable.Schema);
+
+            SourceColumn rightColumn = Assert.IsType<SourceColumn>(condition.RightExpression);
+            Assert.Equal(rightColumnName, rightColumn.Name);
+            Assert.Null(rightColumn.Alias);
+
+            Table rightColumnTable = Assert.IsType<Table>(rightColumn.Source);
+            Assert.Equal(rightTableName, rightColumnTable.Name);
+            Assert.Null(rightColumnTable.Alias);
+            Assert.Null(rightColumnTable.Schema);
 
             Assert.Null(query.HavingCondition);
             Assert.Empty(query.OrderByCollection);
