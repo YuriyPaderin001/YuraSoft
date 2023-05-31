@@ -897,6 +897,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public ICondition Condition(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action)
 		{
+			Guard.ThrowIfNull(leftSource, nameof(leftSource));
+			Guard.ThrowIfNull(rightSource, nameof(rightSource));
 			Guard.ThrowIfNull(action, nameof(action));
 
 			ConditionBuilder builder = new ConditionBuilder();
