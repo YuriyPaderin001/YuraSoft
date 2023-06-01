@@ -159,11 +159,11 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public virtual Select OrderByAsc(string columnName, ISource? columnSource) => OrderBy(new OrderByAsc(new SourceColumn(columnName, columnSource)));
 		public virtual Select OrderByAsc(string columnName, string? columnAlias, ISource? columnSource) => OrderBy(new OrderByAsc(new SourceColumn(columnName, columnAlias, columnSource)));
-		public virtual Select OrderByAsc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
-		public virtual Select OrderByAsc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
+		public virtual Select OrderByAsc(params string[] columnNames) => OrderBy(columnNames.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
+		public virtual Select OrderByAsc(IEnumerable<string> columnNames) => OrderBy(columnNames.Select<string, IOrderBy>(c => new OrderByAsc(new SourceColumn(c))));
 		public virtual Select OrderByAsc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
 		public virtual Select OrderByAsc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByAsc(c)));
-		public virtual Select OrderByAsc(Action<ColumnBuilder> action) => OrderByAsc(_factory.Columns(action));
+		public virtual Select OrderByAsc(Action<ColumnBuilder> orderByAction) => OrderByAsc(_factory.Columns(orderByAction));
 
 		public virtual Select OrderByDesc(string columnName, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnSource)));
 		public virtual Select OrderByDesc(string columnName, string? columnAlias, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnAlias, columnSource)));
