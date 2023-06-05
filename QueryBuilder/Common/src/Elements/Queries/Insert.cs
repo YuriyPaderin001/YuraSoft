@@ -10,19 +10,19 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		public Insert(string name) : this(name, alias: null, schema: null)
+		public Insert(string tableName) : this(tableName, tableAlias: null, tableSchema: null)
 		{
 		}
 
-		public Insert(string name, string? schema) : this(name, alias: null, schema)
+		public Insert(string tableName, string? tableSchema) : this(tableName, tableAlias: null, tableSchema)
 		{
 		}
 
-		public Insert(string name, string? alias, string? schema)
+		public Insert(string tableName, string? tableAlias, string? tableSchema)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(tableName, nameof(tableName));
 
-			Source = new Table(name, alias, schema);
+			Source = new Table(tableName, tableAlias, tableSchema);
 		}
 
 		public Insert(Table table)
@@ -32,11 +32,11 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public readonly ISource Source;
 		public readonly List<IColumn> ColumnCollection = new List<IColumn>();
-		public List<IExpression> ValueCollection = new List<IExpression>();
-		public List<IColumn> ReturningColumnCollection = new List<IColumn>();
+		public readonly List<IExpression> ValueCollection = new List<IExpression>();
+		public readonly List<IColumn> ReturningColumnCollection = new List<IColumn>();
 
-		public Insert Columns(Action<ColumnBuilder> action) =>
-			Columns(_factory.Columns(action));
+		public Insert Columns(Action<ColumnBuilder> columnAction) =>
+			Columns(_factory.Columns(columnAction));
 
         public Insert Columns(params string[] columns) => 
 			Columns((IEnumerable<string>)columns);
@@ -56,8 +56,8 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-		public Insert Values(Action<ExpressionBuilder> action) =>
-			Values(_factory.Expressions(action));
+		public Insert Values(Action<ExpressionBuilder> valueAction) =>
+			Values(_factory.Expressions(valueAction));
         
         public Insert Values(params IExpression[] values) => 
 			Values((IEnumerable<IExpression>)values);
@@ -71,8 +71,8 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-        public Insert Returning(Action<ColumnBuilder> action) =>
-            Returning(_factory.Columns(action));
+        public Insert Returning(Action<ColumnBuilder> columnAction) =>
+            Returning(_factory.Columns(columnAction));
 
         public Insert Returning(params string[] columns) =>
             Returning((IEnumerable<string>)columns);

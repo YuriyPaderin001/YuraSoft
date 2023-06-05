@@ -5,14 +5,13 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class ColumnBuilder
 	{
-		public readonly ExpressionFactory Factory = ExpressionFactory.Instance;
+		public static readonly ExpressionFactory Factory = ExpressionFactory.Instance;
 
 		public readonly List<IColumn> Columns = new List<IColumn>();
 
 		#region Column methods
 
 		public ColumnBuilder Column(IColumn column) => Add(column);
-
 		public ColumnBuilder Column(IExpression expression, string? alias = null) => Add(Factory.Column(expression, alias));
 		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(expressionFunction, alias));
 		public ColumnBuilder Column(string name) => Add(Factory.Column(name));
@@ -36,33 +35,49 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Plus methods
 
-		public ColumnBuilder Plus(string? alias, params IExpression[] expressions) => Add(Factory.Column(Factory.Plus(expressions), alias));
-		public ColumnBuilder Plus(Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Plus(action), alias));
-		public ColumnBuilder Plus(IEnumerable<IExpression> expressions, string? alias = null) => Add(Factory.Column(Factory.Plus(expressions), alias));
+		public ColumnBuilder Plus(string column1, string column2, string? alias = null) => Column(Factory.Plus(column1, column2), alias);
+		public ColumnBuilder Plus(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Plus(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Plus(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Plus(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Plus(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Plus(leftExpression, rightExpression), alias);
+		public ColumnBuilder Plus(string? alias, params IExpression[] expressions) => Column(Factory.Plus(expressions), alias);
+		public ColumnBuilder Plus(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Plus(action), alias);
+		public ColumnBuilder Plus(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Plus(expressions), alias);
 
 		#endregion Plus methods
 
 		#region Minus methods
 
-		public ColumnBuilder Minus(string? alias, params IExpression[] expressions) => Add(Factory.Column(Factory.Minus(expressions), alias));
-		public ColumnBuilder Minus(Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Minus(action), alias));
-		public ColumnBuilder Minus(IEnumerable<IExpression> expressions, string? alias = null) => Add(Factory.Column(Factory.Minus(expressions), alias));
+		public ColumnBuilder Minus(string column1, string column2, string? alias = null) => Column(Factory.Minus(column1, column2), alias);
+		public ColumnBuilder Minus(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Minus(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Minus(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Minus(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Minus(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Minus(leftExpression, rightExpression), alias);
+		public ColumnBuilder Minus(string? alias, params IExpression[] expressions) => Column(Factory.Minus(expressions), alias);
+		public ColumnBuilder Minus(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Minus(action), alias);
+		public ColumnBuilder Minus(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Minus(expressions), alias);
 
 		#endregion Minus methods
 
 		#region Multiply methods
 
-		public ColumnBuilder Multiply(string? alias, params IExpression[] expressions) => Add(Factory.Column(Factory.Multiply(expressions), alias));
-		public ColumnBuilder Multiply(Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Multiply(action), alias));
-		public ColumnBuilder Multiply(IEnumerable<IExpression> expressions, string? alias = null) => Add(Factory.Column(Factory.Multiply(expressions), alias));
+		public ColumnBuilder Multiply(string column1, string column2, string? alias = null) => Column(Factory.Multiply(column1, column2), alias);
+		public ColumnBuilder Multiply(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Multiply(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Multiply(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Multiply(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Multiply(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Multiply(leftExpression, rightExpression), alias);
+		public ColumnBuilder Multiply(string? alias, params IExpression[] expressions) => Column(Factory.Multiply(expressions), alias);
+		public ColumnBuilder Multiply(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Multiply(action), alias);
+		public ColumnBuilder Multiply(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Multiply(expressions), alias);
 
 		#endregion Multiply methods
 
 		#region Divide methods
 
-		public ColumnBuilder Divide(string? alias, params IExpression[] expressions) => Add(Factory.Column(Factory.Divide(expressions), alias));
-		public ColumnBuilder Divide(Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Divide(action), alias));
-		public ColumnBuilder Divide(IEnumerable<IExpression> expressions, string? alias = null) => Add(Factory.Column(Factory.Divide(expressions), alias));
+		public ColumnBuilder Divide(string column1, string column2, string? alias = null) => Column(Factory.Divide(column1, column2), alias);
+		public ColumnBuilder Divide(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Divide(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Divide(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Divide(column1, column1Source, column2, column2Source), alias);
+		public ColumnBuilder Divide(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Divide(leftExpression, rightExpression), alias);
+		public ColumnBuilder Divide(string? alias, params IExpression[] expressions) => Column(Factory.Divide(expressions), alias);
+		public ColumnBuilder Divide(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Divide(action), alias);
+		public ColumnBuilder Divide(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Divide(expressions), alias);
 
 		#endregion Divide methods
 

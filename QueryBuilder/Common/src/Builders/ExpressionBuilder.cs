@@ -702,6 +702,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region PlusEpression methods
 
+		public ExpressionBuilder Plus(string column1, string column2) => Add(Factory.Plus(column1, column2));
+		public ExpressionBuilder Plus(string column1, string column1Source, string column2, string column2Source) => Add(Factory.Plus(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Plus(string column1, ISource column1Source, string column2, ISource column2Source) => Add(Factory.Plus(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Plus(IExpression leftExpression, IExpression rightExpression) => Add(Factory.Plus(leftExpression, rightExpression));
 		public ExpressionBuilder Plus(params IExpression[] expressions) => Add(Factory.Plus(expressions));
 		public ExpressionBuilder Plus(Action<ExpressionBuilder> action) => Add(Factory.Plus(action));
 		public ExpressionBuilder Plus(IEnumerable<IExpression> expressions) => Add(Factory.Plus(expressions));
@@ -710,6 +714,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MinusExpression methods
 
+		public ExpressionBuilder Minus(string column1, string column2) => Add(Factory.Minus(column1, column2));
+		public ExpressionBuilder Minus(string column1, string column1Source, string column2, string column2Source) => Add(Factory.Minus(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Minus(string column1, ISource column1Source, string column2, ISource column2Source) => Add(Factory.Minus(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Minus(IExpression leftExpression, IExpression rightExpression) => Add(Factory.Minus(leftExpression, rightExpression));
 		public ExpressionBuilder Minus(params IExpression[] expressions) => Add(Factory.Minus(expressions));
 		public ExpressionBuilder Minus(Action<ExpressionBuilder> action) => Add(Factory.Minus(action));
 		public ExpressionBuilder Minus(IEnumerable<IExpression> expressions) => Add(Factory.Minus(expressions));
@@ -718,6 +726,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MultiplyExpression methods
 
+		public ExpressionBuilder Multiply(string column1, string column2) => Add(Factory.Multiply(column1, column2));
+		public ExpressionBuilder Multiply(string column1, string column1Source, string column2, string column2Source) => Add(Factory.Multiply(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Multiply(string column1, ISource column1Source, string column2, ISource column2Source) => Add(Factory.Multiply(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Multiply(IExpression leftExpression, IExpression rightExpression) => Add(Factory.Multiply(leftExpression, rightExpression));
 		public ExpressionBuilder Multiply(params IExpression[] expressions) => Add(Factory.Multiply(expressions));
 		public ExpressionBuilder Multiply(Action<ExpressionBuilder> action) => Add(Factory.Multiply(action));
 		public ExpressionBuilder Multiply(IEnumerable<IExpression> expressions) => Add(Factory.Multiply(expressions));
@@ -726,6 +738,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region DivideExpression methods
 
+		public ExpressionBuilder Divide(string column1, string column2) => Add(Factory.Divide(column1, column2));
+		public ExpressionBuilder Divide(string column1, string column1Source, string column2, string column2Source) => Add(Factory.Divide(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Divide(string column1, ISource column1Source, string column2, ISource column2Source) => Add(Factory.Divide(column1, column1Source, column2, column2Source));
+		public ExpressionBuilder Divide(IExpression leftExpression, IExpression rightExpression) => Add(Factory.Divide(leftExpression, rightExpression));
 		public ExpressionBuilder Divide(params IExpression[] expressions) => Add(Factory.Divide(expressions));
 		public ExpressionBuilder Divide(Action<ExpressionBuilder> action) => Add(Factory.Divide(action));
 		public ExpressionBuilder Divide(IEnumerable<IExpression> expressions) => Add(Factory.Divide(expressions));
