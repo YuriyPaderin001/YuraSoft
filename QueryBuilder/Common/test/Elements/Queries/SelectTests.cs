@@ -2336,7 +2336,8 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             
             for (int i = 0; i < columnsCount; i++)
             {
-                SourceColumn column = Assert.IsType<SourceColumn>(query.OrderByCollection[i]);
+                OrderByAsc orderByAsc = Assert.IsType<OrderByAsc>(query.OrderByCollection[i]);
+                SourceColumn column = Assert.IsType<SourceColumn>(orderByAsc.Column);
 
                 Assert.Equal(columns[i], column.Name);
                 Assert.Null(column.Alias);
