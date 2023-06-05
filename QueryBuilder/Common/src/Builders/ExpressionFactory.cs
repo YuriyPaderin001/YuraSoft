@@ -77,10 +77,10 @@ namespace YuraSoft.QueryBuilder.Common
 		public AndCondition And(params ICondition[] conditions) => new AndCondition(conditions);
 		public AndCondition And(IEnumerable<ICondition> conditions) => new AndCondition(conditions);
 		public AndCondition And(ConditionBuilder builder) => new AndCondition(builder.Conditions);
-		public AndCondition And(Action<ConditionBuilder> buildConditionMethod)
+		public AndCondition And(Action<ConditionBuilder> conditionAction)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
+			conditionAction.Invoke(builder);
 
 			return new AndCondition(builder.Conditions);
 		}
@@ -92,10 +92,10 @@ namespace YuraSoft.QueryBuilder.Common
 		public OrCondition Or(params ICondition[] conditions) => new OrCondition(conditions);
 		public OrCondition Or(IEnumerable<ICondition> conditions) => new OrCondition(conditions);
 		public OrCondition Or(ConditionBuilder builder) => new OrCondition(builder.Conditions);
-		public OrCondition Or(Action<ConditionBuilder> buildConditionMethod)
+		public OrCondition Or(Action<ConditionBuilder> conditionAction)
 		{
 			ConditionBuilder builder = new ConditionBuilder();
-			buildConditionMethod.Invoke(builder);
+			conditionAction.Invoke(builder);
 
 			return new OrCondition(builder.Conditions);
 		}
@@ -361,7 +361,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterOrEqualCondition GreaterOrEqual(string column, DateTime value, string? format = null) => new GreaterOrEqualCondition(new SourceColumn(column), new DateTimeValue(value, format));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string value) => new GreaterOrEqualCondition(new SourceColumn(column), new StringValue(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, IExpression expression) => new GreaterOrEqualCondition(new SourceColumn(column), expression);
-		public GreaterOrEqualCondition GreaterOrEqual(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(Column(column), Expression(expressionFunction));
+		public GreaterOrEqualCondition GreaterOrEqual(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(new SourceColumn(column), Expression(expressionFunction));
 
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, sbyte value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, short value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
@@ -373,7 +373,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, DateTime value, string? format = null) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, string value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, IExpression expression) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), expression);
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(Column(column, alias: null, table), Expression(expressionFunction));
+		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), Expression(expressionFunction));
 
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, sbyte value) => new GreaterOrEqualCondition(new SourceColumn(column, source), new Int8Value(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, short value) => new GreaterOrEqualCondition(new SourceColumn(column, source), new Int16Value(value));
@@ -917,6 +917,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region PlusEpression factory methods
 
+		public PlusExpression Plus(string column1, string column2) => Plus(Column(column1), Column(column2));
+		public PlusExpression Plus(string column1, string column1Source, string column2, string column2Source) => Plus(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
+		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => Plus(Column(column1, column1Source), Column(column2, column2Source));
+		public PlusExpression Plus(IExpression leftExpression, IExpression rightExpression) => Plus(leftExpression, rightExpression);
 		public PlusExpression Plus(params IExpression[] expressions) => new PlusExpression(expressions);
 		public PlusExpression Plus(Action<ExpressionBuilder> action) => new PlusExpression(Expressions(action));
 		public PlusExpression Plus(IEnumerable<IExpression> expressions) => new PlusExpression(expressions);
@@ -925,6 +929,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MinusExpression factory methods
 
+		public MinusExpression Minus(string column1, string column2) => Minus(Column(column1), Column(column2));
+		public MinusExpression Minus(string column1, string column1Source, string column2, string column2Source) => Minus(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
+		public MinusExpression Minus(string column1, ISource column1Source, string column2, ISource column2Source) => Minus(Column(column1, column1Source), Column(column2, column2Source));
+		public MinusExpression Minus(IExpression leftExpression, IExpression rightExpression) => Minus(leftExpression, rightExpression);
 		public MinusExpression Minus(params IExpression[] expressions) => new MinusExpression(expressions);
 		public MinusExpression Minus(Action<ExpressionBuilder> action) => new MinusExpression(Expressions(action));
 		public MinusExpression Minus(IEnumerable<IExpression> expressions) => new MinusExpression(expressions);
@@ -933,6 +941,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MultiplyExpression factory methods
 
+		public MultiplyExpression Multiply(string column1, string column2) => Multiply(Column(column1), Column(column2));
+		public MultiplyExpression Multiply(string column1, string column1Source, string column2, string column2Source) => Multiply(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
+		public MultiplyExpression Multiply(string column1, ISource column1Source, string column2, ISource column2Source) => Multiply(Column(column1, column1Source), Column(column2, column2Source));
+		public MultiplyExpression Multiply(IExpression leftExpression, IExpression rightExpression) => Multiply(leftExpression, rightExpression);
 		public MultiplyExpression Multiply(params IExpression[] expressions) => new MultiplyExpression(expressions);
 		public MultiplyExpression Multiply(Action<ExpressionBuilder> action) => new MultiplyExpression(Expressions(action));
 		public MultiplyExpression Multiply(IEnumerable<IExpression> expressions) => new MultiplyExpression(expressions);
@@ -941,6 +953,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region DivideExpression factory methods
 
+		public DivideExpression Divide(string column1, string column2) => Divide(Column(column1), Column(column2));
+		public DivideExpression Divide(string column1, string column1Source, string column2, string column2Source) => Divide(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
+		public DivideExpression Divide(string column1, ISource column1Source, string column2, ISource column2Source) => Divide(Column(column1, column1Source), Column(column2, column2Source));
+		public DivideExpression Divide(IExpression leftExpression, IExpression rightExpression) => Divide(leftExpression, rightExpression);
 		public DivideExpression Divide(params IExpression[] expressions) => new DivideExpression(expressions);
 		public DivideExpression Divide(Action<ExpressionBuilder> action) => new DivideExpression(Expressions(action));
 		public DivideExpression Divide(IEnumerable<IExpression> expressions) => new DivideExpression(expressions);
