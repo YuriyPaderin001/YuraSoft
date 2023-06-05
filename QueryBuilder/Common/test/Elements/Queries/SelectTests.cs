@@ -2462,106 +2462,1006 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             Assert.False(query.LimitValue.HasValue);
         }
 
-        private void Constructor_StringAndISource_Success_Base(string name, ISource? source)
-        {
-            // Act
-            Select select = new Select(name, source);
-
-            // Assert
-            IColumn column = Assert.Single(select.ColumnCollection);
-            SourceColumn sourceColumn = Assert.IsType<SourceColumn>(column);
-            Assert.Equal(name, sourceColumn.Name);
-            Assert.Null(sourceColumn.Alias);
-
-			if (source == null)
-			{
-				Assert.Null(sourceColumn.Source);
-			}
-			else
-			{
-				Assert.Equal(source, sourceColumn.Source);
-			}
-
-            Assert.Null(select.DistinctValue);
-            Assert.Empty(select.SourceCollection);
-            Assert.Null(select.WhereCondition);
-            Assert.Empty(select.JoinCollection);
-            Assert.Null(select.HavingCondition);
-            Assert.Empty(select.OrderByCollection);
-            Assert.Empty(select.GroupByCollection);
-            Assert.False(select.OffsetValue.HasValue);
-            Assert.False(select.LimitValue.HasValue);
-        }
-
-        private void Constructor_StringAndISource_ThrowsArgumentException(string? name, ISource? source)
-        {
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => new Select(name!, source));
-        }
-
-        private void Constructor_StringAndStringAndISource_Success_Base(string name, string? alias, ISource? source)
-        {
-            // Act
-            Select select = new Select(name, alias, source);
-
-            // Assert
-            IColumn column = Assert.Single(select.ColumnCollection);
-            SourceColumn sourceColumn = Assert.IsType<SourceColumn>(column);
-            Assert.Equal(name, sourceColumn.Name);
-
-			if (string.IsNullOrEmpty(alias))
-			{
-				Assert.Null(sourceColumn.Alias);
-			}
-			else
-			{
-				Assert.Equal(alias, sourceColumn.Alias);
-			}
-
-            if (source == null)
-            {
-                Assert.Null(sourceColumn.Source);
-            }
-            else
-            {
-                Assert.Equal(source, sourceColumn.Source);
-            }
-
-            Assert.Null(select.DistinctValue);
-            Assert.Empty(select.SourceCollection);
-            Assert.Null(select.WhereCondition);
-            Assert.Empty(select.JoinCollection);
-            Assert.Null(select.HavingCondition);
-            Assert.Empty(select.OrderByCollection);
-            Assert.Empty(select.GroupByCollection);
-            Assert.False(select.OffsetValue.HasValue);
-            Assert.False(select.LimitValue.HasValue);
-        }
-
-        private void Constructor_StringAndStringAndISource_ThrowsArgumentException(string? name, string? alias, ISource? source)
-        {
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => new Select(name!, alias, source));
-        }
-
-        private void Distinct_IDistinct_SetDistinctValue_Base(IDistinct? distinct)
+        [Fact]
+        public void OrderByAsc_OrderByAction_AddToOrderByCollection()
         {
             // Arrange
-            Select select = new Select(NewColumns(3));
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string columnName = "test_column";
+
+            Action<ColumnBuilder> orderByAction = (cb) => cb.Column(columnName);
 
             // Act
-            select.Distinct(distinct);
+            query.OrderByAsc(orderByAction);
 
-            // Assert
-            if (distinct == null)
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+            Assert.Single(query.OrderByCollection);
+
+            OrderByAsc orderBy = Assert.IsType<OrderByAsc>(query.OrderByCollection[0]);
+            SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+
+            Assert.Equal(columnName, column.Name);
+            Assert.Null(column.Alias);
+            Assert.Null(column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void OrderByAsc_NullOrEmptyColumnNameAndNullColumnSource_ThrowsArgumentException(string? columnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnName!, columnSource: null));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByAsc_NullOrEmptyColumnNameAndColumnSource_ThrowsArgumentException(string? columnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnName!, NewSource()));
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(null, "")]
+        [InlineData(null, "column_alias")]
+        [InlineData("", null)]
+        [InlineData("", "")]
+        [InlineData("", "column_alias")]
+        public void OrderByAsc_NullOrEmptyColumnAndColumnAliasAndColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnName!, columnAlias, NewSource()));
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(null, "")]
+		[InlineData(null, "column_alias")]
+		[InlineData("", null)]
+		[InlineData("", "")]
+		[InlineData("", "column_alias")]
+		public void OrderByAsc_NullOrEmptyColumnAndColumnAliasAndNullColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnName!, columnAlias, columnSource: null));
+
+        [Fact]
+        public void OrderByAsc_NullColumnNamesAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnNames: null!));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void OrderByAsc_ColumnNamesAsParamsWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc("column1", invalidColumnName!, "column2"));
+
+        [Fact]
+        public void OrderByAsc_NullColumnNamesAsEnumerable_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columnNames: (IEnumerable<string>)null!));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByAsc_ColumnNamesAsEnumerableWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(new List<string> { "column1", "column2", invalidColumnName! }));
+
+        [Fact]
+        public void OrderByAsc_NullColumnsAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columns: null!));
+
+        [Fact]
+        public void OrderByAsc_ColumnsAsParamsWithNullItems_ThrowsArgumentException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columns: new IColumn[] { NewColumn(), null!, NewColumn() }));
+
+		[Fact]
+		public void OrderByAsc_NullColumnsAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columns: (IEnumerable<IColumn>)null!));
+
+		[Fact]
+		public void OrderByAsc_ColumnsAsEnumerableWithNullItems_ThrowsArgumentException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(columns: new List<IColumn> { NewColumn(), null!, NewColumn() }));
+
+        [Fact]
+        public void OrderByAsc_NullOrderByAction_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByAsc(orderByAction: null!));
+
+		[Fact]
+		public void OrderByDesc_ColumnNameAndColumnSource_AddToOrderByCollection()
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			const string columnName = "test_column";
+			ISource source = NewSource();
+
+			// Act
+			query.OrderByDesc(columnName, source);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Single(query.OrderByCollection);
+			OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[0]);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+			Assert.Equal(columnName, column.Name);
+			Assert.Null(column.Alias);
+			Assert.Equal(source, column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Fact]
+		public void OrderByDesc_ColumnNameAndNullColumnSource_AddToOrderByCollection()
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			const string columnName = "test_column";
+
+			// Act
+			query.OrderByDesc(columnName, columnSource: null!);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Single(query.OrderByCollection);
+			OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[0]);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+			Assert.Equal(columnName, column.Name);
+			Assert.Null(column.Alias);
+			Assert.Null(column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData("column_alias")]
+		public void OrderByDesc_ColumnNameAndColumnAliasAndColumnSource_AddToOrderByCollection(string? columnAlias)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			const string columnName = "test_column";
+			ISource columnSource = NewSource();
+
+			// Act
+			query.OrderByDesc(columnName, columnAlias, columnSource);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Single(query.OrderByCollection);
+			OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[0]);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+			Assert.Equal(columnName, column.Name);
+
+			if (string.IsNullOrEmpty(columnAlias))
+			{
+				Assert.Null(column.Alias);
+			}
+			else
+			{
+				Assert.Equal(columnAlias, column.Alias);
+			}
+
+			Assert.Equal(columnSource, column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData("column_alias")]
+		public void OrderByDesc_ColumnNameAndColumnAliasAndNullColumnSource_AddToOrderByCollection(string? columnAlias)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			const string columnName = "test_column";
+
+			// Act
+			query.OrderByDesc(columnName, columnAlias, columnSource: null!);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Single(query.OrderByCollection);
+			OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[0]);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+			Assert.Equal(columnName, column.Name);
+
+			if (string.IsNullOrEmpty(columnAlias))
+			{
+				Assert.Null(column.Alias);
+			}
+			else
+			{
+				Assert.Equal(columnAlias, column.Alias);
+			}
+
+			Assert.Null(column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void OrderByDesc_ColumnNamesAsParams_AddToOrderByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			string[] columns = new string[columnsCount];
+			for (int i = 0; i < columnsCount; i++)
+			{
+				columns[i] = $"test_column_{i + 1}";
+			}
+
+			// Act
+			query.OrderByDesc(columns);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Equal(columnsCount, query.OrderByCollection.Count);
+
+			for (int i = 0; i < columnsCount; i++)
+			{
+				OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[i]);
+				SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+
+				Assert.Equal(columns[i], column.Name);
+				Assert.Null(column.Alias);
+				Assert.Null(column.Source);
+			}
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void OrderByDesc_ColumnNamesAsEnumerable_AddToOrderByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			string[] columns = new string[columnsCount];
+			for (int i = 0; i < columnsCount; i++)
+			{
+				columns[i] = $"test_column_{i + 1}";
+			}
+
+			// Act
+			query.OrderByDesc((IEnumerable<string>)columns);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+
+			Assert.Equal(columnsCount, query.OrderByCollection.Count);
+
+			for (int i = 0; i < columnsCount; i++)
+			{
+				OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[i]);
+				SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+
+				Assert.Equal(columns[i], column.Name);
+				Assert.Null(column.Alias);
+				Assert.Null(column.Source);
+			}
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void OrderByDesc_ColumnsAsParams_AddToOrderByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			IColumn[] columns = NewColumns(columnsCount).ToArray();
+
+			// Act
+			query.OrderByDesc(columns);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Equal(columnsCount, query.OrderByCollection.Count);
+
+			for (int i = 0; i < columnsCount; i++)
+			{
+				OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[i]);
+
+				Assert.Equal(columns[i], orderBy.Column);
+			}
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void OrderByDesc_ColumnsAsEnumerable_AddToOrderByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			List<IColumn> columns = NewColumns(columnsCount);
+
+			// Act
+			query.OrderByDesc(columns);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Equal(columnsCount, query.OrderByCollection.Count);
+
+			for (int i = 0; i < columnsCount; i++)
+			{
+				OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[i]);
+
+				Assert.Equal(columns[i], orderBy.Column);
+			}
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Fact]
+		public void OrderByDesc_OrderByAction_AddToOrderByCollection()
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			const string columnName = "test_column";
+
+			Action<ColumnBuilder> orderByAction = (cb) => cb.Column(columnName);
+
+			// Act
+			query.OrderByDesc(orderByAction);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Single(query.OrderByCollection);
+
+			OrderByDesc orderBy = Assert.IsType<OrderByDesc>(query.OrderByCollection[0]);
+			SourceColumn column = Assert.IsType<SourceColumn>(orderBy.Column);
+
+			Assert.Equal(columnName, column.Name);
+			Assert.Null(column.Alias);
+			Assert.Null(column.Source);
+
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByDesc_NullOrEmptyColumnNameAndNullColumnSource_ThrowsArgumentException(string? columnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnName!, columnSource: null));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByDesc_NullOrEmptyColumnNameAndColumnSource_ThrowsArgumentException(string? columnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnName!, NewSource()));
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(null, "")]
+		[InlineData(null, "column_alias")]
+		[InlineData("", null)]
+		[InlineData("", "")]
+		[InlineData("", "column_alias")]
+		public void OrderByDesc_NullOrEmptyColumnAndColumnAliasAndColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnName!, columnAlias, NewSource()));
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(null, "")]
+		[InlineData(null, "column_alias")]
+		[InlineData("", null)]
+		[InlineData("", "")]
+		[InlineData("", "column_alias")]
+		public void OrderByDesc_NullOrEmptyColumnAndColumnAliasAndNullColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnName!, columnAlias, columnSource: null));
+
+		[Fact]
+		public void OrderByDesc_NullColumnNamesAsParams_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnNames: null!));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByDesc_ColumnNamesAsParamsWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc("column1", invalidColumnName!, "column2"));
+
+		[Fact]
+		public void OrderByDesc_NullColumnNamesAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columnNames: (IEnumerable<string>)null!));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void OrderByDesc_ColumnNamesAsEnumerableWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(new List<string> { "column1", "column2", invalidColumnName! }));
+
+		[Fact]
+		public void OrderByDesc_NullColumnsAsParams_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columns: null!));
+
+		[Fact]
+		public void OrderByDesc_ColumnsAsParamsWithNullItems_ThrowsArgumentException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columns: new IColumn[] { NewColumn(), null!, NewColumn() }));
+
+		[Fact]
+		public void OrderByDesc_NullColumnsAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columns: (IEnumerable<IColumn>)null!));
+
+		[Fact]
+		public void OrderByDesc_ColumnsAsEnumerableWithNullItems_ThrowsArgumentException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(columns: new List<IColumn> { NewColumn(), null!, NewColumn() }));
+
+		[Fact]
+		public void OrderByDesc_NullOrderByAction_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderByDesc(orderByAction: null!));
+
+		[Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public void OrderBy_ColumnsAsParams_AddToOrderByCollection(int columnsCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            IOrderBy[] orderBies = new IOrderBy[columnsCount];
+            for (int i = 0; i < columnsCount; i++)
             {
-                Assert.Null(select.DistinctValue);
+                orderBies[i] = new Mock<IOrderBy>().Object;
             }
+
+            // Act
+            query.OrderBy(orderBies);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Equal(orderBies, query.OrderByCollection);
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void OrderBy_ColumnsAsEnumerable_AddToOrderByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			IOrderBy[] orderBies = new IOrderBy[columnsCount];
+			for (int i = 0; i < columnsCount; i++)
+			{
+				orderBies[i] = new Mock<IOrderBy>().Object;
+			}
+
+			// Act
+			query.OrderBy((IEnumerable<IOrderBy>)orderBies);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Equal(orderBies, query.OrderByCollection);
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Fact]
+        public void OrderBy_NullColumnsAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderBy(columns: null!));
+
+        [Fact]
+        public void OrderBy_ColumnsAsParamsWithNullItems_ThrowsArgumentException() =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderBy(columns: new IOrderBy[] { new Mock<IOrderBy>().Object, null!, new Mock<IOrderBy>().Object }));
+
+		[Fact]
+		public void OrderBy_NullColumnsAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).OrderBy(columns: (IEnumerable<IOrderBy>)null!));
+
+		[Fact]
+		public void OrderBy_ColumnsAsEnumerableWithNullItems_ThrowsArgumentException() =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).OrderBy(columns: new List<IOrderBy> { new Mock<IOrderBy>().Object, null!, new Mock<IOrderBy>().Object }));
+
+        [Fact]
+        public void GroupBy_ColumnNameAndColumnSource_AddToGroupByCollection()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            string columnName = "column_name";
+            ISource source = NewSource();
+
+            // Act
+            query.GroupBy(columnName, source);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+            Assert.Single(query.GroupByCollection);
+
+            SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[0]);
+            Assert.Equal(columnName, column.Name);
+            Assert.Null(column.Alias);
+            Assert.Equal(source, column.Source);
+			
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Fact]
+		public void GroupBy_ColumnNameAndNullColumnSource_AddToGroupByCollection()
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			string columnName = "column_name";
+
+			// Act
+			query.GroupBy(columnName, columnSource: null!);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Single(query.GroupByCollection);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[0]);
+			Assert.Equal(columnName, column.Name);
+			Assert.Null(column.Alias);
+			Assert.Null(column.Source);
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("column_alias")]
+        public void GroupBy_ColumnNameAndColumnAliasAndColumnSource_AddToGroupByCollection(string? columnAlias)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            string columnName = "column_name";
+            ISource columnSource = NewSource();
+
+            // Act
+            query.GroupBy(columnName, columnAlias, columnSource);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Single(query.GroupByCollection);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[0]);
+			Assert.Equal(columnName, column.Name);
+
+            if (string.IsNullOrEmpty(columnAlias))
+            {
+				Assert.Null(column.Alias);
+			}
             else
             {
-                Assert.Equal(distinct, select.DistinctValue);
+                Assert.Equal(columnAlias, column.Alias);
             }
+			
+			Assert.Equal(columnSource, column.Source);
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData("column_alias")]
+		public void GroupBy_ColumnNameAndColumnAliasAndNullColumnSource_AddToGroupByCollection(string? columnAlias)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			string columnName = "column_name";
+
+			// Act
+			query.GroupBy(columnName, columnAlias, columnSource: null);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Single(query.GroupByCollection);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[0]);
+			Assert.Equal(columnName, column.Name);
+
+			if (string.IsNullOrEmpty(columnAlias))
+			{
+				Assert.Null(column.Alias);
+			}
+			else
+			{
+				Assert.Equal(columnAlias, column.Alias);
+			}
+
+			Assert.Null(column.Source);
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(3)]
+        public void GroupBy_ColumnNamesAsParams_AddToGroupByCollection(int columnsCount)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            string[] columnNames = new string[columnsCount];
+            for (int i = 0; i < columnsCount; i++)
+            {
+                columnNames[i] = $"column_name_{i + 1}";
+            }
+
+            // Act
+            query.GroupBy(columnNames);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Equal(columnsCount, query.GroupByCollection.Count);
+
+            for (int i = 0; i < columnsCount; i++)
+            {
+                SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[i]);
+                Assert.Equal(columnNames[i], column.Name);
+                Assert.Null(column.Alias);
+                Assert.Null(column.Source);
+            }
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(3)]
+		public void GroupBy_ColumnNamesAsEnumerable_AddToGroupByCollection(int columnsCount)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			string[] columnNames = new string[columnsCount];
+			for (int i = 0; i < columnsCount; i++)
+			{
+				columnNames[i] = $"column_name_{i + 1}";
+			}
+
+			// Act
+			query.GroupBy((IEnumerable<string>)columnNames);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Equal(columnsCount, query.GroupByCollection.Count);
+
+			for (int i = 0; i < columnsCount; i++)
+			{
+				SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[i]);
+				Assert.Equal(columnNames[i], column.Name);
+				Assert.Null(column.Alias);
+				Assert.Null(column.Source);
+			}
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Fact]
+        public void GroupBy_ColumnAction_AddToGroupByCollection()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string columnName = "column_name";
+            Action<ColumnBuilder> columnAction = (cb) => cb.Column(columnName);
+
+            // Act
+            query.GroupBy(columnAction);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Single(query.GroupByCollection);
+
+			SourceColumn column = Assert.IsType<SourceColumn>(query.GroupByCollection[0]);
+			Assert.Equal(columnName, column.Name);
+            Assert.Null(column.Alias);
+            Assert.Null(column.Source);
+
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void GroupBy_NullOrEmptyColumnNameAndColumnSource_ThrowsArgumentException(string? columnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnName!, NewSource()));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void GroupBy_NullOrEmptyColumnNameAndNullColumnSource_ThrowsArgumentException(string? columnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnName!, columnSource: null!));
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(null, "")]
+		[InlineData(null, "column_alias")]
+		[InlineData("", null)]
+		[InlineData("", "")]
+		[InlineData("", "column_alias")]
+		public void GroupBy_NullOrEmptyColumnNameAndColumnAliasAndColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnName!, columnAlias, NewSource()));
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(null, "")]
+		[InlineData(null, "column_alias")]
+		[InlineData("", null)]
+		[InlineData("", "")]
+		[InlineData("", "column_alias")]
+		public void GroupBy_NullOrEmptyColumnNameAndColumnAliasAndNullColumnSource_ThrowsArgumentException(string? columnName, string? columnAlias) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnName!, columnAlias, columnSource: null!));
+
+        [Fact]
+        public void GroupBy_NullColumnNamesAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnNames: null!));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void GroupBy_ColumnNamesAsParamsWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy("column1", invalidColumnName!, "column3"));
+
+		[Fact]
+		public void GroupBy_NullColumnNamesAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnNames: (IEnumerable<string>)null!));
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void GroupBy_ColumnNamesAsEnumerableWithNullOrEmptyItems_ThrowsArgumentException(string? invalidColumnName) =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(new List<string> { "column1", invalidColumnName!, "column3" }));
+
+        [Fact]
+        public void GroupBy_NullColumnsAsParams_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columns: null!));
+
+        [Fact]
+        public void GroupBy_ColumnsAsParamsWithNullItems_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(NewColumn(), NewColumn(), null!));
+
+		[Fact]
+		public void GroupBy_NullColumnsAsEnumerable_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columns: (IEnumerable<IColumn>)null!));
+
+		[Fact]
+		public void GroupBy_ColumnsAsEnumerableWithNullItems_ThrowsArgumentNullException() =>
+			Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).GroupBy(new List<IColumn> { NewColumn(), NewColumn(), null! }));
+
+        [Fact]
+        public void GroupBy_ColumnAction_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new Select(Array.Empty<IColumn>()).GroupBy(columnAction: null!));
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(0)]
+        [InlineData(3)]
+        public void Offset_Offset_SetOffsetValue(int? offset)
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            // Act
+            query.Offset(offset);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Empty(query.GroupByCollection);
+			Assert.Equal(offset, query.OffsetValue);
+			Assert.False(query.LimitValue.HasValue);
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData(0)]
+		[InlineData(3)]
+		public void Limit_Limit_SetLimitValue(int? limit)
+		{
+			// Arrange
+			Select query = new Select(Array.Empty<IColumn>());
+
+			// Act
+			query.Limit(limit);
+
+			// Assert
+			Assert.Empty(query.ColumnCollection);
+			Assert.Null(query.DistinctValue);
+			Assert.Empty(query.SourceCollection);
+			Assert.Null(query.WhereCondition);
+			Assert.Empty(query.JoinCollection);
+			Assert.Null(query.HavingCondition);
+			Assert.Empty(query.OrderByCollection);
+			Assert.Empty(query.GroupByCollection);
+			Assert.False(query.OffsetValue.HasValue);
+			Assert.Equal(limit, query.LimitValue);
+		}
+
+        [Fact]
+        public void ToSubquery_Alias_ReturnSubquery()
+        {
+            // Arrange
+            Select query = new Select(Array.Empty<IColumn>());
+
+            const string alias = "alias";
+
+            // Act
+            Subquery subquery = query.ToSubquery(alias);
+
+            // Assert
+            Assert.Equal(query, subquery.Select);
+            Assert.Equal(alias, subquery.Alias);
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ToSubquery_NullOrEmptyAlias_ThrowsArgumentException(string? alias) =>
+            Assert.Throws<ArgumentException>(() => new Select(Array.Empty<IColumn>()).ToSubquery(alias!));
 
         [Fact]
         public void RenderQuery_RendererAndSql_WritesSqlToSql()
@@ -2648,5 +3548,106 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Queries
             // Assert
             Assert.Equal(expectedSql, sql.ToString());
         }
-    }
+
+		private void Constructor_StringAndISource_Success_Base(string name, ISource? source)
+		{
+			// Act
+			Select select = new Select(name, source);
+
+			// Assert
+			IColumn column = Assert.Single(select.ColumnCollection);
+			SourceColumn sourceColumn = Assert.IsType<SourceColumn>(column);
+			Assert.Equal(name, sourceColumn.Name);
+			Assert.Null(sourceColumn.Alias);
+
+			if (source == null)
+			{
+				Assert.Null(sourceColumn.Source);
+			}
+			else
+			{
+				Assert.Equal(source, sourceColumn.Source);
+			}
+
+			Assert.Null(select.DistinctValue);
+			Assert.Empty(select.SourceCollection);
+			Assert.Null(select.WhereCondition);
+			Assert.Empty(select.JoinCollection);
+			Assert.Null(select.HavingCondition);
+			Assert.Empty(select.OrderByCollection);
+			Assert.Empty(select.GroupByCollection);
+			Assert.False(select.OffsetValue.HasValue);
+			Assert.False(select.LimitValue.HasValue);
+		}
+
+		private void Constructor_StringAndISource_ThrowsArgumentException(string? name, ISource? source)
+		{
+			// Act & Assert
+			Assert.Throws<ArgumentException>(() => new Select(name!, source));
+		}
+
+		private void Constructor_StringAndStringAndISource_Success_Base(string name, string? alias, ISource? source)
+		{
+			// Act
+			Select select = new Select(name, alias, source);
+
+			// Assert
+			IColumn column = Assert.Single(select.ColumnCollection);
+			SourceColumn sourceColumn = Assert.IsType<SourceColumn>(column);
+			Assert.Equal(name, sourceColumn.Name);
+
+			if (string.IsNullOrEmpty(alias))
+			{
+				Assert.Null(sourceColumn.Alias);
+			}
+			else
+			{
+				Assert.Equal(alias, sourceColumn.Alias);
+			}
+
+			if (source == null)
+			{
+				Assert.Null(sourceColumn.Source);
+			}
+			else
+			{
+				Assert.Equal(source, sourceColumn.Source);
+			}
+
+			Assert.Null(select.DistinctValue);
+			Assert.Empty(select.SourceCollection);
+			Assert.Null(select.WhereCondition);
+			Assert.Empty(select.JoinCollection);
+			Assert.Null(select.HavingCondition);
+			Assert.Empty(select.OrderByCollection);
+			Assert.Empty(select.GroupByCollection);
+			Assert.False(select.OffsetValue.HasValue);
+			Assert.False(select.LimitValue.HasValue);
+		}
+
+		private void Constructor_StringAndStringAndISource_ThrowsArgumentException(string? name, string? alias, ISource? source)
+		{
+			// Act & Assert
+			Assert.Throws<ArgumentException>(() => new Select(name!, alias, source));
+		}
+
+		private void Distinct_IDistinct_SetDistinctValue_Base(IDistinct? distinct)
+		{
+			// Arrange
+			Select select = new Select(NewColumns(3));
+
+			// Act
+			select.Distinct(distinct);
+
+			// Assert
+			if (distinct == null)
+			{
+				Assert.Null(select.DistinctValue);
+			}
+			else
+			{
+				Assert.Equal(distinct, select.DistinctValue);
+			}
+		}
+	}
 }

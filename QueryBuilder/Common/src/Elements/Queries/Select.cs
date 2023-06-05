@@ -167,11 +167,11 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public virtual Select OrderByDesc(string columnName, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnSource)));
 		public virtual Select OrderByDesc(string columnName, string? columnAlias, ISource? columnSource) => OrderBy(new OrderByDesc(new SourceColumn(columnName, columnAlias, columnSource)));
-		public virtual Select OrderByDesc(params string[] columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
-		public virtual Select OrderByDesc(IEnumerable<string> columns) => OrderBy(columns.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
+		public virtual Select OrderByDesc(params string[] columnNames) => OrderBy(columnNames.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
+		public virtual Select OrderByDesc(IEnumerable<string> columnNames) => OrderBy(columnNames.Select<string, IOrderBy>(c => new OrderByDesc(new SourceColumn(c))));
 		public virtual Select OrderByDesc(params IColumn[] columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
 		public virtual Select OrderByDesc(IEnumerable<IColumn> columns) => OrderBy(columns.Select<IColumn, IOrderBy>(c => new OrderByDesc(c)));
-		public virtual Select OrderByDesc(Action<ColumnBuilder> action) => OrderByDesc(_factory.Columns(action));
+		public virtual Select OrderByDesc(Action<ColumnBuilder> orderByAction) => OrderByDesc(_factory.Columns(orderByAction));
 		
 		public virtual Select OrderBy(params IOrderBy[] columns) => OrderBy((IEnumerable<IOrderBy>)columns);
 		public virtual Select OrderBy(IEnumerable<IOrderBy> columns)
@@ -183,12 +183,12 @@ namespace YuraSoft.QueryBuilder.Common
 			return this;
 		}
 
-		public virtual Select GroupBy(string columnName, ISource? sourceName) => GroupBy(new SourceColumn(columnName, sourceName));
-		public virtual Select GroupBy(string columnName, string? columnAlias, ISource? sourceName) => GroupBy(new SourceColumn(columnName, columnAlias, sourceName));
-		public virtual Select GroupBy(params string[] columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
-		public virtual Select GroupBy(IEnumerable<string> columns) => GroupBy(columns.Select<string, IColumn>(c => new SourceColumn(c)));
+		public virtual Select GroupBy(string columnName, ISource? columnSource) => GroupBy(new SourceColumn(columnName, columnSource));
+		public virtual Select GroupBy(string columnName, string? columnAlias, ISource? columnSource) => GroupBy(new SourceColumn(columnName, columnAlias, columnSource));
+		public virtual Select GroupBy(params string[] columnNames) => GroupBy(columnNames.Select<string, IColumn>(c => new SourceColumn(c)));
+		public virtual Select GroupBy(IEnumerable<string> columnNames) => GroupBy(columnNames.Select<string, IColumn>(c => new SourceColumn(c)));
 		public virtual Select GroupBy(params IColumn[] columns) => GroupBy(columns.AsEnumerable());
-		public virtual Select GroupBy(Action<ColumnBuilder> action) => GroupBy(_factory.Columns(action));
+		public virtual Select GroupBy(Action<ColumnBuilder> columnAction) => GroupBy(_factory.Columns(columnAction));
 		public virtual Select GroupBy(IEnumerable<IColumn> columns)
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
