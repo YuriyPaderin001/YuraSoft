@@ -10,19 +10,19 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		public Update(string name) : this(name, alias: null, schema: null)
+		public Update(string sourceName) : this(sourceName, sourceAlias: null, sourceSchema: null)
 		{
 		}
 
-		public Update(string name, string? schema) : this(name, alias: null, schema)
+		public Update(string sourceName, string? sourceSchema) : this(sourceName, sourceAlias: null, sourceSchema)
 		{
 		}
 
-		public Update(string name, string? alias, string? schema)
+		public Update(string sourceName, string? sourceAlias, string? sourceSchema)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(sourceName, nameof(sourceName));
 
-			Source = new Table(name, alias, schema);
+			Source = new Table(sourceName, sourceAlias, sourceSchema);
 		}
 
 		public Update(Table table)
@@ -46,29 +46,29 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(string columnName, IExpression value) => Set(new SourceColumn(columnName), value);
 		public virtual Update SetNull(string columnName) => Set(new SourceColumn(columnName), new NullValue());
 
-		public virtual Update Set(string columnName, string columnSource, sbyte value) => Set(new SourceColumn(columnName, columnSource), new Int8Value(value));
-		public virtual Update Set(string columnName, string columnSource, short value) => Set(new SourceColumn(columnName, columnSource), new Int16Value(value));
-		public virtual Update Set(string columnName, string columnSource, int value) => Set(new SourceColumn(columnName, columnSource), new Int32Value(value));
-		public virtual Update Set(string columnName, string columnSource, long value) => Set(new SourceColumn(columnName, columnSource), new Int64Value(value));
-		public virtual Update Set(string columnName, string columnSource, float value) => Set(new SourceColumn(columnName, columnSource), new FloatValue(value));
-		public virtual Update Set(string columnName, string columnSource, double value) => Set(new SourceColumn(columnName, columnSource), new DoubleValue(value));
-		public virtual Update Set(string columnName, string columnSource, decimal value) => Set(new SourceColumn(columnName, columnSource), new DecimalValue(value));
-		public virtual Update Set(string columnName, string columnSource, DateTime value, string? format = null) => Set(new SourceColumn(columnName, columnSource), new DateTimeValue(value, format));
-		public virtual Update Set(string columnName, string columnSource, string value) => Set(new SourceColumn(columnName, columnSource), new StringValue(value));
-		public virtual Update Set(string columnName, string columnSource, IExpression value) => Set(new SourceColumn(columnName, columnSource), value);
-		public virtual Update SetNull(string columnName, string columnSource) => Set(new SourceColumn(columnName, columnSource), new NullValue());
+		public virtual Update Set(string columnName, string tableName, sbyte value) => Set(new SourceColumn(columnName, new Table(tableName)), new Int8Value(value));
+		public virtual Update Set(string columnName, string tableName, short value) => Set(new SourceColumn(columnName, new Table(tableName)), new Int16Value(value));
+		public virtual Update Set(string columnName, string tableName, int value) => Set(new SourceColumn(columnName, new Table(tableName)), new Int32Value(value));
+		public virtual Update Set(string columnName, string tableName, long value) => Set(new SourceColumn(columnName, new Table(tableName)), new Int64Value(value));
+		public virtual Update Set(string columnName, string tableName, float value) => Set(new SourceColumn(columnName, new Table(tableName)), new FloatValue(value));
+		public virtual Update Set(string columnName, string tableName, double value) => Set(new SourceColumn(columnName, new Table(tableName)), new DoubleValue(value));
+		public virtual Update Set(string columnName, string tableName, decimal value) => Set(new SourceColumn(columnName, new Table(tableName)), new DecimalValue(value));
+		public virtual Update Set(string columnName, string tableName, DateTime value, string? format = null) => Set(new SourceColumn(columnName, new Table(tableName)), new DateTimeValue(value, format));
+		public virtual Update Set(string columnName, string tableName, string value) => Set(new SourceColumn(columnName, new Table(tableName)), new StringValue(value));
+		public virtual Update Set(string columnName, string tableName, IExpression value) => Set(new SourceColumn(columnName, new Table(tableName)), value);
+		public virtual Update SetNull(string columnName, string tableName) => Set(new SourceColumn(columnName, new Table(tableName)), new NullValue());
 
-		public virtual Update Set(string columnName, ISource source, sbyte value) => Set(new SourceColumn(columnName, source), new Int8Value(value));
-		public virtual Update Set(string columnName, ISource source, short value) => Set(new SourceColumn(columnName, source), new Int16Value(value));
-		public virtual Update Set(string columnName, ISource source, int value) => Set(new SourceColumn(columnName, source), new Int32Value(value));
-		public virtual Update Set(string columnName, ISource source, long value) => Set(new SourceColumn(columnName, source), new Int64Value(value));
-		public virtual Update Set(string columnName, ISource source, float value) => Set(new SourceColumn(columnName, source), new FloatValue(value));
-		public virtual Update Set(string columnName, ISource source, double value) => Set(new SourceColumn(columnName, source), new DoubleValue(value));
-		public virtual Update Set(string columnName, ISource source, decimal value) => Set(new SourceColumn(columnName, source), new DecimalValue(value));
-		public virtual Update Set(string columnName, ISource source, DateTime value, string? format = null) => Set(new SourceColumn(columnName, source), new DateTimeValue(value, format));
-		public virtual Update Set(string columnName, ISource source, string value) => Set(new SourceColumn(columnName, source), new StringValue(value));
-		public virtual Update Set(string columnName, ISource source, IExpression value) => Set(new SourceColumn(columnName, source), value);
-		public virtual Update SetNull(string columnName, ISource source) => Set(new SourceColumn(columnName, source), new NullValue());
+		public virtual Update Set(string columnName, ISource? columnSource, sbyte value) => Set(new SourceColumn(columnName, columnSource), new Int8Value(value));
+		public virtual Update Set(string columnName, ISource? columnSource, short value) => Set(new SourceColumn(columnName, columnSource), new Int16Value(value));
+		public virtual Update Set(string columnName, ISource? columnSource, int value) => Set(new SourceColumn(columnName, columnSource), new Int32Value(value));
+		public virtual Update Set(string columnName, ISource? columnSource, long value) => Set(new SourceColumn(columnName, columnSource), new Int64Value(value));
+		public virtual Update Set(string columnName, ISource? columnSource, float value) => Set(new SourceColumn(columnName, columnSource), new FloatValue(value));
+		public virtual Update Set(string columnName, ISource? columnSource, double value) => Set(new SourceColumn(columnName, columnSource), new DoubleValue(value));
+		public virtual Update Set(string columnName, ISource? columnSource, decimal value) => Set(new SourceColumn(columnName, columnSource), new DecimalValue(value));
+		public virtual Update Set(string columnName, ISource? columnSource, DateTime value, string? format = null) => Set(new SourceColumn(columnName, columnSource), new DateTimeValue(value, format));
+		public virtual Update Set(string columnName, ISource? columnSource, string value) => Set(new SourceColumn(columnName, columnSource), new StringValue(value));
+		public virtual Update Set(string columnName, ISource? columnSource, IExpression value) => Set(new SourceColumn(columnName, columnSource), value);
+		public virtual Update SetNull(string columnName, ISource? columnSource) => Set(new SourceColumn(columnName, columnSource), new NullValue());
 
 		public virtual Update Set(IColumn column, sbyte value) => Set(column, new Int8Value(value));
 		public virtual Update Set(IColumn column, short value) => Set(column, new Int16Value(value));
@@ -81,6 +81,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(IColumn column, string value) => Set(column, new StringValue(value));
 		public virtual Update Set(IColumn column, IExpression value)
 		{
+			Guard.ThrowIfNull(column, nameof(column));
+			Guard.ThrowIfNull(value, nameof(value));
+
 			SetCollection.Add(Tuple.Create(column, value));
 
 			return this;
