@@ -34,58 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Constructor_LeftExpressionAndRightExpression_ThrowsArgumentNullException_Base(leftExpression: null, rightExpression: null);
 
 		[Fact]
-		public void SetLeftExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression rightExpression = NewExpression();
-			NotEqualCondition notEqualCondition = new NotEqualCondition(NewExpression(), rightExpression);
-			IExpression leftExpression = NewExpression();
-
-			// Act
-			notEqualCondition.LeftExpression = leftExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, notEqualCondition.LeftExpression);
-			Assert.Equal(rightExpression, notEqualCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetLeftExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			NotEqualCondition notEqualCondition = new NotEqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => notEqualCondition.LeftExpression = null!);
-		}
-
-		[Fact]
-		public void SetRightExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression leftExpression = NewExpression();
-			NotEqualCondition notEqualCondition = new NotEqualCondition(leftExpression, NewExpression());
-			IExpression rightExpression = NewExpression();
-
-			// Act
-			notEqualCondition.RightExpression = rightExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, notEqualCondition.LeftExpression);
-			Assert.Equal(rightExpression, notEqualCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetRightExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			NotEqualCondition notEqualCondition = new NotEqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => notEqualCondition.RightExpression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

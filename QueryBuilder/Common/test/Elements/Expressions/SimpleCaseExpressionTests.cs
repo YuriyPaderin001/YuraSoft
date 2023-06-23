@@ -94,82 +94,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 		  Constructor_ExpressionAndWhenThensAndElse_ThrowsException<ArgumentNullException>(expression: NewExpression(), whenThens: null, @else: null);
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-
-			IExpression expression = NewExpression();
-
-			// Act
-			simpleCaseExpression.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, simpleCaseExpression.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_Null_Success()
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => simpleCaseExpression.Expression = null!);
-		}
-
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetWhenThens_OneWhenThen_Success(int length)
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-			List<Tuple<IExpression, IExpression>> whenThens = NewSimpleWhenThenList(length);
-
-			// Act
-			simpleCaseExpression.WhenThens = whenThens;
-
-			// Assert
-			Assert.Equal(whenThens, simpleCaseExpression.WhenThens);
-		}
-
-		[Fact]
-		public void SetWhenThens_EmptyWhenThens_ThrowsArgumentOutOfRangeException() =>
-		  SetWhenThens_ThrowsException<ArgumentOutOfRangeException>(NewSimpleEmptyWhenThenList());
-
-		[Fact]
-		public void SetWhenThens_NullWhenThens_ThrowsArgumentNullException() =>
-		  SetWhenThens_ThrowsException<ArgumentNullException>(whenThens: null);
-
-		[Fact]
-		public void SetElse_Expression_Success()
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-			IExpression @else = NewExpression();
-
-			// Act
-			simpleCaseExpression.Else = @else;
-
-			// Assert
-			Assert.Equal(@else, simpleCaseExpression.Else);
-		}
-
-		[Fact]
-		public void SetElse_Null_Success()
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-
-			// Act
-			simpleCaseExpression.Else = null;
-
-			// Assert
-			Assert.Null(simpleCaseExpression.Else);
-		}
-
-		[Fact]
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
@@ -252,16 +176,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new SimpleCaseExpression(expression!, whenThens!, @else!));
-		}
-
-		private void SetWhenThens_ThrowsException<TException>(IEnumerable<Tuple<IExpression, IExpression>>? whenThens) where TException : Exception
-		{
-			// Arrange
-			SimpleCaseExpression simpleCaseExpression = new SimpleCaseExpression(NewExpression(), NewSimpleWhenThenList(1));
-			List<Tuple<IExpression, IExpression>> whenThensList = whenThens == null ? null! : new List<Tuple<IExpression, IExpression>>(whenThens);
-
-			// Act & Assert
-			Assert.Throws<TException>(() => simpleCaseExpression.WhenThens = whenThensList);
 		}
 	}
 }

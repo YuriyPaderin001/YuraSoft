@@ -9,38 +9,31 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		private ISource _source;
-
-		public Delete(string name) : this(name, alias: null, schema: null)
+		public Delete(string tableName) : this(tableName, tableAlias: null, tableSchema: null)
 		{
 		}
 
-		public Delete(string name, string? schema) : this(name, alias: null, schema)
+		public Delete(string tableName, string? tableSchema) : this(tableName, tableAlias: null, tableSchema)
 		{
 		}
 
-		public Delete(string name, string? alias, string? schema)
+		public Delete(string tableName, string? tableAlias, string? tableSchema)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(tableName, nameof(tableName));
 
-			_source = new Table(name, alias, schema);
+			Source = new Table(tableName, tableAlias, tableSchema);
 		}
 
 		public Delete(Table table)
 		{
-			_source = Guard.ThrowIfNull(table, nameof(table));
+			Source = Guard.ThrowIfNull(table, nameof(table));
 		}
 
-		public ISource Source 
-		{ 
-			get => _source; 
-			set => _source = Guard.ThrowIfNull(value, nameof(Source));
-		}
+		public readonly ISource Source;
+		public ICondition? Condition { get; protected set; }
 
-		public ICondition? Condition { get; set; }
-
-		public Delete Where(Action<ConditionBuilder> action) =>
-			Where(_factory.Condition(action));
+		public Delete Where(Action<ConditionBuilder> conditionAction) =>
+			Where(_factory.Condition(conditionAction));
 
         public virtual Delete Where(ICondition? condition)
 		{

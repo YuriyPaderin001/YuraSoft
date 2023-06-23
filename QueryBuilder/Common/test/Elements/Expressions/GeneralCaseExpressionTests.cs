@@ -60,36 +60,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 		public void Constructor_NullWhenThensAndNullElse_ThrowsArgumentNullException() =>
 		  Constructor_WhenThensAndElse_ThrowsException<ArgumentNullException>(whenThens: null, @else: null);
 
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetWhenThens_WhenThens_Success(int length)
-		{
-			// Arrange
-			GeneralCaseExpression generalCaseExpression = new GeneralCaseExpression(NewGeneralWhenThenList(length));
-			List<Tuple<ICondition, IExpression>> whenThens = NewGeneralWhenThenList(length);
-
-			// Act
-			generalCaseExpression.WhenThens = whenThens;
-
-			// Assert
-			Assert.Equal(whenThens, generalCaseExpression.WhenThens);
-		}
-
-		[Fact]
-		public void SetWhenThens_EmptyWhenThens_ThrowsArgumentOutOfRangeException() =>
-		  SetWhenThens_ThrowsException<ArgumentOutOfRangeException>(NewGeneralEmptyWhenThenList());
-
-		[Fact]
-		public void SetWhenThens_NullWhenThens_ThrowsArgumentNullException() =>
-		  SetWhenThens_ThrowsException<ArgumentNullException>(whenThens: null);
-
-		[Fact]
-		public void SetElse_Expression_Success() => SetElse_Success(NewExpression());
-
-		[Fact]
-		public void SetElse_Null_Success() => SetElse_Success(@else: null);
-
 		[Fact]
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
@@ -173,34 +143,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new GeneralCaseExpression(whenThens!, @else));
-		}
-
-		private void SetWhenThens_ThrowsException<TException>(List<Tuple<ICondition, IExpression>>? whenThens) where TException : Exception
-		{
-			// Arrange
-			GeneralCaseExpression generalCaseExpression = new GeneralCaseExpression(NewGeneralWhenThenList(1));
-
-			// Act & Assert
-			Assert.Throws<TException>(() => generalCaseExpression.WhenThens = whenThens!);
-		}
-
-		private void SetElse_Success(IExpression? @else)
-		{
-			// Arrange
-			GeneralCaseExpression generalCaseExpression = new GeneralCaseExpression(NewGeneralWhenThenList(1));
-
-			// Act
-			generalCaseExpression.Else = @else;
-
-			// Assert
-			if (@else == null)
-			{
-				Assert.Null(generalCaseExpression.Else);
-			}
-			else
-			{
-				Assert.Equal(@else, generalCaseExpression.Else);
-			}
 		}
 	}
 }

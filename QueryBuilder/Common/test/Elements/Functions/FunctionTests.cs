@@ -49,43 +49,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		}
 
 		[Fact]
-		public void SetName_String_Success()
-		{
-			// Arrange
-			NativeFunction function = NewFunction();
-			const string name = "new_test_name";
-
-			// Act
-			function.Name = name;
-
-			// Assert
-			Assert.Equal(name, function.Name);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void SetName_NullOrEmptyString_ThrowsArgumentException(string? name)
-		{
-			// Arrange
-			NativeFunction function = NewFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentException>(() => function.Name = name!);
-		}
-
-		[Theory]
-		[InlineData(0)]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetParameters_IExpressionList_Success(int length) =>
-			SetParameters_IExpressionList_Success_Base(NewExpressionList(length));
-
-		[Fact]
-		public void SetParameters_NullIExpressionList_Success() =>
-			SetParameters_IExpressionList_Success_Base(parameters: null);
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
@@ -191,25 +154,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new NativeFunction(name!, NewExpressionList(length)));
-		}
-
-		private void SetParameters_IExpressionList_Success_Base(List<IExpression>? parameters)
-		{
-			// Arrange
-			NativeFunction function = NewFunction(parameters: NewExpressionList(3));
-
-			// Act
-			function.Parameters = parameters;
-
-			// Assert
-			if (parameters == null)
-			{
-				Assert.Null(function.Parameters);
-			}
-			else
-			{
-				Assert.Equal(parameters, function.Parameters);
-			}
 		}
 
 		private NativeFunction NewFunction(string name = "test_function", List<IExpression>? parameters = null) => 

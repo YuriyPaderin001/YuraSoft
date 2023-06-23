@@ -4,17 +4,9 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public abstract class ExpressionFunction : Function
 	{
-		private IExpression _expression;
+		public ExpressionFunction(IExpression expression) =>
+			Expression = Guard.ThrowIfNull(expression, nameof(expression));
 
-		public ExpressionFunction(IExpression expression)
-		{
-			_expression = Guard.ThrowIfNull(expression, nameof(expression));
-		}
-
-		public IExpression Expression
-		{
-			get => _expression;
-			set => _expression = Guard.ThrowIfNull(value, nameof(Expression));
-		}
+		public readonly IExpression Expression;
 	}
 }

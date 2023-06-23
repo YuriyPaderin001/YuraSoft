@@ -33,39 +33,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Orders
 		}
 
 		[Fact]
-		public void SetColumn_IColumn_Success()
-		{
-			// Arrange
-			OrderDirection direction = OrderDirection.Desc;
-			OrderBy orderBy = new OrderBy(NewColumn(), direction);
-			IColumn column = NewColumn();
-
-			// Act
-			orderBy.Column = column;
-
-			// Assert
-			Assert.Equal(column, orderBy.Column);
-			Assert.Equal(direction, orderBy.Direction);
-		}
-
-		[Theory]
-		[InlineData(OrderDirection.Asc)]
-		[InlineData(OrderDirection.Desc)]
-		public void SetDirection_OrderDirection_Success(OrderDirection direction)
-		{
-			// Arrange
-			IColumn column = NewColumn();
-			OrderBy orderBy = new OrderBy(column, OrderDirection.Asc);
-
-			// Act
-			orderBy.Direction = direction;
-
-			// Assert
-			Assert.Equal(column, orderBy.Column);
-			Assert.Equal(direction, orderBy.Direction);
-		}
-
-		[Fact]
 		public void RenderOrderBy_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

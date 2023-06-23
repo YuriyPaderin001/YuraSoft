@@ -44,52 +44,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 			Assert.Throws<ArgumentNullException>(() => new PlusExpression(null!));
 		}
 
-		[Theory]
-		[InlineData(2)]
-		[InlineData(3)]
-		public void SetExpressions_Expressions_Success(int length)
-		{
-			// Arrange
-			PlusExpression plusExpression = new PlusExpression(NewExpressionList(length));
-			List<IExpression> expressions = NewExpressionList(length);
-
-			// Act
-			plusExpression.Expressions = expressions;
-
-			// Assert
-			Assert.Equal(expressions, plusExpression.Expressions);
-		}
-
-		[Fact]
-		public void SetExpressions_OneExpression_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewExpressionList(1));
-		}
-
-		[Fact]
-		public void SetExpressions_EmptyExpressionList_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => plusExpression.Expressions = NewEmptyExpressionList());
-		}
-
-		[Fact]
-		public void SetExpressions_NullList_ThrowsArgumentNullException()
-		{
-			// Arrange
-			PlusExpression plusExpression = new PlusExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => plusExpression.Expressions = null!);
-		}
-
 		[Fact]
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

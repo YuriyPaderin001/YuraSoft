@@ -34,23 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Equal(value, decimalValue.Data);
 		}
 
-		[Theory]
-		[InlineData(-3.23)]
-		[InlineData(0)]
-		[InlineData(0.23)]
-		[InlineData(1.23)]
-		public void SetData_Decimal_Success(decimal value)
-		{
-			// Arrange
-			DecimalValue decimalValue = new DecimalValue(-9);
-
-			// Act
-			decimalValue.Data = value;
-
-			// Assert
-			Assert.Equal(value, decimalValue.Data);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

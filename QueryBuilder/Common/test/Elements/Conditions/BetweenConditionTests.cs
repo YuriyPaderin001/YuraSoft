@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using Moq;
 using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
@@ -75,90 +73,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		}
 
 		[Fact]
-		public void SetExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression lessExpression = NewExpression();
-			IExpression hightExpression = NewExpression();
-			BetweenCondition betweenCondition = new BetweenCondition(NewExpression(), lessExpression, hightExpression);
-			IExpression expression = NewExpression();
-
-			// Act
-			betweenCondition.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, betweenCondition.Expression);
-			Assert.Equal(lessExpression, betweenCondition.LessExpression);
-			Assert.Equal(hightExpression, betweenCondition.HightExpression);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			BetweenCondition betweenCondition = new BetweenCondition(NewExpression(), NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => betweenCondition.Expression = null!);
-		}
-
-		[Fact]
-		public void SetLessExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			IExpression hightExpression = NewExpression();
-			BetweenCondition betweenCondition = new BetweenCondition(expression, NewExpression(), hightExpression);
-			IExpression lessExpression = NewExpression();
-
-			// Act
-			betweenCondition.LessExpression = lessExpression;
-
-			// Assert
-			Assert.Equal(expression, betweenCondition.Expression);
-			Assert.Equal(lessExpression, betweenCondition.LessExpression);
-			Assert.Equal(hightExpression, betweenCondition.HightExpression);
-		}
-
-		[Fact]
-		public void SetLessExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			BetweenCondition betweenCondition = new BetweenCondition(NewExpression(), NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => betweenCondition.LessExpression = null!);
-		}
-
-		[Fact]
-		public void SetHightExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			IExpression lessExpression = NewExpression();
-			BetweenCondition betweenCondition = new BetweenCondition(expression, lessExpression, NewExpression());
-			IExpression hightExpression = NewExpression();
-
-			// Act
-			betweenCondition.HightExpression = hightExpression;
-
-			// Assert
-			Assert.Equal(expression, betweenCondition.Expression);
-			Assert.Equal(lessExpression, betweenCondition.LessExpression);
-			Assert.Equal(hightExpression, betweenCondition.HightExpression);
-		}
-
-		[Fact]
-		public void SetHightExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			BetweenCondition betweenCondition = new BetweenCondition(NewExpression(), NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => betweenCondition.HightExpression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
@@ -222,12 +136,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 
 			// Assert
 			Assert.Equal(expectedSql, sql);
-		}
-
-		private void Constructor_ExpressionAndLessExpressionAndHightExpression_ThrowsArgumentNullException_Base(IExpression expression, IExpression lessExpression, IExpression hightExpression)
-		{
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => new BetweenCondition(expression!, lessExpression!, hightExpression!));
 		}
 	}
 }

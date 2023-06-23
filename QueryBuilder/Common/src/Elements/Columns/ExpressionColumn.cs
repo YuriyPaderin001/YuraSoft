@@ -6,26 +6,14 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class ExpressionColumn : Column
 	{
-		private IExpression _expression;
-		private string? _name;
-
-		public ExpressionColumn(IExpression expression, string? name = null)
+		public ExpressionColumn(IExpression expression, string? alias = null)
 		{
-			_expression = Guard.ThrowIfNull(expression, nameof(expression));
-			_name = name == string.Empty ? null : name;
+			Expression = Guard.ThrowIfNull(expression, nameof(expression));
+			Alias = alias == string.Empty ? null : alias;
 		}
 
-		public IExpression Expression 
-		{ 
-			get => _expression;
-			set => _expression = Guard.ThrowIfNull(value, nameof(Expression));
-		}
-
-		public string? Name
-		{
-			get => _name;
-			set => _name = value == string.Empty ? null : value;
-		}
+		public readonly IExpression Expression;
+		public readonly string? Alias;
 
 		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
 			renderer.RenderIdentificator(this, sql);

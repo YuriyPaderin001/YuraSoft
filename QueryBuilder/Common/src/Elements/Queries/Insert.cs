@@ -10,57 +10,33 @@ namespace YuraSoft.QueryBuilder.Common
 	{
 		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-		private ISource _source;
-		private List<IColumn> _sourceColumns = new List<IColumn>();
-		private List<IExpression> _values = new List<IExpression>();
-		private List<IColumn> _returningColumns = new List<IColumn>();
-
-		public Insert(string name) : this(name, alias: null, schema: null)
+		public Insert(string tableName) : this(tableName, tableAlias: null, tableSchema: null)
 		{
 		}
 
-		public Insert(string name, string? schema) : this(name, alias: null, schema)
+		public Insert(string tableName, string? tableSchema) : this(tableName, tableAlias: null, tableSchema)
 		{
 		}
 
-		public Insert(string name, string? alias, string? schema)
+		public Insert(string tableName, string? tableAlias, string? tableSchema)
 		{
-			Guard.ThrowIfNullOrEmpty(name, nameof(name));
+			Guard.ThrowIfNullOrEmpty(tableName, nameof(tableName));
 
-			_source = new Table(name, alias, schema);
+			Source = new Table(tableName, tableAlias, tableSchema);
 		}
 
 		public Insert(Table table)
 		{
-			_source = Guard.ThrowIfNull(table, nameof(table));
+			Source = Guard.ThrowIfNull(table, nameof(table));
 		}
 
-		public ISource Source 
-		{ 
-			get => _source; 
-			set => _source = Guard.ThrowIfNull(value, nameof(Source));
-		}
+		public readonly ISource Source;
+		public readonly List<IColumn> ColumnCollection = new List<IColumn>();
+		public readonly List<IExpression> ValueCollection = new List<IExpression>();
+		public readonly List<IColumn> ReturningColumnCollection = new List<IColumn>();
 
-		public List<IColumn> ColumnCollection
-		{
-			get => _sourceColumns;
-			set => _sourceColumns = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ColumnCollection));
-		}
-
-		public List<IExpression> ValueCollection
-		{
-			get => _values;
-			set => _values = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ValueCollection));
-		}
-
-		public List<IColumn> ReturningColumnCollection
-		{
-			get => _returningColumns;
-			set => _returningColumns = Guard.ThrowIfNullOrContainsNullElements(value, nameof(ReturningColumnCollection));
-		}
-
-		public Insert Columns(Action<ColumnBuilder> action) =>
-			Columns(_factory.Columns(action));
+		public Insert Columns(Action<ColumnBuilder> columnAction) =>
+			Columns(_factory.Columns(columnAction));
 
         public Insert Columns(params string[] columns) => 
 			Columns((IEnumerable<string>)columns);
@@ -74,14 +50,14 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Insert Columns(IEnumerable<IColumn> columns)
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
-			
-			_sourceColumns.AddRange(columns);
+
+            ColumnCollection.AddRange(columns);
 
 			return this;
 		}
 
-		public Insert Values(Action<ExpressionBuilder> action) =>
-			Values(_factory.Expressions(action));
+		public Insert Values(Action<ExpressionBuilder> valueAction) =>
+			Values(_factory.Expressions(valueAction));
         
         public Insert Values(params IExpression[] values) => 
 			Values((IEnumerable<IExpression>)values);
@@ -90,13 +66,13 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrContainsNullElements(values, nameof(values));
 
-			_values.AddRange(values);
+            ValueCollection.AddRange(values);
 
 			return this;
 		}
 
-        public Insert Returning(Action<ColumnBuilder> action) =>
-            Returning(_factory.Columns(action));
+        public Insert Returning(Action<ColumnBuilder> columnAction) =>
+            Returning(_factory.Columns(columnAction));
 
         public Insert Returning(params string[] columns) =>
             Returning((IEnumerable<string>)columns);
@@ -111,7 +87,7 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 			Guard.ThrowIfNullOrContainsNullElements(columns, nameof(columns));
 
-			_returningColumns.AddRange(columns);
+            ReturningColumnCollection.AddRange(columns);
 
 			return this;
 		}

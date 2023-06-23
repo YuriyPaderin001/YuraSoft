@@ -29,21 +29,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Orders
 		}
 
 		[Fact]
-		public void SetColumn_IColumn_Success()
-		{
-			// Arrange
-			OrderByDesc orderByDesc = new OrderByDesc(NewColumn());
-			IColumn column = NewColumn();
-
-			// Act
-			orderByDesc.Column = column;
-
-			// Assert
-			Assert.Equal(column, orderByDesc.Column);
-			Assert.Equal(OrderDirection.Desc, orderByDesc.Direction);
-		}
-
-		[Fact]
 		public void RenderOrderByDesc_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

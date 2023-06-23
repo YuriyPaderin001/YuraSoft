@@ -27,32 +27,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Joins
 			Assert.Throws<ArgumentNullException>(() => new CrossJoin(source: null!));
 		}
 
-
-		[Fact]
-		public void SetSource_ISource_Success()
-		{
-			// Arrange
-			CrossJoin crossJoin = new CrossJoin(NewSource());
-			ISource source = NewSource();
-
-			// Act
-			crossJoin.Source = source;
-
-			// Assert
-			Assert.Equal(source, crossJoin.Source);
-		}
-
-		[Fact]
-		public void SetSource_NullISource_ThrowsArgumentNullException()
-		{
-			// Arrange
-			CrossJoin crossJoin = new CrossJoin(NewSource());
-			ISource source = NewSource();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => crossJoin.Source = null!);
-		}
-
 		[Fact]
 		public void RenderJoin_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

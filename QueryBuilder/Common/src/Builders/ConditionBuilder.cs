@@ -797,6 +797,7 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Condition methods
 
 		public ConditionBuilder Condition(ICondition condition) => Add(condition);
+		public ConditionBuilder Condition(Action<ConditionBuilder> conditionAction) => Add(Factory.Condition(conditionAction));
 
 		#endregion Condition methods
 

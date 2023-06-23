@@ -32,22 +32,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Equal(value, int16Value.Data);
 		}
 
-		[Theory]
-		[InlineData(-3)]
-		[InlineData(0)]
-		[InlineData(1)]
-		public void SetData_Short_Success(short value)
-		{
-			// Arrange
-			Int16Value int16Value = new Int16Value(-9);
-
-			// Act
-			int16Value.Data = value;
-
-			// Assert
-			Assert.Equal(value, int16Value.Data);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

@@ -34,58 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Constructor_LeftExpressionAndRightExpression_ThrowsArgumentNullException_Base(leftExpression: null, rightExpression: null);
 
 		[Fact]
-		public void SetLeftExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression rightExpression = NewExpression();
-			GreaterOrEqualCondition greaterOrEqualCondition = new GreaterOrEqualCondition(NewExpression(), rightExpression);
-			IExpression leftExpression = NewExpression();
-
-			// Act
-			greaterOrEqualCondition.LeftExpression = leftExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, greaterOrEqualCondition.LeftExpression);
-			Assert.Equal(rightExpression, greaterOrEqualCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetLeftExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			GreaterOrEqualCondition greaterOrEqualCondition = new GreaterOrEqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => greaterOrEqualCondition.LeftExpression = null!);
-		}
-
-		[Fact]
-		public void SetRightExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression leftExpression = NewExpression();
-			GreaterOrEqualCondition greaterOrEqualCondition = new GreaterOrEqualCondition(leftExpression, NewExpression());
-			IExpression rightExpression = NewExpression();
-
-			// Act
-			greaterOrEqualCondition.RightExpression = rightExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, greaterOrEqualCondition.LeftExpression);
-			Assert.Equal(rightExpression, greaterOrEqualCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetRightExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			GreaterOrEqualCondition greaterOrEqualCondition = new GreaterOrEqualCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => greaterOrEqualCondition.RightExpression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

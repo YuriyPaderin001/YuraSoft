@@ -30,30 +30,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void Constructor_NullIConditionList_ThrowsArgumentNullException() =>
 			Constructor_IConditionList_ThrowsException<ArgumentNullException>(conditions: null);
 
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetConditions_IConditionList_Success(int length)
-		{
-			// Arrange
-			AndCondition andCondition = new AndCondition(NewConditionList(3));
-			List<ICondition> conditions = NewConditionList(length);
-
-			// Act
-			andCondition.Conditions = conditions;
-
-			// Assert
-			Assert.Equal(conditions, andCondition.Conditions);
-		}
-
-		[Fact]
-		public void SetConditions_EmptyIConditionList_ThrowsArgumentOutOfRangeException() =>
-			SetConditions_IConditionList_ThrowsException<ArgumentOutOfRangeException>(NewEmptyConditionList());
-
-		[Fact]
-		public void SetConditions_NullIConditionList_ThrowsArgumentNullException() =>
-			SetConditions_IConditionList_ThrowsException<ArgumentNullException>(conditions: null);
-
 		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
@@ -124,15 +100,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new AndCondition(conditions!));
-		}
-
-		private void SetConditions_IConditionList_ThrowsException<TException>(List<ICondition>? conditions) where TException: Exception
-		{
-			// Arrange
-			AndCondition andCondition = new AndCondition(NewConditionList(3));
-
-			// Act & Assert
-			Assert.Throws<TException>(() => andCondition.Conditions = conditions!);
 		}
 	}
 }

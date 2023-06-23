@@ -27,30 +27,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		}
 
 		[Fact]
-		public void SetExpression_IExpression_Success()
-		{
-			// Arrange
-			IsNullCondition isNullCondition = new IsNullCondition(NewExpression());
-			IExpression expression = NewExpression();
-
-			// Act
-			isNullCondition.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, isNullCondition.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			IsNullCondition isNullCondition = new IsNullCondition(NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => isNullCondition.Expression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

@@ -62,6 +62,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public void RenderFunction(NowFunction function, StringBuilder sql);
 		public void RenderFunction(ConcatFunction function, StringBuilder sql);
 		public void RenderFunction(CoalesceFunction function, StringBuilder sql);
+		public void RenderFunction(ExtractFunction function, StringBuilder sql);
+		public void RenderFunction(RoundFunction function, StringBuilder sql);
 
 		#endregion Function render methods
 

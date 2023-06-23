@@ -34,23 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Equal(value, floatValue.Data);
 		}
 
-		[Theory]
-		[InlineData(-3.23)]
-		[InlineData(0)]
-		[InlineData(0.23)]
-		[InlineData(1.23)]
-		public void SetData_Float_Success(float value)
-		{
-			// Arrange
-			FloatValue floatValue = new FloatValue(-9);
-
-			// Act
-			floatValue.Data = value;
-
-			// Assert
-			Assert.Equal(value, floatValue.Data);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

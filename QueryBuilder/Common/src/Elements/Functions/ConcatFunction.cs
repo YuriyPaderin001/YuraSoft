@@ -7,18 +7,10 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class ConcatFunction : Function
 	{
-		private List<IExpression> _values;
+		public ConcatFunction(IEnumerable<IExpression> values) =>
+			Values = new List<IExpression>(Guard.ThrowIfNullOrEmpty(values, nameof(values)));
 
-		public ConcatFunction(IEnumerable<IExpression> values) 
-		{
-			_values = new List<IExpression>(Guard.ThrowIfNullOrEmpty(values, nameof(values)));
-		}
-
-		public List<IExpression> Values 
-		{ 
-			get => _values;
-			set => _values = new List<IExpression>(Guard.ThrowIfNullOrEmpty(value, nameof(Values)));
-		}
+		public readonly List<IExpression> Values;
 
 		public override void RenderFunction(IRenderer renderer, StringBuilder sql) => renderer.RenderFunction(this, sql);
 	}

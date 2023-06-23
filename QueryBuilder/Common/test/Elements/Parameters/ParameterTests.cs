@@ -30,32 +30,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Parameters
 		}
 
 		[Fact]
-		public void SetName_String_Success()
-		{
-			// Arrange
-			Parameter parameter = NewParameter();
-			const string name = "new_test_name";
-
-			// Act
-			parameter.Name = name;
-
-			// Assert
-			Assert.Equal(name, parameter.Name);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void SetName_NullOrEmptyString_ThrowsArgumentException(string? name)
-		{
-			// Arrange
-			Parameter parameter = NewParameter();
-
-			// Act & Assert
-			Assert.Throws<ArgumentException>(() => parameter.Name = name!);
-		}
-
-		[Fact]
 		public void RenderParameter_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

@@ -7,8 +7,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Validation
 {
 	public class GuardTests
 	{
-#pragma warning disable IDE0001, IDE0039
-
 		[Fact]
 		public void ThrowIfNullOrEmptyOrContainsNullElements_Valid_ReturnsValue()
 		{
@@ -333,7 +331,5 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Validation
 			// Assert
 			Assert.Throws<ArgumentOutOfRangeException>(action);
 		}
-
-#pragma warning restore IDE0001, IDE0039
 	}
 }

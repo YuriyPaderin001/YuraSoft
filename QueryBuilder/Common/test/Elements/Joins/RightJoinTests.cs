@@ -35,58 +35,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Joins
 			Constructor_ISourceAndICondition_ThrowsArgumentNullException(source: null, condition: null);
 
 		[Fact]
-		public void SetSource_ISource_Success()
-		{
-			// Arrange
-			ICondition condition = NewCondition();
-			RightJoin rightJoin = new RightJoin(NewSource(), condition);
-			ISource source = NewSource();
-
-			// Act
-			rightJoin.Source = source;
-
-			// Assert
-			Assert.Equal(source, rightJoin.Source);
-			Assert.Equal(condition, rightJoin.Condition);
-		}
-
-		[Fact]
-		public void SetSource_NullISource_ThrowsArgumentNullException()
-		{
-			// Arrange
-			RightJoin rightJoin = new RightJoin(NewSource(), NewCondition());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => rightJoin.Source = null!);
-		}
-
-		[Fact]
-		public void SetCondition_ICondition_Success()
-		{
-			// Arrange
-			ISource source = NewSource();
-			RightJoin rightJoin = new RightJoin(source, NewCondition());
-			ICondition condition = NewCondition();
-
-			// Act
-			rightJoin.Condition = condition;
-
-			// Assert
-			Assert.Equal(source, rightJoin.Source);
-			Assert.Equal(condition, rightJoin.Condition);
-		}
-
-		[Fact]
-		public void SetCondition_NullICondition_ThrowsArgumentNullException()
-		{
-			// Arrange
-			RightJoin rightJoin = new RightJoin(NewSource(), NewCondition());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => rightJoin.Condition = null!);
-		}
-
-		[Fact]
 		public void RenderJoin_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

@@ -32,22 +32,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Values
 			Assert.Equal(value, int8Value.Data);
 		}
 
-		[Theory]
-		[InlineData(-3)]
-		[InlineData(0)]
-		[InlineData(1)]
-		public void SetData_Sbyte_Success(sbyte value)
-		{
-			// Arrange
-			Int8Value int8Value = new Int8Value(-9);
-
-			// Act
-			int8Value.Data = value;
-
-			// Assert
-			Assert.Equal(value, int8Value.Data);
-		}
-
 		[Fact]
 		public void RenderValue_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

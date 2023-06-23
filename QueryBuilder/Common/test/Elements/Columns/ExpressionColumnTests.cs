@@ -18,7 +18,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 
 			// Assert
 			Assert.Equal(expression, expressionColumn.Expression);
-			Assert.Null(expressionColumn.Name);
+			Assert.Null(expressionColumn.Alias);
 		}
 
 		[Theory]
@@ -38,11 +38,11 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 
 			if (string.IsNullOrEmpty(name))
 			{
-				Assert.Null(expressionColumn.Name);
+				Assert.Null(expressionColumn.Alias);
 			}
 			else
 			{
-				Assert.Equal(name, expressionColumn.Name);
+				Assert.Equal(name, expressionColumn.Alias);
 			}
 		}
 
@@ -61,58 +61,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Columns
 		{
 			// Act & Assert
 			Assert.Throws<ArgumentNullException>(() => new ExpressionColumn(expression: null!, name));
-		}
-
-		[Fact]
-		public void SetExpression_IExpression_Success()
-		{
-			// Arrange
-			const string name = "test_name";
-			ExpressionColumn expressionColumn = new ExpressionColumn(NewExpression(), name);
-			IExpression expression = NewExpression();
-
-			// Act
-			expressionColumn.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, expressionColumn.Expression);
-			Assert.Equal(name, expressionColumn.Name);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			ExpressionColumn expressionColumn = new ExpressionColumn(NewExpression(), "test_name");
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => expressionColumn.Expression = null!);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData("test_new_name")]
-		public void SetName_String_Success(string? name)
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			ExpressionColumn expressionColumn = new ExpressionColumn(expression, "test_name");
-
-			// Act
-			expressionColumn.Name = name;
-
-			// Assert
-			Assert.Equal(expression, expressionColumn.Expression);
-
-			if (string.IsNullOrEmpty(name))
-			{
-				Assert.Null(expressionColumn.Name);
-			}
-			else
-			{
-				Assert.Equal(name, expressionColumn.Name);
-			}
 		}
 
 		[Fact]

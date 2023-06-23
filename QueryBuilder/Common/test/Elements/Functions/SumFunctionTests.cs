@@ -28,30 +28,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		}
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			SumFunction sumFunction = NewSumFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			sumFunction.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, sumFunction.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			SumFunction sumFunction = NewSumFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => sumFunction.Expression = null!);
-		}
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

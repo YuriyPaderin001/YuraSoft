@@ -44,52 +44,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Expressions
 			Assert.Throws<ArgumentNullException>(() => new DivideExpression(null!));
 		}
 
-		[Theory]
-		[InlineData(2)]
-		[InlineData(3)]
-		public void SetExpressions_Expressions_Success(int length)
-		{
-			// Arrange
-			DivideExpression divideExpression = new DivideExpression(NewExpressionList(length));
-			List<IExpression> expressions = NewExpressionList(length);
-
-			// Act
-			divideExpression.Expressions = expressions;
-
-			// Assert
-			Assert.Equal(expressions, divideExpression.Expressions);
-		}
-
-		[Fact]
-		public void SetExpressions_OneExpression_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			DivideExpression divideExpression = new DivideExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => divideExpression.Expressions = NewExpressionList(1));
-		}
-
-		[Fact]
-		public void SetExpressions_EmptyExpressionList_ThrowsArgumentOutOfRangeException()
-		{
-			// Arrange
-			DivideExpression divideExpression = new DivideExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => divideExpression.Expressions = NewEmptyExpressionList());
-		}
-
-		[Fact]
-		public void SetExpressions_NullList_ThrowsArgumentNullException()
-		{
-			// Arrange
-			DivideExpression divideExpression = new DivideExpression(NewExpressionList(2));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => divideExpression.Expressions = null!);
-		}
-
 		[Fact]
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{

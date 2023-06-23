@@ -34,58 +34,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Constructor_LeftExpressionAndRightExpression_ThrowsArgumentNullException_Base(leftExpression: null, rightExpression: null);
 
 		[Fact]
-		public void SetLeftExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression rightExpression = NewExpression();
-			LessCondition lessCondition = new LessCondition(NewExpression(), rightExpression);
-			IExpression leftExpression = NewExpression();
-
-			// Act
-			lessCondition.LeftExpression = leftExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, lessCondition.LeftExpression);
-			Assert.Equal(rightExpression, lessCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetLeftExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			LessCondition lessCondition = new LessCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => lessCondition.LeftExpression = null!);
-		}
-
-		[Fact]
-		public void SetRightExpression_IExpression_Success()
-		{
-			// Arrange
-			IExpression leftExpression = NewExpression();
-			LessCondition lessCondition = new LessCondition(leftExpression, NewExpression());
-			IExpression rightExpression = NewExpression();
-
-			// Act
-			lessCondition.RightExpression = rightExpression;
-
-			// Assert
-			Assert.Equal(leftExpression, lessCondition.LeftExpression);
-			Assert.Equal(rightExpression, lessCondition.RightExpression);
-		}
-
-		[Fact]
-		public void SetRightExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			LessCondition lessCondition = new LessCondition(NewExpression(), NewExpression());
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => lessCondition.RightExpression = null!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

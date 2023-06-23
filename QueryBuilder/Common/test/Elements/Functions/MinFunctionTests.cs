@@ -28,30 +28,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 		}
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			MinFunction minFunction = NewMinFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			minFunction.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, minFunction.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			MinFunction minFunction = NewMinFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => minFunction.Expression = null!);
-		}
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

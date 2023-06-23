@@ -6,18 +6,10 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class Parameter : Value, IParameter
 	{
-		private string _name;
+		public Parameter(string name) =>
+			Name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
 
-		public Parameter(string name)
-		{
-			_name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
-		}
-
-		public string Name
-		{
-			get => _name;
-			set => _name = Guard.ThrowIfNullOrEmpty(value, nameof(Name));
-		}
+		public readonly string Name;
 
 		public override void RenderValue(IRenderer renderer, StringBuilder sql) => 
 			RenderParameter(renderer, sql);

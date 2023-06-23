@@ -43,60 +43,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void Constructor_ExpressionAndNullIExpressionList_ThrowsArgumentNullException() =>
 			Constructor_ExpressionAndIExpressionList_ThrowsException<ArgumentNullException>(NewExpression(), values: null);
 
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetExpression_IExpression_Success(int length)
-		{
-			// Arrange
-			List<IExpression> values = NewExpressionList(length);
-			InCondition inCondition = new InCondition(NewExpression(), values);
-			IExpression expression = NewExpression();
-
-			// Act
-			inCondition.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, inCondition.Expression);
-			Assert.Equal(values, inCondition.Values);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			InCondition inCondition = new InCondition(NewExpression(), NewExpressionList(3));
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => inCondition.Expression = null!);
-		}
-
-		[Theory]
-		[InlineData(1)]
-		[InlineData(3)]
-		public void SetValues_IExpressionList_Success(int length)
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			InCondition inCondition = new InCondition(expression, NewExpressionList(3));
-			List<IExpression> values = NewExpressionList(length);
-
-			// Act
-			inCondition.Values = values;
-
-			// Assert
-			Assert.Equal(expression, inCondition.Expression);
-			Assert.Equal(values, inCondition.Values);
-		}
-
-		[Fact]
-		public void SetValues_EmptyIExpressionList_ThrowsArgumentOutOfLengthException() =>
-			SetValues_IExpressionList_ThrowsException<ArgumentOutOfRangeException>(NewEmptyExpressionList());
-
-		[Fact]
-		public void SetValues_NullIExpressionList_ThrowsArgumentNullException() =>
-			SetValues_IExpressionList_ThrowsException<ArgumentNullException>(values: null);
-
 		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
@@ -167,15 +113,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new InCondition(expression!, values!));
-		}
-
-		private void SetValues_IExpressionList_ThrowsException<TException>(List<IExpression>? values) where TException: Exception
-		{
-			// Arrange
-			InCondition inCondition = new InCondition(NewExpression(), NewExpressionList(3));
-
-			// Act & Assert
-			Assert.Throws<TException>(() => inCondition.Values = values!);
 		}
 	}
 }

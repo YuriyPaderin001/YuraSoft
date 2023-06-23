@@ -35,54 +35,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Functions
 			Constructor_ExpressionAndDefaultExpression_ThrowsException<ArgumentNullException>(expression: NewExpression(), defaultExpression: null);
 
 		[Fact]
-		public void SetExpression_Expression_Success()
-		{
-			// Arrange
-			CoalesceFunction coalesceFunction = NewCoalesceFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			coalesceFunction.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, coalesceFunction.Expression);
-		}
-
-		[Fact]
-		public void SetExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			CoalesceFunction coalesceFunction = NewCoalesceFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => coalesceFunction.Expression = null!);
-		}
-
-		[Fact]
-		public void SetDefaultExpression_Expression_Success()
-		{
-			// Arrange
-			CoalesceFunction coalesceFunction = NewCoalesceFunction();
-			IExpression expression = NewExpression();
-
-			// Act
-			coalesceFunction.DefaultExpression = expression;
-
-			// Assert
-			Assert.Equal(expression, coalesceFunction.DefaultExpression);
-		}
-
-		[Fact]
-		public void SetDefaultExpression_NullExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			CoalesceFunction coalesceFunction = NewCoalesceFunction();
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => coalesceFunction.DefaultExpression = null!);
-		}
-
-		[Fact]
 		public void RenderFunction_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange

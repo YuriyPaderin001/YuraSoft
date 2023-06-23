@@ -38,60 +38,6 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Constructor_ExpressionAndPattern_ThrowsException<ArgumentNullException>(expression: null, pattern);
 
 		[Fact]
-		public void SetExpression_IExpression_Success()
-		{
-			// Arrange
-			string pattern = "%test%";
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), pattern);
-			IExpression expression = NewExpression();
-
-			// Act
-			likeCondition.Expression = expression;
-
-			// Assert
-			Assert.Equal(expression, likeCondition.Expression);
-			Assert.Equal(pattern, likeCondition.Pattern);
-		}
-
-		[Fact]
-		public void SetExpression_NullIExpression_ThrowsArgumentNullException()
-		{
-			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
-
-			// Act & Assert
-			Assert.Throws<ArgumentNullException>(() => likeCondition.Expression = null!);
-		}
-
-		[Fact]
-		public void SetPattern_String_Success()
-		{
-			// Arrange
-			IExpression expression = NewExpression();
-			LikeCondition likeCondition = new LikeCondition(expression, "%test%");
-			string pattern = "%new_test%";
-
-			// Act
-			likeCondition.Pattern = pattern;
-
-			// Assert
-			Assert.Equal(expression, likeCondition.Expression);
-			Assert.Equal(pattern, likeCondition.Pattern);
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void SetPattern_NullOrEmptyString_ThrowsArgumentException(string? pattern)
-		{
-			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
-
-			// Act & Assert
-			Assert.Throws<ArgumentException>(() => likeCondition.Pattern = pattern!);
-		}
-
-		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
