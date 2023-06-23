@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using YuraSoft.QueryBuilder.Common;
 
@@ -81,6 +82,52 @@ namespace YuraSoft.QueryBuilder.PostgreSql
         public static NotEqualCondition NotEqual(this ExpressionFactory factory, string column, ISource source, bool value) =>
             factory.NotEqual(column, source, Bool(factory, value));
 
+        #region Function methods
+
+        #region AnyFunction methods
+
+        public static AnyFunction Any(this ExpressionFactory _, params sbyte[] values) => new AnyFunction(values.Select(v => new Int8Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params short[] values) => new AnyFunction(values.Select(v => new Int16Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params int[] values) => new AnyFunction(values.Select(v => new Int32Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params long[] values) => new AnyFunction(values.Select(v => new Int64Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params float[] values) => new AnyFunction(values.Select(v => new FloatValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params double[] values) => new AnyFunction(values.Select(v => new DoubleValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params decimal[] values) => new AnyFunction(values.Select(v => new DecimalValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params DateTime[] values) => new AnyFunction(values.Select(v => new DateTimeValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, string format, params DateTime[] values) => new AnyFunction(values.Select(v => new DateTimeValue(v, format)));
+        public static AnyFunction Any(this ExpressionFactory _, params string[] values) => new AnyFunction(values.Select(v => new StringValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params bool[] values) => new AnyFunction(values.Select(v => new BoolValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, params IExpression[] expressions) => new AnyFunction(expressions);
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<sbyte> values) => new AnyFunction(values.Select(v => new Int8Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<short> values) => new AnyFunction(values.Select(v => new Int16Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<int> values) => new AnyFunction(values.Select(v => new Int32Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<long> values) => new AnyFunction(values.Select(v => new Int64Value(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<float> values) => new AnyFunction(values.Select(v => new FloatValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<double> values) => new AnyFunction(values.Select(v => new DoubleValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<decimal> values) => new AnyFunction(values.Select(v => new DecimalValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<DateTime> values, string? format = null) => new AnyFunction(values.Select(v => new DateTimeValue(v, format)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<string> values) => new AnyFunction(values.Select(v => new StringValue(v)));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<bool> values) => new AnyFunction(values.Select(v => new BoolValue(v)));
+        public static AnyFunction Any(this ExpressionFactory factory, Action<ExpressionBuilder> expressionAction) => new AnyFunction(factory.Expressions(expressionAction));
+        public static AnyFunction Any(this ExpressionFactory _, IEnumerable<IExpression> expressions) => new AnyFunction(expressions);
+
+        #endregion AnyFunction methods
+
+        public static ArrayAggFunction ArrayAgg(this ExpressionFactory factory, string columnName) =>
+            new ArrayAggFunction(factory.Column(columnName));
+
+        public static ArrayAggFunction ArrayAgg(this ExpressionFactory factory, string columnName, string columnTableName) =>
+            new ArrayAggFunction(factory.Column(columnName, new Table(columnTableName)));
+
+        public static ArrayAggFunction ArrayAgg(this ExpressionFactory factory, string columnName, ISource? columnSource) =>
+            new ArrayAggFunction(factory.Column(columnName, columnSource));
+
+        public static ArrayAggFunction ArrayAgg(this ExpressionFactory factory, Func<ExpressionFactory, IExpression> expressionFunction) =>
+            new ArrayAggFunction(factory.Expression(expressionFunction));
+
+        public static ArrayAggFunction ArrayAgg(this ExpressionFactory _, IExpression expression) =>
+            new ArrayAggFunction(expression);
+
         public static CoalesceFunction Coalesce(this ExpressionFactory factory, string column, bool value) =>
             factory.Coalesce(factory.Column(column), Bool(factory, value));
 
@@ -96,6 +143,8 @@ namespace YuraSoft.QueryBuilder.PostgreSql
         public static CoalesceFunction Coalesce(this ExpressionFactory factory, IExpression expression, bool value) =>
             factory.Coalesce(expression, Bool(factory, value));
 
+        #endregion Function methods
+
         public static BoolValue True(this ExpressionFactory factory) => Bool(factory, value: true);
         public static BoolValue False(this ExpressionFactory factory) => Bool(factory, value: false);
 
@@ -103,5 +152,15 @@ namespace YuraSoft.QueryBuilder.PostgreSql
             ? Bool(factory, value) : factory.Null();
 
 		public static BoolValue Bool(this ExpressionFactory _, bool value) => new BoolValue(value);
+
+        public static IntervalValue YearInterval(this ExpressionFactory _, int years) => Interval(_, years: years);
+        public static IntervalValue MonthInterval(this ExpressionFactory _, int months) => Interval(_, months: months);
+        public static IntervalValue DayInterval(this ExpressionFactory _, int days) => Interval(_, days: days);
+        public static IntervalValue HourInterval(this ExpressionFactory _, int hours) => Interval(_, hours: hours);
+        public static IntervalValue MinuteInterval(this ExpressionFactory _, int minutes) => Interval(_, minutes: minutes);
+        public static IntervalValue SecondInterval(this ExpressionFactory _, int seconds) => Interval(_, seconds: seconds);
+        public static IntervalValue MillisecondInterval(this ExpressionFactory _, int milliseconds) => Interval(_, milliseconds: milliseconds);
+        public static IntervalValue Interval(this ExpressionFactory _, int years = 0, int months = 0, int days = 0, int hours = 0, int minutes = 0, int seconds = 0, int milliseconds = 0) =>
+            new IntervalValue(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 }

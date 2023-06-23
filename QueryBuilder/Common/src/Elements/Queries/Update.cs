@@ -43,7 +43,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(string columnName, decimal value) => Set(new SourceColumn(columnName), new DecimalValue(value));
 		public virtual Update Set(string columnName, DateTime value, string? format = null) => Set(new SourceColumn(columnName), new DateTimeValue(value, format));
 		public virtual Update Set(string columnName, string value) => Set(new SourceColumn(columnName), new StringValue(value));
-		public virtual Update Set(string columnName, IExpression value) => Set(new SourceColumn(columnName), value);
+        public virtual Update Set(string columnName, Func<ExpressionFactory, IExpression> expressionFunction) => Set(new SourceColumn(columnName), _factory.Expression(expressionFunction));
+        public virtual Update Set(string columnName, IExpression value) => Set(new SourceColumn(columnName), value);
 		public virtual Update SetNull(string columnName) => Set(new SourceColumn(columnName), new NullValue());
 
 		public virtual Update Set(string columnName, string tableName, sbyte value) => Set(new SourceColumn(columnName, new Table(tableName)), new Int8Value(value));
@@ -55,6 +56,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(string columnName, string tableName, decimal value) => Set(new SourceColumn(columnName, new Table(tableName)), new DecimalValue(value));
 		public virtual Update Set(string columnName, string tableName, DateTime value, string? format = null) => Set(new SourceColumn(columnName, new Table(tableName)), new DateTimeValue(value, format));
 		public virtual Update Set(string columnName, string tableName, string value) => Set(new SourceColumn(columnName, new Table(tableName)), new StringValue(value));
+		public virtual Update Set(string columnName, string tableName, Func<ExpressionFactory, IExpression> expressionFunction) => Set(new SourceColumn(columnName, new Table(tableName)), _factory.Expression(expressionFunction));
 		public virtual Update Set(string columnName, string tableName, IExpression value) => Set(new SourceColumn(columnName, new Table(tableName)), value);
 		public virtual Update SetNull(string columnName, string tableName) => Set(new SourceColumn(columnName, new Table(tableName)), new NullValue());
 
@@ -67,6 +69,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(string columnName, ISource? columnSource, decimal value) => Set(new SourceColumn(columnName, columnSource), new DecimalValue(value));
 		public virtual Update Set(string columnName, ISource? columnSource, DateTime value, string? format = null) => Set(new SourceColumn(columnName, columnSource), new DateTimeValue(value, format));
 		public virtual Update Set(string columnName, ISource? columnSource, string value) => Set(new SourceColumn(columnName, columnSource), new StringValue(value));
+		public virtual Update Set(string columnName, ISource? columnSource, Func<ExpressionFactory, IExpression> expressionFunction) => Set(new SourceColumn(columnName, columnSource), _factory.Expression(expressionFunction));
 		public virtual Update Set(string columnName, ISource? columnSource, IExpression value) => Set(new SourceColumn(columnName, columnSource), value);
 		public virtual Update SetNull(string columnName, ISource? columnSource) => Set(new SourceColumn(columnName, columnSource), new NullValue());
 
@@ -79,6 +82,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public virtual Update Set(IColumn column, decimal value) => Set(column, new DecimalValue(value));
 		public virtual Update Set(IColumn column, DateTime value, string? format = null) => Set(column, new DateTimeValue(value, format));
 		public virtual Update Set(IColumn column, string value) => Set(column, new StringValue(value));
+		public virtual Update Set(IColumn column, Func<ExpressionFactory, IExpression> expressionFunction) =>
+			Set(column, _factory.Expression(expressionFunction));
+
 		public virtual Update Set(IColumn column, IExpression value)
 		{
 			Guard.ThrowIfNull(column, nameof(column));

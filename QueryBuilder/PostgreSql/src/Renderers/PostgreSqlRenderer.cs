@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using YuraSoft.QueryBuilder.Common;
@@ -10,8 +9,6 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 {
 	public class PostgreSqlRenderer : IRenderer
 	{
-		private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
-
 		#region Column rendering methods
 
 		public void RenderColumn(SourceColumn column, StringBuilder sql)
@@ -188,6 +185,24 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append("DISTINCT");
 		}
 
+		public void RenderDistinct(DistinctOn distinct, StringBuilder sql)
+		{
+			Guard.ThrowIfNull(distinct, nameof(distinct));
+			Guard.ThrowIfNull(sql, nameof(sql));
+
+            sql.Append("DISTINCT ON (");
+
+            distinct.Columns[0].RenderIdentificator(this, sql);
+            for (int i = 1; i < distinct.Columns.Count; i++)
+            {
+                sql.Append(", ");
+
+                distinct.Columns[i].RenderIdentificator(this, sql);
+            }
+
+            sql.Append(')');
+        }
+
 		#endregion Distinct render methods
 
 		#region Expression rendering methods
@@ -317,6 +332,8 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append(function.Type);
 		}
 
+		public void RenderFunction(AnyFunction function, StringBuilder sql) => RenderFunction("any", function, function.Expressions, sql);
+		public void RenderFunction(ArrayAggFunction function, StringBuilder sql) => RenderExpressionFunction("array_agg", function, sql);
 		public void RenderFunction(CountFunction function, StringBuilder sql) => RenderExpressionFunction("count", function, sql);
 		public void RenderFunction(SumFunction function, StringBuilder sql) => RenderExpressionFunction("sum", function, sql);
 		public void RenderFunction(MaxFunction function, StringBuilder sql) => RenderExpressionFunction("max", function, sql);
@@ -885,6 +902,110 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 		public void RenderValue(StringValue value, StringBuilder sql) => RenderValue(value, $"'{value?.Data}'", sql);
 		public void RenderValue(NullValue value, StringBuilder sql) => RenderValue(value, "null", sql);
 		public void RenderValue(BoolValue value, StringBuilder sql) => RenderValue(value, value?.Data == true ? "TRUE" : "FALSE", sql);
+		public void RenderValue(IntervalValue value, StringBuilder sql)
+		{
+			Guard.ThrowIfNull(value, nameof(value));
+			Guard.ThrowIfNull(sql, nameof(sql));
+
+			sql.Append('\'');
+
+			bool hasValue = false;
+			if (value.Years != 0)
+			{
+                hasValue = true;
+
+                sql.Append(value.Years);
+				sql.Append(" years");
+			}
+
+			if (value.Months != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+				else
+				{
+					hasValue = true;
+				}
+
+				sql.Append(value.Months);
+				sql.Append(" months");
+			}
+
+			if (value.Days != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+				else
+				{
+					hasValue = true;
+				}
+
+				sql.Append(value.Days);
+				sql.Append(" days");
+			}
+
+			if (value.Hours != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+				else
+				{
+					hasValue = true;
+				}
+
+				sql.Append(value.Hours);
+				sql.Append(" hours");
+			}
+
+			if (value.Minutes != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+				else
+				{
+					hasValue = true;
+				}
+
+				sql.Append(value.Minutes);
+				sql.Append(" minutes");
+			}
+
+			if (value.Seconds != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+				else
+				{
+					hasValue = true;
+				}
+
+				sql.Append(value.Seconds);
+				sql.Append(" seconds");
+			}
+
+			if (value.Milliseconds != 0)
+			{
+				if (hasValue)
+				{
+					sql.Append(' ');
+				}
+
+				sql.Append(value.Milliseconds);
+				sql.Append(" milliseconds");
+			}
+
+			sql.Append("\'::interval");
+		}
 
 		private void RenderValue(IValue value, object? data, StringBuilder sql) =>
 			RenderValue(value, data?.ToString(), sql);

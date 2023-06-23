@@ -6,28 +6,28 @@ namespace YuraSoft.QueryBuilder.PostgreSql
     {
         private static readonly ExpressionFactory _factory = ExpressionFactory.Instance;
 
-        public static Update True(this Update update, string column) =>
+        public static Update SetTrue(this Update update, string column) =>
             update.Set(column, _factory.True());
 
-        public static Update True(this Update update, string column, string columnSource) =>
+        public static Update SetTrue(this Update update, string column, string columnSource) =>
             update.Set(column, columnSource, _factory.True());
 
-        public static Update True(this Update update, string column, ISource columnSource) =>
+        public static Update SetTrue(this Update update, string column, ISource columnSource) =>
             update.Set(column, columnSource, _factory.True());
 
-        public static Update True(this Update update, IColumn column) =>
+        public static Update SetTrue(this Update update, IColumn column) =>
             update.Set(column, _factory.True());
 
-        public static Update False(this Update update, string column) =>
+        public static Update SetFalse(this Update update, string column) =>
             update.Set(column, _factory.False());
 
-        public static Update False(this Update update, string column, string columnSource) =>
+        public static Update SetFalse(this Update update, string column, string columnSource) =>
             update.Set(column, columnSource, _factory.False());
 
-        public static Update False(this Update update, string column, ISource columnSource) =>
+        public static Update SetFalse(this Update update, string column, ISource columnSource) =>
             update.Set(column, columnSource, _factory.False());
 
-        public static Update False(this Update update, IColumn column) =>
+        public static Update SetFalse(this Update update, IColumn column) =>
             update.Set(column, _factory.False());
 
         public static Update Set(this Update update, string column, bool value) =>
