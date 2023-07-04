@@ -919,7 +919,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public PlusExpression Plus(string column1, string column2) => new PlusExpression(new[] { Column(column1), Column(column2) });
 		public PlusExpression Plus(string column1, string column1Source, string column2, string column2Source) => new PlusExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
-		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => new PlusExpression(new[] { (Column(column1, column1Source), Column(column2, column2Source) });
+		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => new PlusExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
 		public PlusExpression Plus(IExpression leftExpression, IExpression rightExpression) => new PlusExpression(new[] { leftExpression, rightExpression });
 		public PlusExpression Plus(params IExpression[] expressions) => new PlusExpression(expressions);
 		public PlusExpression Plus(Action<ExpressionBuilder> action) => new PlusExpression(Expressions(action));
