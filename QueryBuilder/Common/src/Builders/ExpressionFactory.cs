@@ -917,10 +917,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region PlusEpression factory methods
 
-		public PlusExpression Plus(string column1, string column2) => Plus(Column(column1), Column(column2));
-		public PlusExpression Plus(string column1, string column1Source, string column2, string column2Source) => Plus(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
-		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => Plus(Column(column1, column1Source), Column(column2, column2Source));
-		public PlusExpression Plus(IExpression leftExpression, IExpression rightExpression) => Plus(leftExpression, rightExpression);
+		public PlusExpression Plus(string column1, string column2) => new PlusExpression(new[] { Column(column1), Column(column2) });
+		public PlusExpression Plus(string column1, string column1Source, string column2, string column2Source) => new PlusExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
+		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => new PlusExpression(new[] { (Column(column1, column1Source), Column(column2, column2Source) });
+		public PlusExpression Plus(IExpression leftExpression, IExpression rightExpression) => new PlusExpression(new[] { leftExpression, rightExpression });
 		public PlusExpression Plus(params IExpression[] expressions) => new PlusExpression(expressions);
 		public PlusExpression Plus(Action<ExpressionBuilder> action) => new PlusExpression(Expressions(action));
 		public PlusExpression Plus(IEnumerable<IExpression> expressions) => new PlusExpression(expressions);
@@ -929,10 +929,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MinusExpression factory methods
 
-		public MinusExpression Minus(string column1, string column2) => Minus(Column(column1), Column(column2));
-		public MinusExpression Minus(string column1, string column1Source, string column2, string column2Source) => Minus(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
-		public MinusExpression Minus(string column1, ISource column1Source, string column2, ISource column2Source) => Minus(Column(column1, column1Source), Column(column2, column2Source));
-		public MinusExpression Minus(IExpression leftExpression, IExpression rightExpression) => Minus(leftExpression, rightExpression);
+		public MinusExpression Minus(string column1, string column2) => new MinusExpression(new[] { Column(column1), Column(column2) });
+		public MinusExpression Minus(string column1, string column1Source, string column2, string column2Source) => new MinusExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
+		public MinusExpression Minus(string column1, ISource column1Source, string column2, ISource column2Source) => new MinusExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
+		public MinusExpression Minus(IExpression leftExpression, IExpression rightExpression) => new MinusExpression(new[] { leftExpression, rightExpression });
 		public MinusExpression Minus(params IExpression[] expressions) => new MinusExpression(expressions);
 		public MinusExpression Minus(Action<ExpressionBuilder> action) => new MinusExpression(Expressions(action));
 		public MinusExpression Minus(IEnumerable<IExpression> expressions) => new MinusExpression(expressions);
@@ -941,10 +941,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region MultiplyExpression factory methods
 
-		public MultiplyExpression Multiply(string column1, string column2) => Multiply(Column(column1), Column(column2));
-		public MultiplyExpression Multiply(string column1, string column1Source, string column2, string column2Source) => Multiply(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
-		public MultiplyExpression Multiply(string column1, ISource column1Source, string column2, ISource column2Source) => Multiply(Column(column1, column1Source), Column(column2, column2Source));
-		public MultiplyExpression Multiply(IExpression leftExpression, IExpression rightExpression) => Multiply(leftExpression, rightExpression);
+		public MultiplyExpression Multiply(string column1, string column2) => new MultiplyExpression(new[] { Column(column1), Column(column2) });
+		public MultiplyExpression Multiply(string column1, string column1Source, string column2, string column2Source) => new MultiplyExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
+		public MultiplyExpression Multiply(string column1, ISource column1Source, string column2, ISource column2Source) => new MultiplyExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
+		public MultiplyExpression Multiply(IExpression leftExpression, IExpression rightExpression) => new MultiplyExpression(new[] { leftExpression, rightExpression });
 		public MultiplyExpression Multiply(params IExpression[] expressions) => new MultiplyExpression(expressions);
 		public MultiplyExpression Multiply(Action<ExpressionBuilder> action) => new MultiplyExpression(Expressions(action));
 		public MultiplyExpression Multiply(IEnumerable<IExpression> expressions) => new MultiplyExpression(expressions);
@@ -953,10 +953,10 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region DivideExpression factory methods
 
-		public DivideExpression Divide(string column1, string column2) => Divide(Column(column1), Column(column2));
-		public DivideExpression Divide(string column1, string column1Source, string column2, string column2Source) => Divide(Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source));
-		public DivideExpression Divide(string column1, ISource column1Source, string column2, ISource column2Source) => Divide(Column(column1, column1Source), Column(column2, column2Source));
-		public DivideExpression Divide(IExpression leftExpression, IExpression rightExpression) => Divide(leftExpression, rightExpression);
+		public DivideExpression Divide(string column1, string column2) => new DivideExpression(new[] { Column(column1), Column(column2) });
+		public DivideExpression Divide(string column1, string column1Source, string column2, string column2Source) => new DivideExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
+		public DivideExpression Divide(string column1, ISource column1Source, string column2, ISource column2Source) => new DivideExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
+		public DivideExpression Divide(IExpression leftExpression, IExpression rightExpression) => new DivideExpression(new[] { leftExpression, rightExpression });
 		public DivideExpression Divide(params IExpression[] expressions) => new DivideExpression(expressions);
 		public DivideExpression Divide(Action<ExpressionBuilder> action) => new DivideExpression(Expressions(action));
 		public DivideExpression Divide(IEnumerable<IExpression> expressions) => new DivideExpression(expressions);
