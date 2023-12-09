@@ -6,27 +6,24 @@ namespace YuraSoft.QueryBuilder.Common
 {
 	public class SourceColumn : Column
 	{
-		public SourceColumn(string name)
+		public SourceColumn(string name) : this(name, source: null, alias: null)
 		{
-			Name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
 		}
 
-		public SourceColumn(string name, ISource? source)
+		public SourceColumn(string name, string? alias) : this(name, source: null, alias)
 		{
-			Name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
-			Source = source;
 		}
 
-		public SourceColumn(string name, string? alias, ISource? source = null)
+		public SourceColumn(string name, ISource? source, string? alias = null)
 		{
 			Name = Guard.ThrowIfNullOrEmpty(name, nameof(name));
-			Alias = alias == string.Empty ? null : alias;
-			Source = source;
-		}
+            Source = source;
+            Alias = alias == string.Empty ? null : alias;
+        }
 
 		public readonly string Name;
-		public readonly string? Alias;
-		public readonly ISource? Source;
+        public readonly ISource? Source;
+        public readonly string? Alias;
 
 		public override void RenderIdentificator(IRenderer renderer, StringBuilder sql) => 
 			renderer.RenderIdentificator(this, sql);

@@ -14,22 +14,22 @@ namespace YuraSoft.QueryBuilder.Common
 		{
 		}
 
-		public static ExpressionFactory Instance { get; private set; }
+		public static readonly ExpressionFactory Instance;
 
 		#region Columns factory methods
 
 		#region IColumn factory methods
 
-		public IColumn Column(Func<ExpressionFactory, IColumn> function) => function.Invoke(this);
+		public IColumn Column(Func<ExpressionFactory, IColumn> columnFunction) => columnFunction.Invoke(this);
 
-		public IEnumerable<IColumn> Columns(Action<ColumnBuilder> action)
+		public IEnumerable<IColumn> Columns(Action<ColumnBuilder> columnBuilderFunction)
 		{
-			Guard.ThrowIfNull(action, nameof(action));
+			Guard.ThrowIfNull(columnBuilderFunction, nameof(columnBuilderFunction));
 
-			ColumnBuilder builder = new ColumnBuilder();
-			action.Invoke(builder);
+			ColumnBuilder columnBuilder = new ColumnBuilder();
+            columnBuilderFunction.Invoke(columnBuilder);
 
-			IEnumerable<IColumn> columns = builder.Build();
+			IEnumerable<IColumn> columns = columnBuilder.Build();
 
 			return columns;
 		}
@@ -50,8 +50,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public ExpressionColumn Column(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null)
 		{
-			ExpressionFactory factory = new ExpressionFactory();
-			IExpression expression = expressionFunction.Invoke(factory);
+			ExpressionFactory expressionFactory = new ExpressionFactory();
+			IExpression expression = expressionFunction.Invoke(expressionFactory);
 
 			return new ExpressionColumn(expression, name);
 		}
@@ -62,9 +62,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public SourceColumn Column(string name) => new SourceColumn(name);
 		public SourceColumn Column(string name, string? alias) => new SourceColumn(name, alias);
-		public SourceColumn Column(string name, string? alias, string? table) => new SourceColumn(name, alias, string.IsNullOrEmpty(table) ? null : new Table(table));
-		public SourceColumn Column(string name, ISource? source) => new SourceColumn(name, source);
-		public SourceColumn Column(string name, string? alias, ISource? source) => new SourceColumn(name, alias, source);
+		public SourceColumn Column(string name, ISource? source, string? alias = null) => new SourceColumn(name, source, alias);
 
 		#endregion SourceColumn factory methods
 
@@ -76,13 +74,13 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public AndCondition And(params ICondition[] conditions) => new AndCondition(conditions);
 		public AndCondition And(IEnumerable<ICondition> conditions) => new AndCondition(conditions);
-		public AndCondition And(ConditionBuilder builder) => new AndCondition(builder.Conditions);
-		public AndCondition And(Action<ConditionBuilder> conditionAction)
+		public AndCondition And(ConditionBuilder conditionBuilder) => new AndCondition(conditionBuilder.Conditions);
+		public AndCondition And(Action<ConditionBuilder> conditionFunction)
 		{
-			ConditionBuilder builder = new ConditionBuilder();
-			conditionAction.Invoke(builder);
+			ConditionBuilder conditionBuilder = new ConditionBuilder();
+			conditionFunction.Invoke(conditionBuilder);
 
-			return new AndCondition(builder.Conditions);
+			return new AndCondition(conditionBuilder.Conditions);
 		}
 
 		#endregion AndCondition factory methods
@@ -91,13 +89,13 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public OrCondition Or(params ICondition[] conditions) => new OrCondition(conditions);
 		public OrCondition Or(IEnumerable<ICondition> conditions) => new OrCondition(conditions);
-		public OrCondition Or(ConditionBuilder builder) => new OrCondition(builder.Conditions);
-		public OrCondition Or(Action<ConditionBuilder> conditionAction)
+		public OrCondition Or(ConditionBuilder conditionBuilder) => new OrCondition(conditionBuilder.Conditions);
+		public OrCondition Or(Action<ConditionBuilder> conditionFunction)
 		{
-			ConditionBuilder builder = new ConditionBuilder();
-			conditionAction.Invoke(builder);
+			ConditionBuilder conditionBuilder = new ConditionBuilder();
+			conditionFunction.Invoke(conditionBuilder);
 
-			return new OrCondition(builder.Conditions);
+			return new OrCondition(conditionBuilder.Conditions);
 		}
 
 		#endregion OrCondition factory methods
@@ -141,18 +139,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public EqualCondition Equal(string column, IExpression expression) => new EqualCondition(new SourceColumn(column), expression);
 		public EqualCondition Equal(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new EqualCondition(new SourceColumn(column), Expression(expressionFunction));
 
-		public EqualCondition Equal(string column, string table, sbyte value) => new EqualCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public EqualCondition Equal(string column, string table, short value) => new EqualCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public EqualCondition Equal(string column, string table, int value) => new EqualCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public EqualCondition Equal(string column, string table, long value) => new EqualCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public EqualCondition Equal(string column, string table, float value) => new EqualCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public EqualCondition Equal(string column, string table, double value) => new EqualCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public EqualCondition Equal(string column, string table, decimal value) => new EqualCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public EqualCondition Equal(string column, string table, DateTime value, string? format = null) => new EqualCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public EqualCondition Equal(string column, string table, string value) => new EqualCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public EqualCondition Equal(string column, string table, IExpression expression) => new EqualCondition(new SourceColumn(column, new Table(table)), expression);
-		public EqualCondition Equal(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new EqualCondition(new SourceColumn(column, new Table(table)), Expression(expressionFunction));
-
 		public EqualCondition Equal(string column, ISource source, sbyte value) => new EqualCondition(new SourceColumn(column, source), new Int8Value(value));
 		public EqualCondition Equal(string column, ISource source, short value) => new EqualCondition(new SourceColumn(column, source), new Int16Value(value));
 		public EqualCondition Equal(string column, ISource source, int value) => new EqualCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -165,9 +151,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public EqualCondition Equal(string column, ISource source, IExpression expression) => new EqualCondition(new SourceColumn(column, source), expression);
 		public EqualCondition Equal(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new EqualCondition(new SourceColumn(column, source), Expression(expressionFunction));
 
-		public EqualCondition Equal(string column1, string table1, string column2, string table2) => new EqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public EqualCondition Equal(string column1, string table1, string column2, ISource source2) => new EqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public EqualCondition Equal(string column1, ISource source1, string column2, string table2) => new EqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public EqualCondition Equal(string column1, ISource source1, string column2, ISource source2) => new EqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion EqualCondition factory methods
@@ -211,18 +194,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotEqualCondition NotEqual(string column, IExpression expression) => new NotEqualCondition(new SourceColumn(column), expression);
 		public NotEqualCondition NotEqual(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new NotEqualCondition(new SourceColumn(column), Expression(expressionFunction));
 
-		public NotEqualCondition NotEqual(string column, string table, sbyte value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public NotEqualCondition NotEqual(string column, string table, short value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public NotEqualCondition NotEqual(string column, string table, int value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public NotEqualCondition NotEqual(string column, string table, long value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public NotEqualCondition NotEqual(string column, string table, float value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public NotEqualCondition NotEqual(string column, string table, double value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public NotEqualCondition NotEqual(string column, string table, decimal value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public NotEqualCondition NotEqual(string column, string table, DateTime value, string? format = null) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public NotEqualCondition NotEqual(string column, string table, string value) => new NotEqualCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public NotEqualCondition NotEqual(string column, string table, IExpression expression) => new NotEqualCondition(new SourceColumn(column, new Table(table)), expression);
-		public NotEqualCondition NotEqual(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new NotEqualCondition(Column(column, alias: null, table), Expression(expressionFunction));
-
 		public NotEqualCondition NotEqual(string column, ISource source, sbyte value) => new NotEqualCondition(new SourceColumn(column, source), new Int8Value(value));
 		public NotEqualCondition NotEqual(string column, ISource source, short value) => new NotEqualCondition(new SourceColumn(column, source), new Int16Value(value));
 		public NotEqualCondition NotEqual(string column, ISource source, int value) => new NotEqualCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -235,9 +206,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotEqualCondition NotEqual(string column, ISource source, IExpression expression) => new NotEqualCondition(new SourceColumn(column, source), expression);
 		public NotEqualCondition NotEqual(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new NotEqualCondition(Column(column, source), Expression(expressionFunction));
 
-		public NotEqualCondition NotEqual(string column1, string table1, string column2, string table2) => new NotEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public NotEqualCondition NotEqual(string column1, string table1, string column2, ISource source2) => new NotEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public NotEqualCondition NotEqual(string column1, ISource source1, string column2, string table2) => new NotEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public NotEqualCondition NotEqual(string column1, ISource source1, string column2, ISource source2) => new NotEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion NotEqualCondition factory methods
@@ -293,18 +261,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterCondition Greater(string column, IExpression expression) => new GreaterCondition(new SourceColumn(column), expression);
 		public GreaterCondition Greater(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterCondition(Column(column), Expression(expressionFunction));
 
-		public GreaterCondition Greater(string column, string table, sbyte value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public GreaterCondition Greater(string column, string table, short value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public GreaterCondition Greater(string column, string table, int value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public GreaterCondition Greater(string column, string table, long value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public GreaterCondition Greater(string column, string table, float value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public GreaterCondition Greater(string column, string table, double value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public GreaterCondition Greater(string column, string table, decimal value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public GreaterCondition Greater(string column, string table, DateTime value, string? format = null) => new GreaterCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public GreaterCondition Greater(string column, string table, string value) => new GreaterCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public GreaterCondition Greater(string column, string table, IExpression expression) => new GreaterCondition(new SourceColumn(column, new Table(table)), expression);
-		public GreaterCondition Greater(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterCondition(Column(column, alias: null, table), Expression(expressionFunction));
-
 		public GreaterCondition Greater(string column, ISource source, sbyte value) => new GreaterCondition(new SourceColumn(column, source), new Int8Value(value));
 		public GreaterCondition Greater(string column, ISource source, short value) => new GreaterCondition(new SourceColumn(column, source), new Int16Value(value));
 		public GreaterCondition Greater(string column, ISource source, int value) => new GreaterCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -317,9 +273,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterCondition Greater(string column, ISource source, IExpression expression) => new GreaterCondition(new SourceColumn(column, source), expression);
 		public GreaterCondition Greater(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterCondition(Column(column, source), Expression(expressionFunction));
 
-		public GreaterCondition Greater(string column1, string table1, string column2, string table2) => new GreaterCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public GreaterCondition Greater(string column1, string table1, string column2, ISource source2) => new GreaterCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public GreaterCondition Greater(string column1, ISource source1, string column2, string table2) => new GreaterCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public GreaterCondition Greater(string column1, ISource source1, string column2, ISource source2) => new GreaterCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion GreaterCondition factory methods
@@ -363,18 +316,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterOrEqualCondition GreaterOrEqual(string column, IExpression expression) => new GreaterOrEqualCondition(new SourceColumn(column), expression);
 		public GreaterOrEqualCondition GreaterOrEqual(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(new SourceColumn(column), Expression(expressionFunction));
 
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, sbyte value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, short value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, int value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, long value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, float value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, double value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, decimal value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, DateTime value, string? format = null) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, string value) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, IExpression expression) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), expression);
-		public GreaterOrEqualCondition GreaterOrEqual(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(new SourceColumn(column, new Table(table)), Expression(expressionFunction));
-
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, sbyte value) => new GreaterOrEqualCondition(new SourceColumn(column, source), new Int8Value(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, short value) => new GreaterOrEqualCondition(new SourceColumn(column, source), new Int16Value(value));
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, int value) => new GreaterOrEqualCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -387,9 +328,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, IExpression expression) => new GreaterOrEqualCondition(new SourceColumn(column, source), expression);
 		public GreaterOrEqualCondition GreaterOrEqual(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new GreaterOrEqualCondition(Column(column, source), Expression(expressionFunction));
 
-		public GreaterOrEqualCondition GreaterOrEqual(string column1, string table1, string column2, string table2) => new GreaterOrEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public GreaterOrEqualCondition GreaterOrEqual(string column1, string table1, string column2, ISource source2) => new GreaterOrEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public GreaterOrEqualCondition GreaterOrEqual(string column1, ISource source1, string column2, string table2) => new GreaterOrEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public GreaterOrEqualCondition GreaterOrEqual(string column1, ISource source1, string column2, ISource source2) => new GreaterOrEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion GreaterOrEqualCondition factory methods
@@ -433,18 +371,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public LessCondition Less(string column, IExpression expression) => new LessCondition(new SourceColumn(column), expression);
 		public LessCondition Less(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new LessCondition(Column(column), Expression(expressionFunction));
 
-		public LessCondition Less(string column, string table, sbyte value) => new LessCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public LessCondition Less(string column, string table, short value) => new LessCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public LessCondition Less(string column, string table, int value) => new LessCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public LessCondition Less(string column, string table, long value) => new LessCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public LessCondition Less(string column, string table, float value) => new LessCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public LessCondition Less(string column, string table, double value) => new LessCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public LessCondition Less(string column, string table, decimal value) => new LessCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public LessCondition Less(string column, string table, DateTime value, string? format = null) => new LessCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public LessCondition Less(string column, string table, string value) => new LessCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public LessCondition Less(string column, string table, IExpression expression) => new LessCondition(new SourceColumn(column, new Table(table)), expression);
-		public LessCondition Less(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new LessCondition(Column(column, alias: null, table), Expression(expressionFunction));
-
 		public LessCondition Less(string column, ISource source, sbyte value) => new LessCondition(new SourceColumn(column, source), new Int8Value(value));
 		public LessCondition Less(string column, ISource source, short value) => new LessCondition(new SourceColumn(column, source), new Int16Value(value));
 		public LessCondition Less(string column, ISource source, int value) => new LessCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -457,9 +383,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public LessCondition Less(string column, ISource source, IExpression expression) => new LessCondition(new SourceColumn(column, source), expression);
 		public LessCondition Less(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new LessCondition(Column(column, source), Expression(expressionFunction));
 
-		public LessCondition Less(string column1, string table1, string column2, string table2) => new LessCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public LessCondition Less(string column1, string table1, string column2, ISource source2) => new LessCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public LessCondition Less(string column1, ISource source1, string column2, string table2) => new LessCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public LessCondition Less(string column1, ISource source1, string column2, ISource source2) => new LessCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion LessCondition factory methods
@@ -503,18 +426,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public LessOrEqualCondition LessOrEqual(string column, IExpression expression) => new LessOrEqualCondition(new SourceColumn(column), expression);
 		public LessOrEqualCondition LessOrEqual(string column, Func<ExpressionFactory, IExpression> expressionFunction) => new LessOrEqualCondition(Column(column), Expression(expressionFunction));
 
-		public LessOrEqualCondition LessOrEqual(string column, string table, sbyte value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, short value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, int value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, long value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, float value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, double value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, decimal value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new DecimalValue(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, DateTime value, string? format = null) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public LessOrEqualCondition LessOrEqual(string column, string table, string value) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public LessOrEqualCondition LessOrEqual(string column, string table, IExpression expression) => new LessOrEqualCondition(new SourceColumn(column, new Table(table)), expression);
-		public LessOrEqualCondition LessOrEqual(string column, string table, Func<ExpressionFactory, IExpression> expressionFunction) => new LessOrEqualCondition(Column(column, alias: null, table), Expression(expressionFunction));
-
 		public LessOrEqualCondition LessOrEqual(string column, ISource source, sbyte value) => new LessOrEqualCondition(new SourceColumn(column, source), new Int8Value(value));
 		public LessOrEqualCondition LessOrEqual(string column, ISource source, short value) => new LessOrEqualCondition(new SourceColumn(column, source), new Int16Value(value));
 		public LessOrEqualCondition LessOrEqual(string column, ISource source, int value) => new LessOrEqualCondition(new SourceColumn(column, source), new Int32Value(value));
@@ -527,9 +438,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public LessOrEqualCondition LessOrEqual(string column, ISource source, IExpression expression) => new LessOrEqualCondition(new SourceColumn(column, source), expression);
 		public LessOrEqualCondition LessOrEqual(string column, ISource source, Func<ExpressionFactory, IExpression> expressionFunction) => new LessOrEqualCondition(Column(column, source), Expression(expressionFunction));
 
-		public LessOrEqualCondition LessOrEqual(string column1, string table1, string column2, string table2) => new LessOrEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, new Table(table2)));
-		public LessOrEqualCondition LessOrEqual(string column1, string table1, string column2, ISource source2) => new LessOrEqualCondition(new SourceColumn(column1, new Table(table1)), new SourceColumn(column2, source2));
-		public LessOrEqualCondition LessOrEqual(string column1, ISource source1, string column2, string table2) => new LessOrEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, new Table(table2)));
 		public LessOrEqualCondition LessOrEqual(string column1, ISource source1, string column2, ISource source2) => new LessOrEqualCondition(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		#endregion LessOrEqualCondition factory methods
@@ -538,7 +446,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public IsNullCondition IsNull(IExpression expression) => new IsNullCondition(expression);
 		public IsNullCondition IsNull(string column) => new IsNullCondition(new SourceColumn(column));
-		public IsNullCondition IsNull(string column, string table) => new IsNullCondition(new SourceColumn(column, new Table(table)));
 		public IsNullCondition IsNull(string column, ISource source) => new IsNullCondition(new SourceColumn(column, source));
 		public IsNullCondition IsNull(Func<ExpressionFactory, IExpression> expressionFunction) => new IsNullCondition(Expression(expressionFunction));
 
@@ -548,7 +455,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public IsNotNullCondition IsNotNull(IExpression expression) => new IsNotNullCondition(expression);
 		public IsNotNullCondition IsNotNull(string column) => new IsNotNullCondition(new SourceColumn(column));
-		public IsNotNullCondition IsNotNull(string column, string table) => new IsNotNullCondition(new SourceColumn(column, new Table(table)));
 		public IsNotNullCondition IsNotNull(string column, ISource source) => new IsNotNullCondition(new SourceColumn(column, source));
 		public IsNotNullCondition IsNotNull(Func<ExpressionFactory, IExpression> expressionFunction) => new IsNotNullCondition(Expression(expressionFunction));
 
@@ -577,7 +483,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public InCondition In(IExpression expression, IEnumerable<DateTime> values, string? format = null) => new InCondition(expression, values.Select(v => new DateTimeValue(v, format)));
 		public InCondition In(IExpression expression, IEnumerable<string> values) => new InCondition(expression, values.Select(v => new StringValue(v)));
 		public InCondition In(IExpression expression, IEnumerable<IExpression> values) => new InCondition(expression, values);
-		public InCondition In(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) => new InCondition(expression, Expressions(buildExpressionMethod));
+		public InCondition In(IExpression expression, Action<ExpressionBuilder> valuesFunction) => new InCondition(expression, Expressions(valuesFunction));
 
 		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, params sbyte[] values) => new InCondition(Expression(expressionFunction), values.Select(v => new Int8Value(v)));
 		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, params short[] values) => new InCondition(Expression(expressionFunction), values.Select(v => new Int16Value(v)));
@@ -600,8 +506,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<DateTime> values, string? format = null) => new InCondition(Expression(expressionFunction), values.Select(v => new DateTimeValue(v, format)));
 		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<string> values) => new InCondition(Expression(expressionFunction), values.Select(v => new StringValue(v)));
 		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<IExpression> values) => new InCondition(Expression(expressionFunction), values);
-		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> buildExpressionMethod) =>
-			new InCondition(Expression(expressionFunction), Expressions(buildExpressionMethod));
+		public InCondition In(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> valuesFunction) =>
+			new InCondition(Expression(expressionFunction), Expressions(valuesFunction));
 
 		public InCondition In(string column, params sbyte[] values) => new InCondition(new SourceColumn(column), values.Select(v => new Int8Value(v)));
 		public InCondition In(string column, params short[] values) => new InCondition(new SourceColumn(column), values.Select(v => new Int16Value(v)));
@@ -624,29 +530,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public InCondition In(string column, IEnumerable<DateTime> values, string? format = null) => new InCondition(new SourceColumn(column), values.Select(v => new DateTimeValue(v, format)));
 		public InCondition In(string column, IEnumerable<string> values) => new InCondition(new SourceColumn(column), values.Select(v => new StringValue(v)));
 		public InCondition In(string column, IEnumerable<IExpression> values) => new InCondition(new SourceColumn(column), values);
-		public InCondition In(string column, Action<ExpressionBuilder> buildExpressionMethod) => new InCondition(Column(column), Expressions(buildExpressionMethod));
-
-		public InCondition In(string column, string table, params sbyte[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int8Value(v)));
-		public InCondition In(string column, string table, params short[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int16Value(v)));
-		public InCondition In(string column, string table, params int[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int32Value(v)));
-		public InCondition In(string column, string table, params long[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int64Value(v)));
-		public InCondition In(string column, string table, params float[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new FloatValue(v)));
-		public InCondition In(string column, string table, params double[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DoubleValue(v)));
-		public InCondition In(string column, string table, params decimal[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DecimalValue(v)));
-		public InCondition In(string column, string table, string? format, params DateTime[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DateTimeValue(v, format)));
-		public InCondition In(string column, string table, params string[] values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new StringValue(v)));
-		public InCondition In(string column, string table, params IExpression[] values) => new InCondition(new SourceColumn(column, new Table(table)), values);
-		public InCondition In(string column, string table, IEnumerable<sbyte> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int8Value(v)));
-		public InCondition In(string column, string table, IEnumerable<short> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int16Value(v)));
-		public InCondition In(string column, string table, IEnumerable<int> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int32Value(v)));
-		public InCondition In(string column, string table, IEnumerable<long> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int64Value(v)));
-		public InCondition In(string column, string table, IEnumerable<float> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new FloatValue(v)));
-		public InCondition In(string column, string table, IEnumerable<double> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DoubleValue(v)));
-		public InCondition In(string column, string table, IEnumerable<decimal> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DecimalValue(v)));
-		public InCondition In(string column, string table, IEnumerable<DateTime> values, string? format = null) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DateTimeValue(v, format)));
-		public InCondition In(string column, string table, IEnumerable<string> values) => new InCondition(new SourceColumn(column, new Table(table)), values.Select(v => new StringValue(v)));
-		public InCondition In(string column, string table, IEnumerable<IExpression> values) => new InCondition(new SourceColumn(column, new Table(table)), values);
-		public InCondition In(string column, string table, Action<ExpressionBuilder> buildExpressionMethod) => new InCondition(Column(column, alias: null, table), Expressions(buildExpressionMethod));
+		public InCondition In(string column, Action<ExpressionBuilder> valuesFunction) => new InCondition(Column(column), Expressions(valuesFunction));
 
 		public InCondition In(string column, ISource source, params sbyte[] values) => new InCondition(new SourceColumn(column, source), values.Select(v => new Int8Value(v)));
 		public InCondition In(string column, ISource source, params short[] values) => new InCondition(new SourceColumn(column, source), values.Select(v => new Int16Value(v)));
@@ -669,7 +553,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public InCondition In(string column, ISource source, IEnumerable<DateTime> values, string? format = null) => new InCondition(new SourceColumn(column, source), values.Select(v => new DateTimeValue(v, format)));
 		public InCondition In(string column, ISource source, IEnumerable<string> values) => new InCondition(new SourceColumn(column, source), values.Select(v => new StringValue(v)));
 		public InCondition In(string column, ISource source, IEnumerable<IExpression> values) => new InCondition(new SourceColumn(column, source), values);
-		public InCondition In(string column, ISource source, Action<ExpressionBuilder> buildExpressionMethod) => new InCondition(Column(column, source), Expressions(buildExpressionMethod));
+		public InCondition In(string column, ISource source, Action<ExpressionBuilder> valuesFunction) => new InCondition(Column(column, source), Expressions(valuesFunction));
 
 		#endregion InCondition factory methods
 
@@ -696,7 +580,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotInCondition NotIn(IExpression expression, IEnumerable<DateTime> values, string? format = null) => new NotInCondition(expression, values.Select(v => new DateTimeValue(v, format)));
 		public NotInCondition NotIn(IExpression expression, IEnumerable<string> values) => new NotInCondition(expression, values.Select(v => new StringValue(v)));
 		public NotInCondition NotIn(IExpression expression, IEnumerable<IExpression> values) => new NotInCondition(expression, values);
-		public NotInCondition NotIn(IExpression expression, Action<ExpressionBuilder> buildExpressionMethod) => new NotInCondition(expression, Expressions(buildExpressionMethod));
+		public NotInCondition NotIn(IExpression expression, Action<ExpressionBuilder> valuesFunction) => new NotInCondition(expression, Expressions(valuesFunction));
 
 		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params sbyte[] values) => new NotInCondition(Expression(expressionFunction), values.Select(v => new Int8Value(v)));
 		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, params short[] values) => new NotInCondition(Expression(expressionFunction), values.Select(v => new Int16Value(v)));
@@ -719,8 +603,8 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<DateTime> values, string? format = null) => new NotInCondition(Expression(expressionFunction), values.Select(v => new DateTimeValue(v, format)));
 		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<string> values) => new NotInCondition(Expression(expressionFunction), values.Select(v => new StringValue(v)));
 		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, IEnumerable<IExpression> values) => new NotInCondition(Expression(expressionFunction), values);
-		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> buildExpressionMethod) =>
-			new NotInCondition(Expression(expressionFunction), Expressions(buildExpressionMethod));
+		public NotInCondition NotIn(Func<ExpressionFactory, IExpression> expressionFunction, Action<ExpressionBuilder> valuesFunction) =>
+			new NotInCondition(Expression(expressionFunction), Expressions(valuesFunction));
 
 		public NotInCondition NotIn(string column, params sbyte[] values) => new NotInCondition(new SourceColumn(column), values.Select(v => new Int8Value(v)));
 		public NotInCondition NotIn(string column, params short[] values) => new NotInCondition(new SourceColumn(column), values.Select(v => new Int16Value(v)));
@@ -743,29 +627,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotInCondition NotIn(string column, IEnumerable<DateTime> values, string? format = null) => new NotInCondition(new SourceColumn(column), values.Select(v => new DateTimeValue(v, format)));
 		public NotInCondition NotIn(string column, IEnumerable<string> values) => new NotInCondition(new SourceColumn(column), values.Select(v => new StringValue(v)));
 		public NotInCondition NotIn(string column, IEnumerable<IExpression> values) => new NotInCondition(new SourceColumn(column), values);
-		public NotInCondition NotIn(string column, Action<ExpressionBuilder> buildExpressionMethod) => new NotInCondition(Column(column), Expressions(buildExpressionMethod));
-
-		public NotInCondition NotIn(string column, string table, params sbyte[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int8Value(v)));
-		public NotInCondition NotIn(string column, string table, params short[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int16Value(v)));
-		public NotInCondition NotIn(string column, string table, params int[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int32Value(v)));
-		public NotInCondition NotIn(string column, string table, params long[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int64Value(v)));
-		public NotInCondition NotIn(string column, string table, params float[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new FloatValue(v)));
-		public NotInCondition NotIn(string column, string table, params double[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DoubleValue(v)));
-		public NotInCondition NotIn(string column, string table, params decimal[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DecimalValue(v)));
-		public NotInCondition NotIn(string column, string table, string? format, params DateTime[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DateTimeValue(v, format)));
-		public NotInCondition NotIn(string column, string table, params string[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new StringValue(v)));
-		public NotInCondition NotIn(string column, string table, params IExpression[] values) => new NotInCondition(new SourceColumn(column, new Table(table)), values);
-		public NotInCondition NotIn(string column, string table, IEnumerable<sbyte> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int8Value(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<short> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int16Value(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<int> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int32Value(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<long> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new Int64Value(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<float> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new FloatValue(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<double> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DoubleValue(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<decimal> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DecimalValue(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<DateTime> values, string? format = null) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new DateTimeValue(v, format)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<string> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values.Select(v => new StringValue(v)));
-		public NotInCondition NotIn(string column, string table, IEnumerable<IExpression> values) => new NotInCondition(new SourceColumn(column, new Table(table)), values);
-		public NotInCondition NotIn(string column, string table, Action<ExpressionBuilder> buildExpressionMethod) => new NotInCondition(Column(column, alias: null, table), Expressions(buildExpressionMethod));
+		public NotInCondition NotIn(string column, Action<ExpressionBuilder> valuesFunction) => new NotInCondition(Column(column), Expressions(valuesFunction));
 
 		public NotInCondition NotIn(string column, ISource source, params sbyte[] values) => new NotInCondition(new SourceColumn(column, source), values.Select(v => new Int8Value(v)));
 		public NotInCondition NotIn(string column, ISource source, params short[] values) => new NotInCondition(new SourceColumn(column, source), values.Select(v => new Int16Value(v)));
@@ -788,7 +650,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public NotInCondition NotIn(string column, ISource source, IEnumerable<DateTime> values, string? format = null) => new NotInCondition(new SourceColumn(column, source), values.Select(v => new DateTimeValue(v, format)));
 		public NotInCondition NotIn(string column, ISource source, IEnumerable<string> values) => new NotInCondition(new SourceColumn(column, source), values.Select(v => new StringValue(v)));
 		public NotInCondition NotIn(string column, ISource source, IEnumerable<IExpression> values) => new NotInCondition(new SourceColumn(column, source), values);
-		public NotInCondition NotIn(string column, ISource source, Action<ExpressionBuilder> buildExpressionMethod) => new NotInCondition(Column(column, source), Expressions(buildExpressionMethod));
+		public NotInCondition NotIn(string column, ISource source, Action<ExpressionBuilder> valuesFunction) => new NotInCondition(Column(column, source), Expressions(valuesFunction));
 
 		#endregion NotInCondition factory methods
 
@@ -796,7 +658,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public LikeCondition Like(IExpression expression, string pattern) => new LikeCondition(expression, pattern);
 		public LikeCondition Like(string column, string pattern) => new LikeCondition(new SourceColumn(column), pattern);
-		public LikeCondition Like(string column, string table, string pattern) => new LikeCondition(new SourceColumn(column, new Table(table)), pattern);
 		public LikeCondition Like(string column, ISource source, string pattern) => new LikeCondition(new SourceColumn(column, source), pattern);
 		public LikeCondition Like(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => new LikeCondition(Expression(expressionFunction), pattern);
 
@@ -806,7 +667,6 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public NotLikeCondition NotLike(IExpression expression, string pattern) => new NotLikeCondition(expression, pattern);
 		public NotLikeCondition NotLike(string column, string pattern) => new NotLikeCondition(new SourceColumn(column), pattern);
-		public NotLikeCondition NotLike(string column, string table, string pattern) => new NotLikeCondition(new SourceColumn(column, new Table(table)), pattern);
 		public NotLikeCondition NotLike(string column, ISource source, string pattern) => new NotLikeCondition(new SourceColumn(column, source), pattern);
 		public NotLikeCondition NotLike(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => new NotLikeCondition(Expression(expressionFunction), pattern);
 
@@ -823,7 +683,7 @@ namespace YuraSoft.QueryBuilder.Common
 		public BetweenCondition Between(IExpression expression, decimal lowBound, decimal hightBound) => new BetweenCondition(expression, new DecimalValue(lowBound), new DecimalValue(hightBound));
 		public BetweenCondition Between(IExpression expression, DateTime lowBound, DateTime hightBound, string? format = null) => new BetweenCondition(expression, new DateTimeValue(lowBound, format), new DateTimeValue(hightBound, format));
 		public BetweenCondition Between(IExpression expression, string lowBound, string hightBound) => new BetweenCondition(expression, new StringValue(lowBound), new StringValue(hightBound));
-		public BetweenCondition Between(IExpression expression1, IExpression lowBound, IExpression hightBound) => new BetweenCondition(expression1, lowBound, hightBound);
+		public BetweenCondition Between(IExpression expression, IExpression lowBound, IExpression hightBound) => new BetweenCondition(expression, lowBound, hightBound);
 		public BetweenCondition Between(IExpression expression, Func<ExpressionFactory, IExpression> lowBoundFunction, Func<ExpressionFactory, IExpression> hightBoundFunction) =>
 			new BetweenCondition(expression, Expression(lowBoundFunction), Expression(hightBoundFunction));
 
@@ -853,19 +713,6 @@ namespace YuraSoft.QueryBuilder.Common
 		public BetweenCondition Between(string column, Func<ExpressionFactory, IExpression> lowBoundFunction, Func<ExpressionFactory, IExpression> hightBoundFunction) =>
 			new BetweenCondition(Column(column), Expression(lowBoundFunction), Expression(hightBoundFunction));
 
-		public BetweenCondition Between(string column, string table, sbyte lowBound, sbyte hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new Int8Value(lowBound), new Int8Value(hightBound));
-		public BetweenCondition Between(string column, string table, short lowBound, short hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new Int16Value(lowBound), new Int16Value(hightBound));
-		public BetweenCondition Between(string column, string table, int lowBound, int hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new Int32Value(lowBound), new Int32Value(hightBound));
-		public BetweenCondition Between(string column, string table, long lowBound, long hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new Int64Value(lowBound), new Int64Value(hightBound));
-		public BetweenCondition Between(string column, string table, float lowBound, float hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new FloatValue(lowBound), new FloatValue(hightBound));
-		public BetweenCondition Between(string column, string table, double lowBound, double hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new DoubleValue(lowBound), new DoubleValue(hightBound));
-		public BetweenCondition Between(string column, string table, decimal lowBound, decimal hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new DecimalValue(lowBound), new DecimalValue(hightBound));
-		public BetweenCondition Between(string column, string table, DateTime lowBound, DateTime hightBound, string? format = null) => new BetweenCondition(new SourceColumn(column, new Table(table)), new DateTimeValue(lowBound, format), new DateTimeValue(hightBound, format));
-		public BetweenCondition Between(string column, string table, string lowBound, string hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), new StringValue(lowBound), new StringValue(hightBound));
-		public BetweenCondition Between(string column, string table, IExpression lowBound, IExpression hightBound) => new BetweenCondition(new SourceColumn(column, new Table(table)), lowBound, hightBound);
-		public BetweenCondition Between(string column, string table, Func<ExpressionFactory, IExpression> lowBoundFunction, Func<ExpressionFactory, IExpression> hightBoundFunction) =>
-			new BetweenCondition(Column(column, alias: null, table), Expression(lowBoundFunction), Expression(hightBoundFunction));
-
 		public BetweenCondition Between(string column, ISource source, sbyte lowBound, sbyte hightBound) => new BetweenCondition(new SourceColumn(column, source), new Int8Value(lowBound), new Int8Value(hightBound));
 		public BetweenCondition Between(string column, ISource source, short lowBound, short hightBound) => new BetweenCondition(new SourceColumn(column, source), new Int16Value(lowBound), new Int16Value(hightBound));
 		public BetweenCondition Between(string column, ISource source, int lowBound, int hightBound) => new BetweenCondition(new SourceColumn(column, source), new Int32Value(lowBound), new Int32Value(hightBound));
@@ -883,28 +730,28 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region ICondition factory methods
 
-		public ICondition Condition(Action<ConditionBuilder> action)
+		public ICondition Condition(Action<ConditionBuilder> conditionFunction)
 		{
-			Guard.ThrowIfNull(action, nameof(action));
+			Guard.ThrowIfNull(conditionFunction, nameof(conditionFunction));
 
-			ConditionBuilder builder = new ConditionBuilder();
-			action.Invoke(builder);
+			ConditionBuilder conditionBuilder = new ConditionBuilder();
+			conditionFunction.Invoke(conditionBuilder);
 
-			ICondition condition = builder.Build();
+			ICondition condition = conditionBuilder.Build();
 
 			return condition;
 		}
 
-		public ICondition Condition(ISource leftSource, ISource rightSource, Action<ConditionBuilder, ISource, ISource> action)
+		public ICondition Condition(ISource source1, ISource source2, Action<ConditionBuilder, ISource, ISource> conditionFunction)
 		{
-			Guard.ThrowIfNull(leftSource, nameof(leftSource));
-			Guard.ThrowIfNull(rightSource, nameof(rightSource));
-			Guard.ThrowIfNull(action, nameof(action));
+			Guard.ThrowIfNull(source1, nameof(source1));
+			Guard.ThrowIfNull(source2, nameof(source2));
+			Guard.ThrowIfNull(conditionFunction, nameof(conditionFunction));
 
-			ConditionBuilder builder = new ConditionBuilder();
-			action.Invoke(builder, leftSource, rightSource);
+			ConditionBuilder conditionBuilder = new ConditionBuilder();
+			conditionFunction.Invoke(conditionBuilder, source1, source2);
 
-			ICondition condition = builder.Build();
+			ICondition condition = conditionBuilder.Build();
 
 			return condition;
 		}
@@ -918,11 +765,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region PlusEpression factory methods
 
 		public PlusExpression Plus(string column1, string column2) => new PlusExpression(new[] { Column(column1), Column(column2) });
-		public PlusExpression Plus(string column1, string column1Source, string column2, string column2Source) => new PlusExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
-		public PlusExpression Plus(string column1, ISource column1Source, string column2, ISource column2Source) => new PlusExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
-		public PlusExpression Plus(IExpression leftExpression, IExpression rightExpression) => new PlusExpression(new[] { leftExpression, rightExpression });
+		public PlusExpression Plus(string column1, ISource source1, string column2, ISource source2) => new PlusExpression(new[] { Column(column1, source1), Column(column2, source2) });
+		public PlusExpression Plus(IExpression expression1, IExpression expression2) => new PlusExpression(new[] { expression1, expression2 });
 		public PlusExpression Plus(params IExpression[] expressions) => new PlusExpression(expressions);
-		public PlusExpression Plus(Action<ExpressionBuilder> action) => new PlusExpression(Expressions(action));
+		public PlusExpression Plus(Action<ExpressionBuilder> expressionsFunction) => new PlusExpression(Expressions(expressionsFunction));
 		public PlusExpression Plus(IEnumerable<IExpression> expressions) => new PlusExpression(expressions);
 
 		#endregion PlusExpression factory methods
@@ -930,11 +776,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region MinusExpression factory methods
 
 		public MinusExpression Minus(string column1, string column2) => new MinusExpression(new[] { Column(column1), Column(column2) });
-		public MinusExpression Minus(string column1, string column1Source, string column2, string column2Source) => new MinusExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
-		public MinusExpression Minus(string column1, ISource column1Source, string column2, ISource column2Source) => new MinusExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
-		public MinusExpression Minus(IExpression leftExpression, IExpression rightExpression) => new MinusExpression(new[] { leftExpression, rightExpression });
+		public MinusExpression Minus(string column1, ISource source1, string column2, ISource source2) => new MinusExpression(new[] { Column(column1, source1), Column(column2, source2) });
+		public MinusExpression Minus(IExpression expression1, IExpression expression2) => new MinusExpression(new[] { expression1, expression2 });
 		public MinusExpression Minus(params IExpression[] expressions) => new MinusExpression(expressions);
-		public MinusExpression Minus(Action<ExpressionBuilder> action) => new MinusExpression(Expressions(action));
+		public MinusExpression Minus(Action<ExpressionBuilder> expressionsFunction) => new MinusExpression(Expressions(expressionsFunction));
 		public MinusExpression Minus(IEnumerable<IExpression> expressions) => new MinusExpression(expressions);
 
 		#endregion MinusExpression factory methods
@@ -942,11 +787,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region MultiplyExpression factory methods
 
 		public MultiplyExpression Multiply(string column1, string column2) => new MultiplyExpression(new[] { Column(column1), Column(column2) });
-		public MultiplyExpression Multiply(string column1, string column1Source, string column2, string column2Source) => new MultiplyExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
-		public MultiplyExpression Multiply(string column1, ISource column1Source, string column2, ISource column2Source) => new MultiplyExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
-		public MultiplyExpression Multiply(IExpression leftExpression, IExpression rightExpression) => new MultiplyExpression(new[] { leftExpression, rightExpression });
+		public MultiplyExpression Multiply(string column1, ISource source1, string column2, ISource source2) => new MultiplyExpression(new[] { Column(column1, source1), Column(column2, source2) });
+		public MultiplyExpression Multiply(IExpression expression1, IExpression expression2) => new MultiplyExpression(new[] { expression1, expression2 });
 		public MultiplyExpression Multiply(params IExpression[] expressions) => new MultiplyExpression(expressions);
-		public MultiplyExpression Multiply(Action<ExpressionBuilder> action) => new MultiplyExpression(Expressions(action));
+		public MultiplyExpression Multiply(Action<ExpressionBuilder> expressionsFunction) => new MultiplyExpression(Expressions(expressionsFunction));
 		public MultiplyExpression Multiply(IEnumerable<IExpression> expressions) => new MultiplyExpression(expressions);
 
 		#endregion MultiplyExpression factory methods
@@ -954,61 +798,59 @@ namespace YuraSoft.QueryBuilder.Common
 		#region DivideExpression factory methods
 
 		public DivideExpression Divide(string column1, string column2) => new DivideExpression(new[] { Column(column1), Column(column2) });
-		public DivideExpression Divide(string column1, string column1Source, string column2, string column2Source) => new DivideExpression(new[] { Column(column1, alias: null, column1Source), Column(column2, alias: null, column2Source) });
-		public DivideExpression Divide(string column1, ISource column1Source, string column2, ISource column2Source) => new DivideExpression(new[] { Column(column1, column1Source), Column(column2, column2Source) });
-		public DivideExpression Divide(IExpression leftExpression, IExpression rightExpression) => new DivideExpression(new[] { leftExpression, rightExpression });
+		public DivideExpression Divide(string column1, ISource source1, string column2, ISource source2) => new DivideExpression(new[] { Column(column1, source1), Column(column2, source2) });
+		public DivideExpression Divide(IExpression expression1, IExpression expression2) => new DivideExpression(new[] { expression1, expression2 });
 		public DivideExpression Divide(params IExpression[] expressions) => new DivideExpression(expressions);
-		public DivideExpression Divide(Action<ExpressionBuilder> action) => new DivideExpression(Expressions(action));
+		public DivideExpression Divide(Action<ExpressionBuilder> expressionsFunction) => new DivideExpression(Expressions(expressionsFunction));
 		public DivideExpression Divide(IEnumerable<IExpression> expressions) => new DivideExpression(expressions);
 
 		#endregion DivideExpression factory methods
 
 		#region Expression factory methods
 
-		public IExpression Expression(Func<ExpressionFactory, IExpression> function) => function.Invoke(this);
-		public List<IExpression> Expressions(Action<ExpressionBuilder> action)
+		public IExpression Expression(Func<ExpressionFactory, IExpression> expressionFunction) => expressionFunction.Invoke(this);
+		public List<IExpression> Expressions(Action<ExpressionBuilder> expressionsFunction)
 		{
-			Guard.ThrowIfNull(action, nameof(action));
+			Guard.ThrowIfNull(expressionsFunction, nameof(expressionsFunction));
 
-			ExpressionBuilder builder = new ExpressionBuilder();
-			action.Invoke(builder);
+			ExpressionBuilder expressionBuilder = new ExpressionBuilder();
+			expressionsFunction.Invoke(expressionBuilder);
 
-			return builder.Build();
+			return expressionBuilder.Build();
 		}
 
 		#endregion Expression factory methods
 
 		#region GeneralCaseExpression factory methods
 
-		public GeneralCaseExpression Case(Action<GeneralCaseBuilder> caseBuildMethod)
+		public GeneralCaseExpression Case(Action<GeneralCaseBuilder> generalCaseFunction)
 		{
-			GeneralCaseBuilder caseBuilder = new GeneralCaseBuilder();
-			caseBuildMethod.Invoke(caseBuilder);
+			GeneralCaseBuilder generalCaseBuilder = new GeneralCaseBuilder();
+			generalCaseFunction.Invoke(generalCaseBuilder);
 
-			return caseBuilder.Build();
+			return generalCaseBuilder.Build();
 		}
 
 		#endregion GeneralCaseExpression factory methods
 
 		#region SimpleCaseExpression factory methods
 
-		public SimpleCaseExpression Case(string column, Action<SimpleCaseBuilder> caseBuildMethod) => Case(new SourceColumn(column), caseBuildMethod);
-		public SimpleCaseExpression Case(string column, string table, Action<SimpleCaseBuilder> caseBuildMethod) => Case(new SourceColumn(column, new Table(table)), caseBuildMethod);
-		public SimpleCaseExpression Case(string column, ISource source, Action<SimpleCaseBuilder> caseBuildMethod) => Case(new SourceColumn(column, source), caseBuildMethod);
-		public SimpleCaseExpression Case(IExpression expression, Action<SimpleCaseBuilder> caseBuildMethod)
+		public SimpleCaseExpression Case(string column, Action<SimpleCaseBuilder> simpleCaseFunction) => Case(new SourceColumn(column), simpleCaseFunction);
+		public SimpleCaseExpression Case(string column, ISource source, Action<SimpleCaseBuilder> simpleCaseFunction) => Case(new SourceColumn(column, source), simpleCaseFunction);
+		public SimpleCaseExpression Case(IExpression expression, Action<SimpleCaseBuilder> simpleCaseFunction)
 		{
-			SimpleCaseBuilder caseBuilder = new SimpleCaseBuilder(expression);
-			caseBuildMethod.Invoke(caseBuilder);
+			SimpleCaseBuilder simpleCaseBuilder = new SimpleCaseBuilder(expression);
+			simpleCaseFunction.Invoke(simpleCaseBuilder);
 
-			return caseBuilder.Build();
+			return simpleCaseBuilder.Build();
 		}
 
-		public SimpleCaseExpression Case(Func<ExpressionBuilder, IExpression> expressionFunction, Action<SimpleCaseBuilder> caseBuildMethod)
+		public SimpleCaseExpression Case(Func<ExpressionFactory, IExpression> expressionFunction, Action<SimpleCaseBuilder> simpleCaseFunction)
 		{
-			ExpressionBuilder builder = new ExpressionBuilder();
-			IExpression expression = expressionFunction.Invoke(builder);
+			ExpressionFactory expressionFactory = new ExpressionFactory();
+			IExpression expression = expressionFunction.Invoke(expressionFactory);
 
-			return Case(expression, caseBuildMethod);
+			return Case(expression, simpleCaseFunction);
 		}
 
 		#endregion SimpleCaseExpression factory methods
@@ -1020,7 +862,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region CastFunction factory methods
 
 		public CastFunction Cast(string column, string type) => new CastFunction(Column(column), type);
-		public CastFunction Cast(string column, string table, string type) => new CastFunction(Column(column, alias: null, table), type);
 		public CastFunction Cast(string column, ISource source, string type) => new CastFunction(Column(column, source), type);
 		public CastFunction Cast(Func<ExpressionFactory, IExpression> expressionFunction, string type) => new CastFunction(Expression(expressionFunction), type);
 		public CastFunction Cast(IExpression expression, string type) => new CastFunction(expression, type);
@@ -1037,21 +878,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public CoalesceFunction Coalesce(string column, double value) => new CoalesceFunction(new SourceColumn(column), new DoubleValue(value));
 		public CoalesceFunction Coalesce(string column, DateTime value, string? format = null) => new CoalesceFunction(new SourceColumn(column), new DateTimeValue(value, format));
 		public CoalesceFunction Coalesce(string column, string value) => new CoalesceFunction(new SourceColumn(column), new StringValue(value));
-		public CoalesceFunction Coalesce(string column, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column), Expression(function));
-		public CoalesceFunction Coalesce(string column, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column), defaultValue);
-		public CoalesceFunction Coalesce(string column1, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1), new SourceColumn(column2, column2Source));
-
-		public CoalesceFunction Coalesce(string column, string table, sbyte value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int8Value(value));
-		public CoalesceFunction Coalesce(string column, string table, short value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int16Value(value));
-		public CoalesceFunction Coalesce(string column, string table, int value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int32Value(value));
-		public CoalesceFunction Coalesce(string column, string table, long value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new Int64Value(value));
-		public CoalesceFunction Coalesce(string column, string table, float value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new FloatValue(value));
-		public CoalesceFunction Coalesce(string column, string table, double value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new DoubleValue(value));
-		public CoalesceFunction Coalesce(string column, string table, DateTime value, string? format = null) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new DateTimeValue(value, format));
-		public CoalesceFunction Coalesce(string column, string table, string value) => new CoalesceFunction(new SourceColumn(column, new Table(table)), new StringValue(value));
-		public CoalesceFunction Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column, new Table(table)), Expression(function));
-		public CoalesceFunction Coalesce(string column, string table, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column, new Table(table)), defaultValue);
-		public CoalesceFunction Coalesce(string column1, string column1Table, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1, new Table(column1Table)), new SourceColumn(column2, column2Source));
+		public CoalesceFunction Coalesce(string column, Func<ExpressionFactory, IExpression> valueFunction) => new CoalesceFunction(new SourceColumn(column), Expression(valueFunction));
+		public CoalesceFunction Coalesce(string column, IExpression value) => new CoalesceFunction(new SourceColumn(column), value);
+		public CoalesceFunction Coalesce(string column1, string column2, ISource source2) => new CoalesceFunction(new SourceColumn(column1), new SourceColumn(column2, source2));
 
 		public CoalesceFunction Coalesce(string column, ISource source, sbyte value) => new CoalesceFunction(new SourceColumn(column, source), new Int8Value(value));
 		public CoalesceFunction Coalesce(string column, ISource source, short value) => new CoalesceFunction(new SourceColumn(column, source), new Int16Value(value));
@@ -1061,9 +890,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public CoalesceFunction Coalesce(string column, ISource source, double value) => new CoalesceFunction(new SourceColumn(column, source), new DoubleValue(value));
 		public CoalesceFunction Coalesce(string column, ISource source, DateTime value, string? format = null) => new CoalesceFunction(new SourceColumn(column, source), new DateTimeValue(value, format));
 		public CoalesceFunction Coalesce(string column, ISource source, string value) => new CoalesceFunction(new SourceColumn(column, source), new StringValue(value));
-		public CoalesceFunction Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(new SourceColumn(column, source), Expression(function));
-		public CoalesceFunction Coalesce(string column, ISource source, IExpression defaultValue) => new CoalesceFunction(new SourceColumn(column, source), defaultValue);
-		public CoalesceFunction Coalesce(string column1, ISource column1Source, string column2, ISource column2Source) => new CoalesceFunction(new SourceColumn(column1, column1Source), new SourceColumn(column2, column2Source));
+		public CoalesceFunction Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> valueFunction) => new CoalesceFunction(new SourceColumn(column, source), Expression(valueFunction));
+		public CoalesceFunction Coalesce(string column, ISource source, IExpression value) => new CoalesceFunction(new SourceColumn(column, source), value);
+		public CoalesceFunction Coalesce(string column1, ISource source1, string column2, ISource source2) => new CoalesceFunction(new SourceColumn(column1, source1), new SourceColumn(column2, source2));
 
 		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value) => new CoalesceFunction(Expression(expressionFunction), new Int8Value(value));
 		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, short value) => new CoalesceFunction(Expression(expressionFunction), new Int16Value(value));
@@ -1073,9 +902,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, double value) => new CoalesceFunction(Expression(expressionFunction), new DoubleValue(value));
 		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format = null) => new CoalesceFunction(Expression(expressionFunction), new DateTimeValue(value, format));
 		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string value) => new CoalesceFunction(Expression(expressionFunction), new StringValue(value));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(Expression(expressionFunction), Expression(function));
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression defaultValue) => new CoalesceFunction(Expression(expressionFunction), defaultValue);
-		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource column2Source) => new CoalesceFunction(Expression(expressionFunction), new SourceColumn(column2, column2Source));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> valueFunction) => new CoalesceFunction(Expression(expressionFunction), Expression(valueFunction));
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression value) => new CoalesceFunction(Expression(expressionFunction), value);
+		public CoalesceFunction Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource source2) => new CoalesceFunction(Expression(expressionFunction), new SourceColumn(column2, source2));
 
 		public CoalesceFunction Coalesce(IExpression expression, sbyte value) => new CoalesceFunction(expression, new Int8Value(value));
 		public CoalesceFunction Coalesce(IExpression expression, short value) => new CoalesceFunction(expression, new Int16Value(value));
@@ -1085,16 +914,16 @@ namespace YuraSoft.QueryBuilder.Common
 		public CoalesceFunction Coalesce(IExpression expression, double value) => new CoalesceFunction(expression, new DoubleValue(value));
 		public CoalesceFunction Coalesce(IExpression expression, DateTime value, string? format = null) => new CoalesceFunction(expression, new DateTimeValue(value, format));
 		public CoalesceFunction Coalesce(IExpression expression, string value) => new CoalesceFunction(expression, new StringValue(value));
-		public CoalesceFunction Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> function) => new CoalesceFunction(expression, Expression(function));
-		public CoalesceFunction Coalesce(IExpression expression, IExpression defaultValue) => new CoalesceFunction(expression, defaultValue);
-		public CoalesceFunction Coalesce(IExpression expression, string column2, ISource column2Source) => new CoalesceFunction(expression, new SourceColumn(column2, column2Source));
+		public CoalesceFunction Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> valueFunction) => new CoalesceFunction(expression, Expression(valueFunction));
+		public CoalesceFunction Coalesce(IExpression expression, IExpression value) => new CoalesceFunction(expression, value);
+		public CoalesceFunction Coalesce(IExpression expression, string column2, ISource source2) => new CoalesceFunction(expression, new SourceColumn(column2, source2));
 
 		#endregion CoalesceFunction factory methods
 
 		#region ConcatFunction factory methods
 
 		public ConcatFunction Concat(params IExpression[] expressions) => new ConcatFunction(expressions);
-		public ConcatFunction Concat(Action<ExpressionBuilder> action) => new ConcatFunction(Expressions(action));
+		public ConcatFunction Concat(Action<ExpressionBuilder> expressionsFunction) => new ConcatFunction(Expressions(expressionsFunction));
 		public ConcatFunction Concat(IEnumerable<IExpression> expressions) => new ConcatFunction(expressions);
 
 		#endregion ConcatFunction factory methods
@@ -1102,7 +931,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region CountFunction factory methods
 
 		public CountFunction Count(string column) => new CountFunction(new SourceColumn(column));
-		public CountFunction Count(string column, string table) => new CountFunction(new SourceColumn(column, new Table(table)));
 		public CountFunction Count(string column, ISource source) => new CountFunction(new SourceColumn(column, source));
 		public CountFunction Count(Func<ExpressionFactory, IExpression> expressionFunction) => new CountFunction(Expression(expressionFunction));
 		public CountFunction Count(IExpression expression) => new CountFunction(expression);
@@ -1114,14 +942,13 @@ namespace YuraSoft.QueryBuilder.Common
 		public NativeFunction Function(string name) => new NativeFunction(name, parameters: null);
 		public NativeFunction Function(string name, params IExpression[] parameters) => new NativeFunction(name, parameters);
 		public NativeFunction Function(string name, IEnumerable<IExpression>? parameters) => new NativeFunction(name, parameters);
-		public NativeFunction Function(string name, Action<ExpressionBuilder> action) => new NativeFunction(name, Expressions(action));
+		public NativeFunction Function(string name, Action<ExpressionBuilder> expressionsFunction) => new NativeFunction(name, Expressions(expressionsFunction));
 
 		#endregion Function factory methods
 
 		#region MaxFunction factory methods
 
 		public MaxFunction Max(string column) => new MaxFunction(new SourceColumn(column));
-		public MaxFunction Max(string column, string table) => new MaxFunction(new SourceColumn(column, new Table(table)));
 		public MaxFunction Max(string column, ISource source) => new MaxFunction(new SourceColumn(column, source));
 		public MaxFunction Max(Func<ExpressionFactory, IExpression> expressionFunction) => new MaxFunction(Expression(expressionFunction));
 		public MaxFunction Max(IExpression expression) => new MaxFunction(expression);
@@ -1131,7 +958,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region MinFunction factory methods
 
 		public MinFunction Min(string column) => new MinFunction(new SourceColumn(column));
-		public MinFunction Min(string column, string table) => new MinFunction(new SourceColumn(column, new Table(table)));
 		public MinFunction Min(string column, ISource source) => new MinFunction(new SourceColumn(column, source));
 		public MinFunction Min(Func<ExpressionFactory, IExpression> expressionFunction) => new MinFunction(Column(expressionFunction));
 		public MinFunction Min(IExpression expression) => new MinFunction(expression);
@@ -1147,7 +973,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region SumFunction factory methods
 
 		public SumFunction Sum(string column) => new SumFunction(new SourceColumn(column));
-		public SumFunction Sum(string column, string table) => new SumFunction(new SourceColumn(column, new Table(table)));
 		public SumFunction Sum(string column, ISource source) => new SumFunction(new SourceColumn(column, source));
 		public SumFunction Sum(Func<ExpressionFactory, IExpression> expressionFunction) => new SumFunction(Expression(expressionFunction));
 		public SumFunction Sum(IExpression expression) => new SumFunction(expression);
@@ -1157,7 +982,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region ExtractFunction factory methods
 
 		public ExtractFunction Extract(string part, string column) => Extract(part, Column(column));
-		public ExtractFunction Extract(string part, string column, string table) => Extract(part, Column(column, alias: null, table));
 		public ExtractFunction Extract(string part, string column, ISource source) => Extract(part, Column(column, source));
 		public ExtractFunction Extract(string part, Func<ExpressionFactory, IExpression> expressionFunction) => Extract(part, Expression(expressionFunction));
 		public ExtractFunction Extract(string part, IExpression expression) => new ExtractFunction(part, expression);
@@ -1167,7 +991,6 @@ namespace YuraSoft.QueryBuilder.Common
         #region RoundFunction factory methods
 
         public RoundFunction Round(string column, int? precision = null) => Round(Column(column), precision);
-        public RoundFunction Round(string column, string table, int? precision = null) => Round(Column(column, alias: null, table), precision);
         public RoundFunction Round(string column, ISource source, int? precision = null) => Round(Column(column, source), precision);
         public RoundFunction Round(Func<ExpressionFactory, IExpression> expressionFunction, int? precision = null) => Round(Expression(expressionFunction), precision);
         public RoundFunction Round(IExpression expression, int? precision = null) => new RoundFunction(expression, precision);
@@ -1178,17 +1001,16 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region OrderBy factory methods
 
-		public List<IOrderBy> OrderBy(Action<OrderByBuilder> orderByAction)
+		public List<IOrderBy> OrderBy(Action<OrderByBuilder> orderBiesFunction)
 		{
-			OrderByBuilder builder = new OrderByBuilder();
-			orderByAction.Invoke(builder);
+			OrderByBuilder orderByBuilder = new OrderByBuilder();
+			orderBiesFunction.Invoke(orderByBuilder);
 
-			return builder.Build();
+			return orderByBuilder.Build();
 		}
 
 		public OrderBy OrderBy(string column, OrderDirection direction) => new OrderBy(Column(column), direction);
-		public OrderBy OrderBy(string column, string columnSource, OrderDirection direction) => new OrderBy(Column(column, alias: null, columnSource), direction);
-		public OrderBy OrderBy(string column, ISource columnSource, OrderDirection direction) => new OrderBy(Column(column, columnSource), direction);
+		public OrderBy OrderBy(string column, ISource source, OrderDirection direction) => new OrderBy(Column(column, source), direction);
 		public OrderBy OrderBy(IColumn column, OrderDirection direction) => new OrderBy(column, direction);
 
         #endregion OrderBy factory methods

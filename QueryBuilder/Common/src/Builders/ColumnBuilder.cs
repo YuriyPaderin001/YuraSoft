@@ -16,31 +16,27 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(expressionFunction, alias));
 		public ColumnBuilder Column(string name) => Add(Factory.Column(name));
 		public ColumnBuilder Column(string name, string? alias) => Add(Factory.Column(name, alias));
-		public ColumnBuilder Column(string name, string? alias, string? table) => Add(Factory.Column(name, alias, table));
-		public ColumnBuilder Column(string name, ISource? source) => Add(Factory.Column(name, source));
-		public ColumnBuilder Column(string name, string? alias, ISource? source) => Add(Factory.Column(name, alias, source));
+		public ColumnBuilder Column(string name, ISource? source, string? alias = null) => Add(Factory.Column(name, source, alias));
 
 		#endregion Column methods
 
 		#region Case methods
 
-		public ColumnBuilder Case(Action<GeneralCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(caseBuildMethod), alias));
-		public ColumnBuilder Case(string column, Action<SimpleCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(column, caseBuildMethod), alias));
-		public ColumnBuilder Case(string column, string table, Action<SimpleCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(column, table, caseBuildMethod), alias));
-		public ColumnBuilder Case(string column, ISource source, Action<SimpleCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(column, source, caseBuildMethod), alias));
-		public ColumnBuilder Case(IExpression expression, Action<SimpleCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(expression, caseBuildMethod), alias));
-		public ColumnBuilder Case(Func<ExpressionBuilder, IExpression> expressionFunction, Action<SimpleCaseBuilder> caseBuildMethod, string? alias = null) => Add(Factory.Column(Factory.Case(expressionFunction, caseBuildMethod), alias));
+		public ColumnBuilder Case(Action<GeneralCaseBuilder> generalCaseFunction, string? alias = null) => Add(Factory.Column(Factory.Case(generalCaseFunction), alias));
+		public ColumnBuilder Case(string column, Action<SimpleCaseBuilder> simpleCaseFunction, string? alias = null) => Add(Factory.Column(Factory.Case(column, simpleCaseFunction), alias));
+		public ColumnBuilder Case(string column, ISource source, Action<SimpleCaseBuilder> simpleCaseFunction, string? alias = null) => Add(Factory.Column(Factory.Case(column, source, simpleCaseFunction), alias));
+		public ColumnBuilder Case(IExpression expression, Action<SimpleCaseBuilder> simpleCaseFunction, string? alias = null) => Add(Factory.Column(Factory.Case(expression, simpleCaseFunction), alias));
+		public ColumnBuilder Case(Func<ExpressionFactory, IExpression> expressionFunction, Action<SimpleCaseBuilder> simpleCaseFunction, string? alias = null) => Add(Factory.Column(Factory.Case(expressionFunction, simpleCaseFunction), alias));
 
 		#endregion Case methods
 
 		#region Plus methods
 
 		public ColumnBuilder Plus(string column1, string column2, string? alias = null) => Column(Factory.Plus(column1, column2), alias);
-		public ColumnBuilder Plus(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Plus(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Plus(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Plus(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Plus(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Plus(leftExpression, rightExpression), alias);
+		public ColumnBuilder Plus(string column1, ISource source1, string column2, ISource source2, string? alias = null) => Column(Factory.Plus(column1, source1, column2, source2), alias);
+		public ColumnBuilder Plus(IExpression expression1, IExpression expression2, string? alias) => Column(Factory.Plus(expression1, expression2), alias);
 		public ColumnBuilder Plus(string? alias, params IExpression[] expressions) => Column(Factory.Plus(expressions), alias);
-		public ColumnBuilder Plus(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Plus(action), alias);
+		public ColumnBuilder Plus(Action<ExpressionBuilder> expressionsFunction, string? alias = null) => Column(Factory.Plus(expressionsFunction), alias);
 		public ColumnBuilder Plus(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Plus(expressions), alias);
 
 		#endregion Plus methods
@@ -48,11 +44,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Minus methods
 
 		public ColumnBuilder Minus(string column1, string column2, string? alias = null) => Column(Factory.Minus(column1, column2), alias);
-		public ColumnBuilder Minus(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Minus(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Minus(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Minus(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Minus(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Minus(leftExpression, rightExpression), alias);
+		public ColumnBuilder Minus(string column1, ISource source1, string column2, ISource source2, string? alias = null) => Column(Factory.Minus(column1, source1, column2, source2), alias);
+		public ColumnBuilder Minus(IExpression expression1, IExpression expression2, string? alias) => Column(Factory.Minus(expression1, expression2), alias);
 		public ColumnBuilder Minus(string? alias, params IExpression[] expressions) => Column(Factory.Minus(expressions), alias);
-		public ColumnBuilder Minus(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Minus(action), alias);
+		public ColumnBuilder Minus(Action<ExpressionBuilder> expressionsFunction, string? alias = null) => Column(Factory.Minus(expressionsFunction), alias);
 		public ColumnBuilder Minus(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Minus(expressions), alias);
 
 		#endregion Minus methods
@@ -60,11 +55,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Multiply methods
 
 		public ColumnBuilder Multiply(string column1, string column2, string? alias = null) => Column(Factory.Multiply(column1, column2), alias);
-		public ColumnBuilder Multiply(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Multiply(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Multiply(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Multiply(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Multiply(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Multiply(leftExpression, rightExpression), alias);
+		public ColumnBuilder Multiply(string column1, ISource source1, string column2, ISource source2, string? alias = null) => Column(Factory.Multiply(column1, source1, column2, source2), alias);
+		public ColumnBuilder Multiply(IExpression expression1, IExpression expression2, string? alias) => Column(Factory.Multiply(expression1, expression2), alias);
 		public ColumnBuilder Multiply(string? alias, params IExpression[] expressions) => Column(Factory.Multiply(expressions), alias);
-		public ColumnBuilder Multiply(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Multiply(action), alias);
+		public ColumnBuilder Multiply(Action<ExpressionBuilder> expressionsFunction, string? alias = null) => Column(Factory.Multiply(expressionsFunction), alias);
 		public ColumnBuilder Multiply(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Multiply(expressions), alias);
 
 		#endregion Multiply methods
@@ -72,11 +66,10 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Divide methods
 
 		public ColumnBuilder Divide(string column1, string column2, string? alias = null) => Column(Factory.Divide(column1, column2), alias);
-		public ColumnBuilder Divide(string column1, string column1Source, string column2, string column2Source, string? alias = null) => Column(Factory.Divide(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Divide(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Column(Factory.Divide(column1, column1Source, column2, column2Source), alias);
-		public ColumnBuilder Divide(IExpression leftExpression, IExpression rightExpression, string? alias) => Column(Factory.Divide(leftExpression, rightExpression), alias);
+		public ColumnBuilder Divide(string column1, ISource source1, string column2, ISource source2, string? alias = null) => Column(Factory.Divide(column1, source1, column2, source2), alias);
+		public ColumnBuilder Divide(IExpression expression1, IExpression expression2, string? alias) => Column(Factory.Divide(expression1, expression2), alias);
 		public ColumnBuilder Divide(string? alias, params IExpression[] expressions) => Column(Factory.Divide(expressions), alias);
-		public ColumnBuilder Divide(Action<ExpressionBuilder> action, string? alias = null) => Column(Factory.Divide(action), alias);
+		public ColumnBuilder Divide(Action<ExpressionBuilder> expressionsFunction, string? alias = null) => Column(Factory.Divide(expressionsFunction), alias);
 		public ColumnBuilder Divide(IEnumerable<IExpression> expressions, string? alias = null) => Column(Factory.Divide(expressions), alias);
 
 		#endregion Divide methods
@@ -86,7 +79,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region CastFunction factory methods
 
 		public ColumnBuilder Cast(string column, string type, string? alias = null) => Add(Factory.Column(Factory.Cast(column, type), alias));
-		public ColumnBuilder Cast(string column, string table, string type, string? alias = null) => Add(Factory.Column(Factory.Cast(column, table, type), alias));
 		public ColumnBuilder Cast(string column, ISource source, string type, string? alias = null) => Add(Factory.Column(Factory.Cast(column, source, type), alias));
 		public ColumnBuilder Cast(Func<ExpressionFactory, IExpression> expressionFunction, string type, string? alias = null) => Add(Factory.Column(Factory.Cast(expressionFunction, type), alias));
 		public ColumnBuilder Cast(IExpression expression, string type, string? alias = null) => Add(Factory.Column(Factory.Cast(expression, type), alias));
@@ -103,22 +95,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Coalesce(string column, double value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, value), alias));
 		public ColumnBuilder Coalesce(string column, DateTime value, string? format = null, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, value, format), alias));
 		public ColumnBuilder Coalesce(string column, string value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, value), alias));
-		public ColumnBuilder Coalesce(string column, Func<ExpressionFactory, IExpression> function, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, function), alias));
-		public ColumnBuilder Coalesce(string column, IExpression defaultValue, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, defaultValue), alias));
-		public ColumnBuilder Coalesce(string column1, string column2, ISource column2Source, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column1, column2, column2Source), alias));
-
-		public ColumnBuilder Coalesce(string column, string table, sbyte value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, short value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, int value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, long value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, float value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, double value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, DateTime value, string? alias) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, DateTime value, string? format, string? alias) => Add(Factory.Column(Factory.Coalesce(column, table, value, format), alias));
-		public ColumnBuilder Coalesce(string column, string table, string value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, value), alias));
-		public ColumnBuilder Coalesce(string column, string table, Func<ExpressionFactory, IExpression> function, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, function), alias));
-		public ColumnBuilder Coalesce(string column, string table, IExpression defaultValue, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, table, defaultValue), alias));
-		public ColumnBuilder Coalesce(string column1, string column1Table, string column2, ISource column2Source, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column1, column1Table, column2, column2Source), alias));
+		public ColumnBuilder Coalesce(string column, Func<ExpressionFactory, IExpression> valueFunction, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, valueFunction), alias));
+		public ColumnBuilder Coalesce(string column, IExpression value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, value), alias));
+		public ColumnBuilder Coalesce(string column1, string column2, ISource source2, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column1, column2, source2), alias));
 
 		public ColumnBuilder Coalesce(string column, ISource source, sbyte value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), alias));
 		public ColumnBuilder Coalesce(string column, ISource source, short value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), alias));
@@ -129,9 +108,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Coalesce(string column, ISource source, DateTime value, string? alias) => Add(Factory.Column(Factory.Coalesce(column, source, value), alias));
 		public ColumnBuilder Coalesce(string column, ISource source, DateTime value, string? format, string? alias) => Add(Factory.Column(Factory.Coalesce(column, source, value, format), alias));
 		public ColumnBuilder Coalesce(string column, ISource source, string value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), alias));
-		public ColumnBuilder Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> function, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, function), alias));
-		public ColumnBuilder Coalesce(string column, ISource source, IExpression defaultValue, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, defaultValue), alias));
-		public ColumnBuilder Coalesce(string column1, ISource column1Source, string column2, ISource column2Source, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column1, column1Source, column2, column2Source), alias));
+		public ColumnBuilder Coalesce(string column, ISource source, Func<ExpressionFactory, IExpression> valueFunction, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, valueFunction), alias));
+		public ColumnBuilder Coalesce(string column, ISource source, IExpression value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column, source, value), alias));
+		public ColumnBuilder Coalesce(string column1, ISource source1, string column2, ISource source2, string? alias = null) => Add(Factory.Column(Factory.Coalesce(column1, source1, column2, source2), alias));
 
 		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, sbyte value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), alias));
 		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, short value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), alias));
@@ -142,9 +121,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? alias) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), alias));
 		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, DateTime value, string? format, string? alias) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value, format), alias));
 		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), alias));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> function, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, function), alias));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression defaultValue, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, defaultValue), alias));
-		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource column2Source, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, column2, column2Source), alias));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> valueFunction, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, valueFunction), alias));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, IExpression value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, value), alias));
+		public ColumnBuilder Coalesce(Func<ExpressionFactory, IExpression> expressionFunction, string column2, ISource source2, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expressionFunction, column2, source2), alias));
 
 		public ColumnBuilder Coalesce(IExpression expression, sbyte value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, value), alias));
 		public ColumnBuilder Coalesce(IExpression expression, short value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, value), alias));
@@ -155,9 +134,9 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Coalesce(IExpression expression, DateTime value, string? alias) => Add(Factory.Column(Factory.Coalesce(expression, value), alias));
 		public ColumnBuilder Coalesce(IExpression expression, DateTime value, string? format, string? alias) => Add(Factory.Column(Factory.Coalesce(expression, value, format), alias));
 		public ColumnBuilder Coalesce(IExpression expression, string value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, value), alias));
-		public ColumnBuilder Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> function, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, function), alias));
-		public ColumnBuilder Coalesce(IExpression expression, IExpression defaultValue, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, defaultValue), alias));
-		public ColumnBuilder Coalesce(IExpression expression, string column2, ISource column2Source, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, column2, column2Source), alias));
+		public ColumnBuilder Coalesce(IExpression expression, Func<ExpressionFactory, IExpression> valueFunction, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, valueFunction), alias));
+		public ColumnBuilder Coalesce(IExpression expression, IExpression value, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, value), alias));
+		public ColumnBuilder Coalesce(IExpression expression, string column2, ISource source2, string? alias = null) => Add(Factory.Column(Factory.Coalesce(expression, column2, source2), alias));
 
 		#endregion Coalesce methods
 
@@ -165,7 +144,7 @@ namespace YuraSoft.QueryBuilder.Common
 
 		public ColumnBuilder Concat(params IExpression[] expressions) => Add(Factory.Column(Factory.Concat(expressions)));
 		public ColumnBuilder Concat(string? alias = null, params IExpression[] expressions) => Add(Factory.Column(Factory.Concat(expressions), alias));
-		public ColumnBuilder Concat(Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Concat(action), alias));
+		public ColumnBuilder Concat(Action<ExpressionBuilder> expressionsFunction, string? alias = null) => Add(Factory.Column(Factory.Concat(expressionsFunction), alias));
 		public ColumnBuilder Concat(IEnumerable<IExpression> expressions, string? alias = null) => Add(Factory.Column(Factory.Concat(expressions), alias));
 
 		#endregion Concat methods
@@ -173,7 +152,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Count methods
 
 		public ColumnBuilder Count(string column, string? alias = null) => Add(Factory.Column(Factory.Count(column), alias));
-		public ColumnBuilder Count(string column, string table, string? alias = null) => Add(Factory.Column(Factory.Count(column, table), alias));
 		public ColumnBuilder Count(string column, ISource source, string? alias = null) => Add(Factory.Column(Factory.Count(column, source), alias));
 		public ColumnBuilder Count(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(Factory.Count(expressionFunction), alias));
 		public ColumnBuilder Count(IExpression expression, string? alias = null) => Add(Factory.Column(Factory.Count(expression), alias));
@@ -186,14 +164,13 @@ namespace YuraSoft.QueryBuilder.Common
 		public ColumnBuilder Function(string functionName, params IExpression[] parameters) => Add(Factory.Column(Factory.Function(functionName, parameters)));
 		public ColumnBuilder Function(string functionName, string? alias = null, params IExpression[] parameters) => Add(Factory.Column(Factory.Function(functionName, parameters), alias));
 		public ColumnBuilder Function(string functionName, IEnumerable<IExpression>? parameters, string? alias = null) => Add(Factory.Column(Factory.Function(functionName, parameters), alias));
-		public ColumnBuilder Function(string functionName, Action<ExpressionBuilder> action, string? alias = null) => Add(Factory.Column(Factory.Function(functionName, action), alias));
+		public ColumnBuilder Function(string functionName, Action<ExpressionBuilder> parametersFunction, string? alias = null) => Add(Factory.Column(Factory.Function(functionName, parametersFunction), alias));
 
 		#endregion Function methods
 
 		#region Max methods
 
 		public ColumnBuilder Max(string column, string? alias = null) => Add(Factory.Column(Factory.Max(column), alias));
-		public ColumnBuilder Max(string column, string table, string? alias = null) => Add(Factory.Column(Factory.Max(column, table), alias));
 		public ColumnBuilder Max(string column, ISource source, string? alias = null) => Add(Factory.Column(Factory.Max(column, source), alias));
 		public ColumnBuilder Max(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(Factory.Max(expressionFunction), alias));
 		public ColumnBuilder Max(IExpression expression, string? alias = null) => Add(Factory.Column(Factory.Max(expression), alias));
@@ -203,7 +180,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Min methods
 
 		public ColumnBuilder Min(string column, string? alias = null) => Add(Factory.Column(Factory.Min(column), alias));
-		public ColumnBuilder Min(string column, string table, string? alias = null) => Add(Factory.Column(Factory.Min(column, table), alias));
 		public ColumnBuilder Min(string column, ISource source, string? alias = null) => Add(Factory.Column(Factory.Min(column, source), alias));
 		public ColumnBuilder Min(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(Factory.Min(expressionFunction), alias));
 		public ColumnBuilder Min(IExpression expression, string? alias = null) => Add(Factory.Column(Factory.Min(expression), alias));
@@ -219,7 +195,6 @@ namespace YuraSoft.QueryBuilder.Common
 		#region Sum methods
 
 		public ColumnBuilder Sum(string column, string? alias = null) => Add(Factory.Column(Factory.Sum(column), alias));
-		public ColumnBuilder Sum(string column, string table, string? alias = null) => Add(Factory.Column(Factory.Sum(column, table), alias));
 		public ColumnBuilder Sum(string column, ISource source, string? alias = null) => Add(Factory.Column(Factory.Sum(column, source), alias));
 		public ColumnBuilder Sum(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(Factory.Sum(expressionFunction), alias));
 		public ColumnBuilder Sum(IExpression expression, string? alias = null) => Add(Factory.Column(Factory.Sum(expression), alias));
@@ -229,7 +204,6 @@ namespace YuraSoft.QueryBuilder.Common
         #region Extract methods
 
         public ColumnBuilder Extract(string part, string column, string? alias = null) => Column(Factory.Extract(part, column), alias);
-        public ColumnBuilder Extract(string part, string column, string table, string? alias = null) => Column(Factory.Extract(part, column, table), alias);
         public ColumnBuilder Extract(string part, string column, ISource source, string? alias = null) => Column(Factory.Extract(part, column, source), alias);
         public ColumnBuilder Extract(string part, Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Column(Factory.Extract(part, expressionFunction), alias);
         public ColumnBuilder Extract(string part, IExpression expression, string? alias = null) => Column(Factory.Extract(part, expression), alias);
@@ -245,7 +219,6 @@ namespace YuraSoft.QueryBuilder.Common
         public ColumnBuilder Round(IExpression expression, string? alias = null) => Column(Factory.Round(expression), alias);
 
         public ColumnBuilder Round(string column, int? precision, string? alias = null) => Column(Factory.Round(column, precision), alias);
-        public ColumnBuilder Round(string column, string table, int? precision, string? alias = null) => Column(Factory.Round(column, table, precision), alias);
         public ColumnBuilder Round(string column, ISource source, int? precision, string? alias = null) => Column(Factory.Round(column, source, precision), alias);
         public ColumnBuilder Round(Func<ExpressionFactory, IExpression> expressionFunction, int? precision, string? alias = null) => Column(Factory.Round(expressionFunction, precision), alias);
         public ColumnBuilder Round(IExpression expression, int? precision, string? alias = null) => Column(Factory.Round(expression, precision), alias);
