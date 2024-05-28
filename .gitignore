@@ -1,6 +1,7 @@
-/Authorization
+/AuthorizationService
 /CleverAuthorization
 /CleverTasks
 /ErrorHandler
 /FileService
-
+/GetFit
+/ShowYourData
