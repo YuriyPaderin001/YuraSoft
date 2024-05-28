@@ -3,6 +3,7 @@
 /QueryBuilder/obj
 /QueryBuilder.Tests/bin
 /QueryBuilder.Tests/obj
+/QueryBuilderSandbox/.vs
 /QueryBuilderSandbox/bin
 /QueryBuilderSandbox/obj
 /Common/src/bin
@@ -11,3 +12,5 @@
 /Common/test/obj
 /PostgreSql/src/bin
 /PostgreSql/src/obj
+/PostgreSql/test/bin
+/PostgreSql/test/obj
