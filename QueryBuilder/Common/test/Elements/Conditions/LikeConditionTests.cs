@@ -11,7 +11,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		{
 			// Arrange
 			IExpression expression = NewExpression();
-			string pattern = "%test%";
+			IExpression pattern = NewExpression();
 
 			// Act
 			LikeCondition likeCondition = new LikeCondition(expression, pattern);
@@ -22,26 +22,25 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		}
 
 		[Fact]
-		public void Constructor_NullExpressionAndPattern_ThrowsArgumentNullException() =>
-			Constructor_ExpressionAndPattern_ThrowsException<ArgumentNullException>(expression: null, "%test%");
+		public void Constructor_NullIExpressionAndIExpression_ThrowsArgumentNullException() =>
+			Constructor_IExpressionAndIExpression_ThrowsException<ArgumentNullException>(expression: null, pattern: NewExpression());
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void Constructor_ExpressionAndNullOrEmptyPattern_ThrowsArgumentException(string? pattern) =>
-			Constructor_ExpressionAndPattern_ThrowsException<ArgumentException>(NewExpression(), pattern);
+		[Fact]
+		public void Constructor_IExpressionAndNullIExpression_ThrowsArgumentException() =>
+			Constructor_IExpressionAndIExpression_ThrowsException<ArgumentNullException>(NewExpression(), pattern: null);
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		public void Constructor_NullExpressionAndNullOrEmptyPattern_ThrowsArgumentNullException(string? pattern) =>
-			Constructor_ExpressionAndPattern_ThrowsException<ArgumentNullException>(expression: null, pattern);
+		[Fact]
+		public void Constructor_NullIExpressionAndNullIExpression_ThrowsArgumentNullException() =>
+			Constructor_IExpressionAndIExpression_ThrowsException<ArgumentNullException>(expression: null, pattern: null);
 
 		[Fact]
 		public void RenderCondition_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
+			IExpression expression = NewExpression();
+			IExpression pattern = NewExpression();
+
+			LikeCondition likeCondition = new LikeCondition(expression, pattern);
 
 			const string expectedSql = "test";
 			IRenderer renderer = new NullRenderer(expectedSql);
@@ -58,7 +57,10 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void RenderCondition_Renderer_ReturnsSql()
 		{
 			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
+			IExpression expression = NewExpression();
+			IExpression pattern = NewExpression();
+
+			LikeCondition likeCondition = new LikeCondition(expression, pattern);
 
 			const string expectedSql = "test";
 			IRenderer renderer = new NullRenderer(expectedSql);
@@ -74,7 +76,10 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void RenderExpression_RendererAndStringBuilder_WritesSqlToStringBuilder()
 		{
 			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
+			IExpression expression = NewExpression();
+			IExpression pattern = NewExpression();
+
+			LikeCondition likeCondition = new LikeCondition(expression, pattern);
 
 			const string expectedSql = "test";
 			IRenderer renderer = new NullRenderer(expectedSql);
@@ -91,7 +96,10 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 		public void RenderExpression_Renderer_ReturnsSql()
 		{
 			// Arrange
-			LikeCondition likeCondition = new LikeCondition(NewExpression(), "%test%");
+			IExpression expression = NewExpression();
+			IExpression pattern = NewExpression();
+
+			LikeCondition likeCondition = new LikeCondition(expression, pattern);
 
 			const string expectedSql = "test";
 			IRenderer renderer = new NullRenderer(expectedSql);
@@ -103,7 +111,7 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Conditions
 			Assert.Equal(expectedSql, sql);
 		}
 
-		private void Constructor_ExpressionAndPattern_ThrowsException<TException>(IExpression? expression, string? pattern) where TException: Exception
+		private void Constructor_IExpressionAndIExpression_ThrowsException<TException>(IExpression? expression, IExpression? pattern) where TException: Exception
 		{
 			// Act & Assert
 			Assert.Throws<TException>(() => new LikeCondition(expression!, pattern!));

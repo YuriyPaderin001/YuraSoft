@@ -794,21 +794,23 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region LikeCondition factory methods
 
-		public LikeCondition Like(IExpression expression, string pattern) => new LikeCondition(expression, pattern);
-		public LikeCondition Like(string column, string pattern) => new LikeCondition(new SourceColumn(column), pattern);
-		public LikeCondition Like(string column, string table, string pattern) => new LikeCondition(new SourceColumn(column, new Table(table)), pattern);
-		public LikeCondition Like(string column, ISource source, string pattern) => new LikeCondition(new SourceColumn(column, source), pattern);
-		public LikeCondition Like(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => new LikeCondition(Expression(expressionFunction), pattern);
+		public LikeCondition Like(string column, string pattern) => Like(Column(column), pattern);
+		public LikeCondition Like(string column, string? table, string pattern) => Like(Column(column, alias: null, table), pattern);
+		public LikeCondition Like(string column, ISource? source, string pattern) => Like(Column(column, source), pattern);
+		public LikeCondition Like(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => Like(Expression(expressionFunction), pattern);
+		public LikeCondition Like(IExpression expression, string pattern) => Like(expression, new StringValue(pattern));
+		public LikeCondition Like(IExpression expression, IExpression pattern) => new LikeCondition(expression, pattern);
 
 		#endregion LikeCondition factory methods
 
 		#region NotLikeCondition factory methods
 
-		public NotLikeCondition NotLike(IExpression expression, string pattern) => new NotLikeCondition(expression, pattern);
-		public NotLikeCondition NotLike(string column, string pattern) => new NotLikeCondition(new SourceColumn(column), pattern);
-		public NotLikeCondition NotLike(string column, string table, string pattern) => new NotLikeCondition(new SourceColumn(column, new Table(table)), pattern);
-		public NotLikeCondition NotLike(string column, ISource source, string pattern) => new NotLikeCondition(new SourceColumn(column, source), pattern);
-		public NotLikeCondition NotLike(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => new NotLikeCondition(Expression(expressionFunction), pattern);
+		public NotLikeCondition NotLike(string column, string pattern) => NotLike(Column(column), pattern);
+		public NotLikeCondition NotLike(string column, string? table, string pattern) => NotLike(Column(column, alias: null, table), pattern);
+		public NotLikeCondition NotLike(string column, ISource? source, string pattern) => NotLike(Column(column, source), pattern);
+		public NotLikeCondition NotLike(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => NotLike(Expression(expressionFunction), pattern);
+		public NotLikeCondition NotLike(IExpression expression, string pattern) => NotLike(expression, new StringValue(pattern));
+		public NotLikeCondition NotLike(IExpression expression, IExpression pattern) => new NotLikeCondition(expression, pattern);
 
 		#endregion NotLikeCondition factory methods
 
@@ -965,7 +967,15 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Expression factory methods
 
-		public IExpression Expression(Func<ExpressionFactory, IExpression> function) => function.Invoke(this);
+		public IExpression Expression(Func<ExpressionFactory, IExpression> function)
+		{
+			Guard.ThrowIfNull(function, nameof(function));
+
+			IExpression expression = function.Invoke(this);
+
+			return expression;
+		}
+
 		public List<IExpression> Expressions(Action<ExpressionBuilder> action)
 		{
 			Guard.ThrowIfNull(action, nameof(action));

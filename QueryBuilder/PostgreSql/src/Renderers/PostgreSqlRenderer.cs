@@ -56,18 +56,35 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 
 		#region Condition rendeting methods
 
-		public void RenderCondition(EqualCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, "=", sql);
-		public void RenderCondition(NotEqualCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, "<>", sql);
-		public void RenderCondition(LessCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, "<", sql);
-		public void RenderCondition(LessOrEqualCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, "<=", sql);
-		public void RenderCondition(GreaterCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, ">", sql);
-		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder sql) => RenderBinaryCondition(condition, ">=", sql);
+		public void RenderCondition(EqualCondition condition, StringBuilder sql) =>
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, "=", sql);
+
+		public void RenderCondition(NotEqualCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, "<>", sql);
+
+		public void RenderCondition(LessCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, "<", sql);
+
+		public void RenderCondition(LessOrEqualCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, "<=", sql);
+
+		public void RenderCondition(GreaterCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, ">", sql);
+
+		public void RenderCondition(GreaterOrEqualCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.LeftExpression, condition.RightExpression, ">=", sql);
+
 		public void RenderCondition(IsNullCondition condition, StringBuilder sql) => RenderUnaryCondition(condition, "IS NULL", sql);
 		public void RenderCondition(IsNotNullCondition condition, StringBuilder sql) => RenderUnaryCondition(condition, "IS NOT NULL", sql);
 		public void RenderCondition(InCondition condition, StringBuilder sql) => RenderCondition(condition, "IN", sql);
 		public void RenderCondition(NotInCondition condition, StringBuilder sql) => RenderCondition(condition, "NOT IN", sql);
-		public void RenderCondition(LikeCondition condition, StringBuilder sql) => RenderPatternCondition(condition, "ILIKE", sql);
-		public void RenderCondition(NotLikeCondition condition, StringBuilder sql) => RenderPatternCondition(condition, "NOT ILIKE", sql);
+		
+		public void RenderCondition(LikeCondition condition, StringBuilder sql) => 
+			RenderBinaryExpression(condition.Expression, condition.Pattern, "ILIKE", sql);
+
+		public void RenderCondition(NotLikeCondition condition, StringBuilder sql) =>
+			RenderBinaryExpression(condition.Expression, condition.Pattern, "NOT ILIKE", sql);
+
 		public void RenderCondition(AndCondition condition, StringBuilder sql) => RenderLogicalCondition(condition, "AND", sql);
 		public void RenderCondition(OrCondition condition, StringBuilder sql) => RenderLogicalCondition(condition, "OR", sql);
 
@@ -115,20 +132,6 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			sql.Append(')');
 		}
 
-		private void RenderPatternCondition(PatternCondition condition, string conditionType, StringBuilder sql)
-		{
-			Guard.ThrowIfNull(condition, nameof(condition));
-			Guard.ThrowIfNullOrEmpty(conditionType, nameof(conditionType));
-			Guard.ThrowIfNull(sql, nameof(sql));
-
-			condition.Expression.RenderExpression(this, sql);
-			sql.Append(' ');
-			sql.Append(conditionType);
-			sql.Append(" '");
-			sql.Append(condition.Pattern);
-			sql.Append('\'');
-		}
-
 		private void RenderUnaryCondition(UnaryCondition condition, string operation, StringBuilder sql)
 		{
 			Guard.ThrowIfNull(condition, nameof(condition));
@@ -138,19 +141,6 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 			condition.Expression.RenderExpression(this, sql);
 			sql.Append(' ');
 			sql.Append(operation);
-		}
-
-		private void RenderBinaryCondition(BinaryCondition condition, string operation, StringBuilder sql)
-		{
-			Guard.ThrowIfNull(condition, nameof(condition));
-			Guard.ThrowIfNullOrEmpty(operation, nameof(operation));
-			Guard.ThrowIfNull(sql, nameof(sql));
-
-			condition.LeftExpression.RenderExpression(this, sql);
-			sql.Append(' ');
-			sql.Append(operation);
-			sql.Append(' ');
-			condition.RightExpression.RenderExpression(this, sql);
 		}
 
 		public void RenderCondition(ExistsCondition condition, StringBuilder sql)
@@ -1053,6 +1043,23 @@ namespace YuraSoft.QueryBuilder.PostgreSql
 
 				renderAction.Invoke(enumerator.Current, sql);
 			}
+		}
+
+		private void RenderBinaryExpression(IExpression leftExpression, IExpression rightExpression,
+			string operation, StringBuilder sql)
+		{
+			Guard.ThrowIfNull(leftExpression, nameof(leftExpression));
+			Guard.ThrowIfNull(rightExpression, nameof(rightExpression));
+			Guard.ThrowIfNullOrEmpty(operation, nameof(operation));
+			Guard.ThrowIfNull(sql, nameof(sql));
+
+			leftExpression.RenderExpression(this, sql);
+
+			sql.Append(' ');
+			sql.Append(operation);
+			sql.Append(' ');
+
+			rightExpression.RenderExpression(this, sql);
 		}
 	}
 }
