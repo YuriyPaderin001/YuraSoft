@@ -710,25 +710,53 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#endregion NotInCondition factory methods
 
-		#region LikeCondition factory methods
+		#region LikeCondition methods
+
+		public ConditionBuilder Like(string column, string pattern) => Add(Factory.Like(column, pattern));
+		public ConditionBuilder Like(string column, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.Like(column, patternFunction));
+		public ConditionBuilder Like(string column, IExpression pattern) => Add(Factory.Like(column, pattern));
+
+		public ConditionBuilder Like(string column, string? table, string pattern) => Add(Factory.Like(column, table, pattern));
+		public ConditionBuilder Like(string column, string? table, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.Like(column, table, patternFunction));
+		public ConditionBuilder Like(string column, string? table, IExpression pattern) => Add(Factory.Like(column, table, pattern));
+
+		public ConditionBuilder Like(string column, ISource? source, string pattern) => Add(Factory.Like(column, source, pattern));
+		public ConditionBuilder Like(string column, ISource? source, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.Like(column, source, patternFunction));
+		public ConditionBuilder Like(string column, ISource? source, IExpression pattern) => Add(Factory.Like(column, source, pattern));
+
+		public ConditionBuilder Like(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => Add(Factory.Like(expressionFunction, pattern));
+		public ConditionBuilder Like(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.Like(expressionFunction, patternFunction));
+		public ConditionBuilder Like(Func<ExpressionFactory, IExpression> expressionFunction, IExpression pattern) => Add(Factory.Like(expressionFunction, pattern));
 
 		public ConditionBuilder Like(IExpression expression, string pattern) => Add(Factory.Like(expression, pattern));
-		public ConditionBuilder Like(string column, string pattern) => Add(Factory.Like(column, pattern));
-		public ConditionBuilder Like(string column, string table, string pattern) => Add(Factory.Like(column, table, pattern));
-		public ConditionBuilder Like(string column, ISource source, string pattern) => Add(Factory.Like(column, source, pattern));
-		public ConditionBuilder Like(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => Add(Factory.Like(expressionFunction, pattern));
+		public ConditionBuilder Like(IExpression expression, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.Like(expression, patternFunction));
+		public ConditionBuilder Like(IExpression expression, IExpression pattern) => Add(Factory.Like(expression, pattern));
 
-		#endregion LikeCondition factory methods
+		#endregion LikeCondition methods
 
-		#region NotLikeCondition factory methods
+		#region NotLikeCondition methods
+
+		public ConditionBuilder NotLike(string column, string pattern) => Add(Factory.NotLike(column, pattern));
+		public ConditionBuilder NotLike(string column, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.NotLike(column, patternFunction));
+		public ConditionBuilder NotLike(string column, IExpression pattern) => Add(Factory.NotLike(column, pattern));
+
+		public ConditionBuilder NotLike(string column, string? table, string pattern) => Add(Factory.NotLike(column, table, pattern));
+		public ConditionBuilder NotLike(string column, string? table, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.NotLike(column, table, patternFunction));
+		public ConditionBuilder NotLike(string column, string? table, IExpression pattern) => Add(Factory.NotLike(column, table, pattern));
+
+		public ConditionBuilder NotLike(string column, ISource? source, string pattern) => Add(Factory.NotLike(column, source, pattern));
+		public ConditionBuilder NotLike(string column, ISource? source, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.NotLike(column, source, patternFunction));
+		public ConditionBuilder NotLike(string column, ISource? source, IExpression pattern) => Add(Factory.NotLike(column, source, pattern));
+
+		public ConditionBuilder NotLike(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => Add(Factory.NotLike(expressionFunction, pattern));
+		public ConditionBuilder NotLike(Func<ExpressionFactory, IExpression> expressionFunction, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.NotLike(expressionFunction, patternFunction));
+		public ConditionBuilder NotLike(Func<ExpressionFactory, IExpression> expressionFunction, IExpression pattern) => Add(Factory.NotLike(expressionFunction, pattern));
 
 		public ConditionBuilder NotLike(IExpression expression, string pattern) => Add(Factory.NotLike(expression, pattern));
-		public ConditionBuilder NotLike(string column, string pattern) => Add(Factory.NotLike(column, pattern));
-		public ConditionBuilder NotLike(string column, string table, string pattern) => Add(Factory.NotLike(column, table, pattern));
-		public ConditionBuilder NotLike(string column, ISource source, string pattern) => Add(Factory.NotLike(column, source, pattern));
-		public ConditionBuilder NotLike(Func<ExpressionFactory, IExpression> expressionFunction, string pattern) => Add(Factory.NotLike(expressionFunction, pattern));
+		public ConditionBuilder NotLike(IExpression expression, Func<ExpressionFactory, IExpression> patternFunction) => Add(Factory.NotLike(expression, patternFunction));
+		public ConditionBuilder NotLike(IExpression expression, IExpression pattern) => Add(Factory.NotLike(expression, pattern));
 
-		#endregion NotLikeCondition factory methods
+		#endregion NotLikeCondition methods
 
 		#region BetweenCondition factory methods
 

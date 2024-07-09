@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
+using Xunit;
 
 namespace YuraSoft.QueryBuilder.Common.Tests
 {
 	public class TestsBase
 	{
+		protected ExpressionFactory ExpressionFactory => ExpressionFactory.Instance;
+
 		protected List<IColumn> NewColumns(int length)
 		{
 			List<IColumn> columns = new List<IColumn>(length);
@@ -115,5 +118,13 @@ namespace YuraSoft.QueryBuilder.Common.Tests
 		}
 
 		protected ISource NewSource() => new Mock<ISource>().Object;
+
+		protected Func<ExpressionFactory, IExpression> NewExpressionFunction(
+			IExpression resultExpression) => (factory) =>
+			{
+				Assert.NotNull(factory);
+
+				return resultExpression;
+			};
 	}
 }
