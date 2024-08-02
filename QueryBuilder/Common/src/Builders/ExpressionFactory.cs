@@ -20,7 +20,14 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region IColumn factory methods
 
-		public IColumn Column(Func<ExpressionFactory, IColumn> function) => function.Invoke(this);
+		public IColumn Column(Func<ExpressionFactory, IColumn> function)
+		{
+			Guard.ThrowIfNull(function, nameof(function));
+
+			IColumn column = function.Invoke(this);
+
+			return column;
+		}
 
 		public IEnumerable<IColumn> Columns(Action<ColumnBuilder> action)
 		{
@@ -45,16 +52,8 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region ExpressionColumn factory method
 
-		public ExpressionColumn Column(IExpression expression, string? name = null) =>
-		  new ExpressionColumn(expression, name);
-
-		public ExpressionColumn Column(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null)
-		{
-			ExpressionFactory factory = new ExpressionFactory();
-			IExpression expression = expressionFunction.Invoke(factory);
-
-			return new ExpressionColumn(expression, name);
-		}
+		public ExpressionColumn Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Column(Expression(expressionFunction), alias);
+		public ExpressionColumn Column(IExpression expression, string? alias = null) => new ExpressionColumn(expression, alias);
 
 		#endregion ExpressionColumn factory methods
 

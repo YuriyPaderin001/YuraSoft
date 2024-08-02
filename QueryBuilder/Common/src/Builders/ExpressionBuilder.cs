@@ -14,8 +14,8 @@ namespace YuraSoft.QueryBuilder.Common
 		#region ExpressionColumn methods
 
 		public ExpressionBuilder Column(Func<ExpressionFactory, IColumn> function) => Add(Factory.Column(function));
-		public ExpressionBuilder Column(IExpression expression, string? name = null) => Add(Factory.Column(expression, name));
-		public ExpressionBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? name = null) => Add(Factory.Column(expressionFunction, name));
+		public ExpressionBuilder Column(IExpression expression, string? alias = null) => Add(Factory.Column(expression, alias));
+		public ExpressionBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(expressionFunction, alias));
 
 		#endregion ExpressionColumn methods
 

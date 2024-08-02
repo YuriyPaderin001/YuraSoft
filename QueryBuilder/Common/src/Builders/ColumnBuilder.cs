@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using YuraSoft.QueryBuilder.Common.Validation;
+
 namespace YuraSoft.QueryBuilder.Common
 {
 	public class ColumnBuilder
@@ -11,9 +13,15 @@ namespace YuraSoft.QueryBuilder.Common
 
 		#region Column methods
 
-		public ColumnBuilder Column(IColumn column) => Add(column);
-		public ColumnBuilder Column(IExpression expression, string? alias = null) => Add(Factory.Column(expression, alias));
+		public ColumnBuilder Column(IColumn column)
+		{
+			Guard.ThrowIfNull(column, nameof(column));
+
+			return Add(column);
+		}
+
 		public ColumnBuilder Column(Func<ExpressionFactory, IExpression> expressionFunction, string? alias = null) => Add(Factory.Column(expressionFunction, alias));
+		public ColumnBuilder Column(IExpression expression, string? alias = null) => Add(Factory.Column(expression, alias));
 		public ColumnBuilder Column(string name) => Add(Factory.Column(name));
 		public ColumnBuilder Column(string name, string? alias) => Add(Factory.Column(name, alias));
 		public ColumnBuilder Column(string name, string? alias, string? table) => Add(Factory.Column(name, alias, table));
