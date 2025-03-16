@@ -1,8 +1,4 @@
 /.vs
-/QueryBuilder/bin
-/QueryBuilder/obj
-/QueryBuilder.Tests/bin
-/QueryBuilder.Tests/obj
 /QueryBuilderSandbox/.vs
 /QueryBuilderSandbox/bin
 /QueryBuilderSandbox/obj
@@ -14,3 +10,13 @@
 /PostgreSql/src/obj
 /PostgreSql/test/bin
 /PostgreSql/test/obj
+/SyntaxTree
+/SyntaxTree/src/bin
+/SyntaxTree/src/obj
+/SyntaxTree/test/bin
+/SyntaxTree/test/obj
+/Validation
+/Validation/src/bin
+/Validation/src/obj
+/Validation/test/bin
+/Validation/test/obj
