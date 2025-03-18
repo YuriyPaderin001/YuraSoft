@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 using YuraSoft.QueryBuilder.Common.Validation;
 
 namespace YuraSoft.QueryBuilder.Common
 {
-	public class Table : Source
+	public class Table : Source, IEquatable<Table>
 	{
 		public Table(string name, string? alias = null, string? schema = null)
 		{
@@ -22,5 +23,17 @@ namespace YuraSoft.QueryBuilder.Common
 
         public override void RenderSource(IRenderer renderer, StringBuilder sql) => 
 			renderer.RenderSource(this, sql);
-    }
+
+		public override bool Equals(object? obj) =>
+			Equals(obj as Table);
+
+		public bool Equals(Table? table) =>
+			table != null &&
+			Name == table.Name &&
+			Alias == table.Alias &&
+			Schema == table.Schema;
+
+		public override int GetHashCode() =>
+			HashCode.Combine(Name, Alias, Schema);
+	}
 }

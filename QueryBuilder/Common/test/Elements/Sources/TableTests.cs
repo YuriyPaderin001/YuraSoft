@@ -268,5 +268,568 @@ namespace YuraSoft.QueryBuilder.Common.Tests.Elements.Sources
 			// Assert
 			Assert.Equal(expectedSql, sql);
 		}
+
+		[Theory]
+		[InlineData("table_name", null, null)]
+		[InlineData("table_name", null, "")]
+		[InlineData("table_name", null, "table_schema")]
+		[InlineData("table_name", "", null)]
+		[InlineData("table_name", "", "")]
+		[InlineData("table_name", "", "table_schema")]
+		[InlineData("table_name", "table_alias", null)]
+		[InlineData("table_name", "table_alias", "")]
+		[InlineData("table_name", "table_alias", "table_schema")]
+		public void Equals_SameObject_ReturnsTrue(string name, string? alias, string? schema)
+		{
+			// Arrange
+			Table table = new Table(name, alias, schema);
+
+			// Act
+			bool isEquals = table.Equals((object)table);
+
+			// Assert
+			Assert.True(isEquals);
+		}
+
+		[Theory]
+		[InlineData("same_name", null, null, "same_name", null, null)]
+		[InlineData("same_name", null, null, "same_name", null, "")]
+		[InlineData("same_name", null, null, "same_name", "", null)]
+		[InlineData("same_name", null, null, "same_name", "", "")]
+		[InlineData("same_name", null, "", "same_name", null, null)]
+		[InlineData("same_name", null, "", "same_name", null, "")]
+		[InlineData("same_name", null, "", "same_name", "", null)]
+		[InlineData("same_name", null, "", "same_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "", null, "same_name", null, null)]
+		[InlineData("same_name", "", null, "same_name", null, "")]
+		[InlineData("same_name", "", null, "same_name", "", null)]
+		[InlineData("same_name", "", null, "same_name", "", "")]
+		[InlineData("same_name", "", "", "same_name", null, null)]
+		[InlineData("same_name", "", "", "same_name", null, "")]
+		[InlineData("same_name", "", "", "same_name", "", null)]
+		[InlineData("same_name", "", "", "same_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "same_schema")]
+		public void Equals_EquivalentObject_ReturnsTrue(
+			string firstName, string? firstAlias, string? firstSchema,
+			string secondName, string? secondAlias, string? secondSchema)
+		{
+			// Arrange
+			Table firstTable = new Table(firstName, firstAlias, firstSchema);
+			Table secondTable = new Table(secondName, secondAlias, secondSchema);
+
+			// Act
+			bool isEquals = firstTable.Equals((object)secondTable);
+
+			// Assert
+			Assert.True(isEquals);
+		}
+
+		[Theory]
+		[InlineData("table_name", null, null)]
+		[InlineData("table_name", null, "")]
+		[InlineData("table_name", null, "table_schema")]
+		[InlineData("table_name", "", null)]
+		[InlineData("table_name", "", "")]
+		[InlineData("table_name", "", "table_schema")]
+		[InlineData("table_name", "table_alias", null)]
+		[InlineData("table_name", "table_alias", "")]
+		[InlineData("table_name", "table_alias", "table_schema")]
+		public void Equals_NullObject_ReturnsFalse(string name, string? alias, string? schema)
+		{
+			// Arrange
+			Table table = new Table(name, alias, schema);
+
+			// Act
+			bool isEquals = table.Equals((object?)null);
+
+			// Assert
+			Assert.False(isEquals);
+		}
+
+		[Theory]
+		[InlineData("same_name", null, null, "same_name", null, "different_schema")]
+		[InlineData("same_name", null, null, "same_name", "", "different_schema")]
+		[InlineData("same_name", null, null, "same_name", "different_alias", null)]
+		[InlineData("same_name", null, null, "same_name", "different_alias", "")]
+		[InlineData("same_name", null, null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, null, "different_name", null, "different_schema")]
+		[InlineData("same_name", null, null, "different_name", "", "different_schema")]
+		[InlineData("same_name", null, null, "different_name", "different_alias", null)]
+		[InlineData("same_name", null, null, "different_name", "different_alias", "")]
+		[InlineData("same_name", null, null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "", "same_name", null, "different_schema")]
+		[InlineData("same_name", null, "", "same_name", "", "different_schema")]
+		[InlineData("same_name", null, "", "same_name", "different_alias", null)]
+		[InlineData("same_name", null, "", "same_name", "different_alias", "")]
+		[InlineData("same_name", null, "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "", "different_name", null, null)]
+		[InlineData("same_name", null, "", "different_name", null, "")]
+		[InlineData("same_name", null, "", "different_name", null, "different_schema")]
+		[InlineData("same_name", null, "", "different_name", "", null)]
+		[InlineData("same_name", null, "", "different_name", "", "")]
+		[InlineData("same_name", null, "", "different_name", "", "different_schema")]
+		[InlineData("same_name", null, "", "different_name", "different_alias", null)]
+		[InlineData("same_name", null, "", "different_name", "different_alias", "")]
+		[InlineData("same_name", null, "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, null)]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", null)]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, null)]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", null)]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", null, "same_name", null, "different_schema")]
+		[InlineData("same_name", "", null, "same_name", "", "different_schema")]
+		[InlineData("same_name", "", null, "same_name", "different_alias", null)]
+		[InlineData("same_name", "", null, "same_name", "different_alias", "")]
+		[InlineData("same_name", "", null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", null, "different_name", null, null)]
+		[InlineData("same_name", "", null, "different_name", null, "")]
+		[InlineData("same_name", "", null, "different_name", null, "different_schema")]
+		[InlineData("same_name", "", null, "different_name", "", null)]
+		[InlineData("same_name", "", null, "different_name", "", "")]
+		[InlineData("same_name", "", null, "different_name", "", "different_schema")]
+		[InlineData("same_name", "", null, "different_name", "different_alias", null)]
+		[InlineData("same_name", "", null, "different_name", "different_alias", "")]
+		[InlineData("same_name", "", null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "", "same_name", null, "different_schema")]
+		[InlineData("same_name", "", "", "same_name", "", "different_schema")]
+		[InlineData("same_name", "", "", "same_name", "different_alias", null)]
+		[InlineData("same_name", "", "", "same_name", "different_alias", "")]
+		[InlineData("same_name", "", "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "", "different_name", null, null)]
+		[InlineData("same_name", "", "", "different_name", null, "")]
+		[InlineData("same_name", "", "", "different_name", null, "different_schema")]
+		[InlineData("same_name", "", "", "different_name", "", null)]
+		[InlineData("same_name", "", "", "different_name", "", "")]
+		[InlineData("same_name", "", "", "different_name", "", "different_schema")]
+		[InlineData("same_name", "", "", "different_name", "different_alias", null)]
+		[InlineData("same_name", "", "", "different_name", "different_alias", "")]
+		[InlineData("same_name", "", "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, null)]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", null)]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", null, null)]
+		[InlineData("same_name", "", "same_schema", "different_name", null, "")]
+		[InlineData("same_name", "", "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "", null)]
+		[InlineData("same_name", "", "same_schema", "different_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", null, null)]
+		[InlineData("same_name", "same_alias", null, "same_name", null, "")]
+		[InlineData("same_name", "same_alias", null, "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "", "")]
+		[InlineData("same_name", "same_alias", null, "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", null, null)]
+		[InlineData("same_name", "same_alias", null, "different_name", null, "")]
+		[InlineData("same_name", "same_alias", null, "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "", null)]
+		[InlineData("same_name", "same_alias", null, "different_name", "", "")]
+		[InlineData("same_name", "same_alias", null, "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", null, null)]
+		[InlineData("same_name", "same_alias", "", "same_name", null, "")]
+		[InlineData("same_name", "same_alias", "", "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", null, null)]
+		[InlineData("same_name", "same_alias", "", "different_name", null, "")]
+		[InlineData("same_name", "same_alias", "", "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "different_schema")]
+		public void Equals_DifferentObject_ReturnsFalse(
+			string firstName, string? firstAlias, string? firstSchema,
+			string secondName, string? secondAlias, string? secondSchema)
+		{
+			// Arrange
+			Table firstTable = new Table(firstName, firstAlias, firstSchema);
+			Table secondTable = new Table(secondName, secondAlias, secondSchema);
+
+			// Act
+			bool isEquals = firstTable.Equals((object)secondTable);
+
+			// Assert
+			Assert.False(isEquals);
+		}
+
+		[Theory]
+		[InlineData("table_name", null, null)]
+		[InlineData("table_name", null, "")]
+		[InlineData("table_name", null, "table_schema")]
+		[InlineData("table_name", "", null)]
+		[InlineData("table_name", "", "")]
+		[InlineData("table_name", "", "table_schema")]
+		[InlineData("table_name", "table_alias", null)]
+		[InlineData("table_name", "table_alias", "")]
+		[InlineData("table_name", "table_alias", "table_schema")]
+		public void Equals_SameTable_ReturnsTrue(string name, string? alias, string? schema)
+		{
+			// Arrange
+			Table table = new Table(name, alias, schema);
+
+			// Act
+			bool isEquals = table.Equals(table);
+
+			// Assert
+			Assert.True(isEquals);
+		}
+
+		[Theory]
+		[InlineData("same_name", null, null, "same_name", null, null)]
+		[InlineData("same_name", null, null, "same_name", null, "")]
+		[InlineData("same_name", null, null, "same_name", "", null)]
+		[InlineData("same_name", null, null, "same_name", "", "")]
+		[InlineData("same_name", null, "", "same_name", null, null)]
+		[InlineData("same_name", null, "", "same_name", null, "")]
+		[InlineData("same_name", null, "", "same_name", "", null)]
+		[InlineData("same_name", null, "", "same_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "", null, "same_name", null, null)]
+		[InlineData("same_name", "", null, "same_name", null, "")]
+		[InlineData("same_name", "", null, "same_name", "", null)]
+		[InlineData("same_name", "", null, "same_name", "", "")]
+		[InlineData("same_name", "", "", "same_name", null, null)]
+		[InlineData("same_name", "", "", "same_name", null, "")]
+		[InlineData("same_name", "", "", "same_name", "", null)]
+		[InlineData("same_name", "", "", "same_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "same_schema")]
+		public void Equals_EquivalentTable_ReturnsTrue(
+			string firstName, string? firstAlias, string? firstSchema,
+			string secondName, string? secondAlias, string? secondSchema)
+		{
+			// Arrange
+			Table firstTable = new Table(firstName, firstAlias, firstSchema);
+			Table secondTable = new Table(secondName, secondAlias, secondSchema);
+
+			// Act
+			bool isEquals = firstTable.Equals(secondTable);
+
+			// Assert
+			Assert.True(isEquals);
+		}
+
+		[Theory]
+		[InlineData("table_name", null, null)]
+		[InlineData("table_name", null, "")]
+		[InlineData("table_name", null, "table_schema")]
+		[InlineData("table_name", "", null)]
+		[InlineData("table_name", "", "")]
+		[InlineData("table_name", "", "table_schema")]
+		[InlineData("table_name", "table_alias", null)]
+		[InlineData("table_name", "table_alias", "")]
+		[InlineData("table_name", "table_alias", "table_schema")]
+		public void Equals_NullTable_ReturnsFalse(string name, string? alias, string? schema)
+		{
+			// Arrange
+			Table table = new Table(name, alias, schema);
+
+			// Act
+			bool isEquals = table.Equals(null);
+
+			// Assert
+			Assert.False(isEquals);
+		}
+
+		[Theory]
+		[InlineData("same_name", null, null, "same_name", null, "different_schema")]
+		[InlineData("same_name", null, null, "same_name", "", "different_schema")]
+		[InlineData("same_name", null, null, "same_name", "different_alias", null)]
+		[InlineData("same_name", null, null, "same_name", "different_alias", "")]
+		[InlineData("same_name", null, null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, null, "different_name", null, "different_schema")]
+		[InlineData("same_name", null, null, "different_name", "", "different_schema")]
+		[InlineData("same_name", null, null, "different_name", "different_alias", null)]
+		[InlineData("same_name", null, null, "different_name", "different_alias", "")]
+		[InlineData("same_name", null, null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "", "same_name", null, "different_schema")]
+		[InlineData("same_name", null, "", "same_name", "", "different_schema")]
+		[InlineData("same_name", null, "", "same_name", "different_alias", null)]
+		[InlineData("same_name", null, "", "same_name", "different_alias", "")]
+		[InlineData("same_name", null, "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "", "different_name", null, null)]
+		[InlineData("same_name", null, "", "different_name", null, "")]
+		[InlineData("same_name", null, "", "different_name", null, "different_schema")]
+		[InlineData("same_name", null, "", "different_name", "", null)]
+		[InlineData("same_name", null, "", "different_name", "", "")]
+		[InlineData("same_name", null, "", "different_name", "", "different_schema")]
+		[InlineData("same_name", null, "", "different_name", "different_alias", null)]
+		[InlineData("same_name", null, "", "different_name", "different_alias", "")]
+		[InlineData("same_name", null, "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, null)]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "")]
+		[InlineData("same_name", null, "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", null)]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, null)]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", null)]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", null, "same_schema", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", null, "same_name", null, "different_schema")]
+		[InlineData("same_name", "", null, "same_name", "", "different_schema")]
+		[InlineData("same_name", "", null, "same_name", "different_alias", null)]
+		[InlineData("same_name", "", null, "same_name", "different_alias", "")]
+		[InlineData("same_name", "", null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", null, "different_name", null, null)]
+		[InlineData("same_name", "", null, "different_name", null, "")]
+		[InlineData("same_name", "", null, "different_name", null, "different_schema")]
+		[InlineData("same_name", "", null, "different_name", "", null)]
+		[InlineData("same_name", "", null, "different_name", "", "")]
+		[InlineData("same_name", "", null, "different_name", "", "different_schema")]
+		[InlineData("same_name", "", null, "different_name", "different_alias", null)]
+		[InlineData("same_name", "", null, "different_name", "different_alias", "")]
+		[InlineData("same_name", "", null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "", "same_name", null, "different_schema")]
+		[InlineData("same_name", "", "", "same_name", "", "different_schema")]
+		[InlineData("same_name", "", "", "same_name", "different_alias", null)]
+		[InlineData("same_name", "", "", "same_name", "different_alias", "")]
+		[InlineData("same_name", "", "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "", "different_name", null, null)]
+		[InlineData("same_name", "", "", "different_name", null, "")]
+		[InlineData("same_name", "", "", "different_name", null, "different_schema")]
+		[InlineData("same_name", "", "", "different_name", "", null)]
+		[InlineData("same_name", "", "", "different_name", "", "")]
+		[InlineData("same_name", "", "", "different_name", "", "different_schema")]
+		[InlineData("same_name", "", "", "different_name", "different_alias", null)]
+		[InlineData("same_name", "", "", "different_name", "different_alias", "")]
+		[InlineData("same_name", "", "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, null)]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "")]
+		[InlineData("same_name", "", "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", null)]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "", "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", null, null)]
+		[InlineData("same_name", "", "same_schema", "different_name", null, "")]
+		[InlineData("same_name", "", "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "", null)]
+		[InlineData("same_name", "", "same_schema", "different_name", "", "")]
+		[InlineData("same_name", "", "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "", "same_schema", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", null, null)]
+		[InlineData("same_name", "same_alias", null, "same_name", null, "")]
+		[InlineData("same_name", "same_alias", null, "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "", "")]
+		[InlineData("same_name", "same_alias", null, "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", null, "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", null, null)]
+		[InlineData("same_name", "same_alias", null, "different_name", null, "")]
+		[InlineData("same_name", "same_alias", null, "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "", null)]
+		[InlineData("same_name", "same_alias", null, "different_name", "", "")]
+		[InlineData("same_name", "same_alias", null, "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", null, "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", null, null)]
+		[InlineData("same_name", "same_alias", "", "same_name", null, "")]
+		[InlineData("same_name", "same_alias", "", "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", null, null)]
+		[InlineData("same_name", "same_alias", "", "different_name", null, "")]
+		[InlineData("same_name", "same_alias", "", "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "", "different_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "same_name", "different_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", null, "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "same_alias", "different_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", null)]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "same_schema")]
+		[InlineData("same_name", "same_alias", "same_schema", "different_name", "different_alias", "different_schema")]
+		public void Equals_DifferentTable_ReturnsFalse(
+			string firstName, string? firstAlias, string? firstSchema,
+			string secondName, string? secondAlias, string? secondSchema)
+		{
+			// Arrange
+			Table firstTable = new Table(firstName, firstAlias, firstSchema);
+			Table secondTable = new Table(secondName, secondAlias, secondSchema);
+
+			// Act
+			bool isEquals = firstTable.Equals(secondTable);
+
+			// Assert
+			Assert.False(isEquals);
+		}
+
+		[Theory]
+		[InlineData("table_name", null, null)]
+		[InlineData("table_name", null, "")]
+		[InlineData("table_name", null, "table_schema")]
+		[InlineData("table_name", "", null)]
+		[InlineData("table_name", "", "")]
+		[InlineData("table_name", "", "table_schema")]
+		[InlineData("table_name", "table_alias", null)]
+		[InlineData("table_name", "table_alias", "")]
+		[InlineData("table_name", "table_alias", "table_schema")]
+		public void GetHashCode_ReturnsHashCode(string name, string? alias, string? schema)
+		{
+			// Arrange
+			string? normalizedAlias = string.IsNullOrEmpty(alias) ? null : alias;
+			string? normalizedSchema = string.IsNullOrEmpty(schema) ? null : schema;
+
+			int expectedHashCode = HashCode.Combine(name, normalizedAlias, normalizedSchema);
+
+			Table table = new Table(name, alias, schema);
+
+			// Act
+			int hashCode = table.GetHashCode();
+
+			// Assert
+			Assert.Equal(expectedHashCode, hashCode);
+		}
 	}
 }
